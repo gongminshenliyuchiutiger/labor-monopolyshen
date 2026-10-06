@@ -601,81 +601,38 @@
             transition: background-color 0.3s ease, color 0.3s ease, border-top-color 0.3s ease;
         }
 
-        #theme-toggle {
+        /* 右上角浮動功能按鈕 (色彩與尺寸 100% 絕對一致) */
+        .floating-action-btn, #theme-toggle, #info-link-button, #admin-mode-button {
             position: fixed;
-            top: 10px;
             right: 10px;
-            background-color: var(--accent-color-1);
-            color: var(--text-light);
-            border: none;
-            border-radius: 50%;
             width: 40px;
             height: 40px;
-            font-size: 1.2rem;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.22);
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            background-color: var(--accent-color-1);
+            color: #ffffff !important;
             z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        body.dark-mode #theme-toggle {
-            background-color: var(--accent-color-2);
-            color: var(--text-dark);
-        }
-        .game-wrapper h1 { color: var(--text-heading-color); }
-
-        #info-link-button { 
-            position: fixed;
-            top: 60px; /* Position below theme-toggle: 10px (theme-toggle top) + 40px (theme-toggle height) + 10px (spacing) */
-            right: 10px;
-            background-color: var(--info-button-bg);
-            color: var(--info-button-text);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 999; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-        }
-        #info-link-button:hover {
+        .floating-action-btn:hover, #theme-toggle:hover, #info-link-button:hover, #admin-mode-button:hover {
             transform: scale(1.1);
             filter: brightness(110%);
         }
+        #theme-toggle { top: 10px; font-size: 1.15rem; }
+        #info-link-button { top: 60px; font-size: 1.15rem; }
+        #admin-mode-button { top: 110px; font-size: 1.1rem; }
 
-        /* 管理員模式按鈕與管理面板樣式 */
-        #admin-mode-button { 
-            position: fixed;
-            top: 110px;
-            right: 10px;
-            background-color: var(--accent-color-1);
-            color: var(--text-light);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            z-index: 999; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-        }
-        #admin-mode-button:hover {
-            transform: scale(1.1);
-            filter: brightness(110%);
-        }
+        /* 深色模式下三個按鈕的背景與圖示顏色完全相同 (#0f172a 均勻深色對比) */
+        body.dark-mode #theme-toggle,
+        body.dark-mode #info-link-button,
         body.dark-mode #admin-mode-button {
-            background-color: var(--accent-color-2);
-            color: #0f172a;
+            background-color: var(--accent-color-2) !important;
+            color: #0f172a !important;
         }
 
         .admin-modal-overlay {
@@ -776,9 +733,16 @@
             left: 15px;
             width: clamp(80px, 12vw, 120px);
             z-index: 998;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out;
+            cursor: grab;
+            user-select: none;
+            -webkit-user-drag: none;
+            touch-action: none;
             filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
+        }
+        #mascot.dragging {
+            cursor: grabbing !important;
+            transform: scale(1.12) !important;
+            filter: drop-shadow(5px 8px 12px rgba(0,0,0,0.35)) !important;
         }
         #mascot:hover {
             transform: scale(1.1);
@@ -796,6 +760,62 @@
             border-radius: 50%;
             opacity: 0;
             z-index: 1001;
+        }
+
+        /* 答案法規解析區塊樣式 (深色與淺色模式完整支援) */
+        .explanation-box {
+            padding: 0.85rem;
+            border-radius: 0.75rem;
+            text-align: left;
+            margin-bottom: 0.75rem;
+            max-height: 10rem;
+            overflow-y: auto;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            background-color: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            color: #1e293b;
+        }
+        .explanation-box .explanation-title {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+        .explanation-box .explanation-content {
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        #quiz-explanation-box .explanation-title { color: #1d4ed8; }
+        #quiz-explanation-box .explanation-content { color: #334155; }
+        #chance-task-explanation-box { background-color: #fffbeb; border-color: #fde68a; }
+        #chance-task-explanation-box .explanation-title { color: #b45309; }
+        #chance-task-explanation-box .explanation-content { color: #334155; }
+
+        /* 暗色模式下：融入彈窗的深邃藍黑底、細緻邊框與柔和淺色文字，絕不泛白刺眼 */
+        body.dark-mode .explanation-box,
+        body.dark-mode #quiz-explanation-box,
+        body.dark-mode #chance-task-explanation-box {
+            background-color: #0b1329 !important;
+            border: 1.5px solid #2563eb !important;
+            color: #f1f5f9 !important;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+        }
+        body.dark-mode #quiz-explanation-box .explanation-title,
+        body.dark-mode #quiz-explanation-box .text-blue-700 {
+            color: #60a5fa !important;
+        }
+        body.dark-mode #chance-task-explanation-box .explanation-title,
+        body.dark-mode #chance-task-explanation-box .text-amber-700 {
+            color: #fbbf24 !important;
+        }
+        body.dark-mode .explanation-box .explanation-content,
+        body.dark-mode #quiz-explanation-text,
+        body.dark-mode #chance-task-explanation-text {
+            color: #cbd5e1 !important;
         }
 
     </style>
@@ -857,17 +877,26 @@
                     <label for="volume-slider" class="sr-only">音量</label>
                     <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" title="調整音量">
                 </div>
-                <div class="game-setup-controls">
-                    <div>
-                        <label for="player-count">人數:</label>
-                        <select id="player-count">
+                <div class="game-setup-controls flex items-center gap-1.5 text-xs whitespace-nowrap">
+                    <div class="flex items-center gap-0.5">
+                        <label for="player-count" class="font-medium">人數:</label>
+                        <select id="player-count" class="text-xs py-0.5 px-1 border rounded bg-white dark:bg-slate-800 border-gray-300 dark:border-gray-600">
                             <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option>
                             <option value="4">4</option><option value="5">5</option><option value="6">6</option>
                             <option value="7">7</option><option value="8">8</option><option value="9">9</option>
                             <option value="10">10</option><option value="11">11</option><option value="12">12</option>
                         </select>
                     </div>
-                    <button id="start-game" class="action-button">開始遊戲</button>
+                    <div class="flex items-center gap-0.5" title="切換獲勝規則">
+                        <label for="win-condition" class="font-medium">規則:</label>
+                        <select id="win-condition" class="text-xs py-0.5 px-1 border rounded bg-white dark:bg-slate-800 border-gray-300 dark:border-gray-600">
+                            <option value="exact_land" selected>停終點 (預設)</option>
+                            <option value="pass_end">先過終點</option>
+                            <option value="endless">無限輪迴</option>
+                        </select>
+                    </div>
+                    <button id="start-game" class="action-button text-xs px-2.5 py-1 whitespace-nowrap">開始</button>
+                    <button id="end-game-btn" class="action-button text-xs px-2 py-1 bg-purple-600 hover:bg-purple-700 text-white whitespace-nowrap" style="display:none;" title="隨時結算戰報">結算</button>
                 </div>
                 <div class="current-player-turn-info">
                     <div>
@@ -900,30 +929,42 @@
         <div class="popup-card event-card" id="event-card">
             <h3 class="text-xl font-bold mb-3" id="event-title">事件卡</h3>
             <p id="event-description" class="mb-5 text-base flex-grow">事件描述</p>
-            <button id="event-close" class="action-button w-full py-2.5">確定</button>
+            <button id="event-close" class="action-button w-full py-2.5"><i class="fas fa-check mr-1.5"></i>確定</button>
         </div>
 
         <!-- Quiz Card -->
         <div class="popup-card quiz-card" id="quiz-card">
-            <h3 class="text-xl font-bold mb-3" id="quiz-title">勞權問答</h3>
-            <p id="quiz-question" class="mb-4 text-base font-medium">問題內容...</p>
-            <div id="quiz-options" class="options-list mb-4 flex-grow">
+            <h3 class="text-xl font-bold mb-2" id="quiz-title">勞權問答</h3>
+            <p id="quiz-question" class="mb-3 text-base font-medium">問題內容...</p>
+            <div id="quiz-options" class="options-list mb-3 flex-grow">
                 <!-- Options will be generated here -->
             </div>
-            <p id="quiz-feedback" class="text-base font-bold mb-4 h-6 text-center"></p>
+            <p id="quiz-feedback" class="text-base font-bold mb-2 text-center"></p>
+            <div id="quiz-explanation-box" class="explanation-box hidden">
+                <div class="explanation-title">
+                    <i class="fas fa-lightbulb"></i> 專業法規解析
+                </div>
+                <p id="quiz-explanation-text" class="explanation-content"></p>
+            </div>
+            <button id="quiz-next-btn" class="action-button w-full py-2.5 mt-auto hidden"><i class="fas fa-check mr-1.5"></i>確定</button>
         </div>
 
         <!-- Chance Task Card -->
         <div class="popup-card chance-task-card" id="chance-task-card">
-            <h3 class="text-xl font-bold mb-3" id="chance-task-title">機會任務</h3>
-            <p id="chance-task-text" class="mb-4 text-base font-medium">任務描述...</p>
-            <div id="chance-task-options" class="options-list mb-4 flex-grow">
+            <h3 class="text-xl font-bold mb-2" id="chance-task-title">機會任務</h3>
+            <p id="chance-task-text" class="mb-3 text-base font-medium">任務描述...</p>
+            <div id="chance-task-options" class="options-list mb-3 flex-grow">
                 <!-- Options or confirm button here -->
             </div>
-            <p id="chance-task-feedback" class="text-base font-bold mb-4 h-6 text-center"></p>
-             <button id="chance-task-close" class="action-button w-full py-2.5 mt-auto" style="display:none;">確定</button>
+            <p id="chance-task-feedback" class="text-base font-bold mb-2 text-center"></p>
+            <div id="chance-task-explanation-box" class="explanation-box hidden">
+                <div class="explanation-title">
+                    <i class="fas fa-lightbulb"></i> 任務法規解析
+                </div>
+                <p id="chance-task-explanation-text" class="explanation-content"></p>
+            </div>
+            <button id="chance-task-close" class="action-button w-full py-2.5 mt-auto" style="display:none;"><i class="fas fa-check mr-1.5"></i>確定</button>
         </div>
-
 
         <!-- Fate Wheel Card -->
         <div class="popup-card fate-wheel-card" id="fate-wheel-card">
@@ -936,10 +977,56 @@
             <button id="spin-wheel-button" class="action-button w-full py-2.5 mt-2">旋轉輪盤</button>
         </div>
 
+        <!-- Game Over & Leaderboard Export Modal -->
+        <div class="popup-card" id="game-over-modal" style="display:none; max-width: 540px; width: 95%;">
+            <div class="text-center mb-3">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-300 text-2xl mb-2 shadow-inner">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100" id="game-over-title">遊戲成績結算！</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="game-over-desc">勞動權益步佈為贏神 終局排行榜</p>
+            </div>
+
+            <!-- 排行榜清單 -->
+            <div class="max-h-60 overflow-y-auto mb-4 border rounded-xl border-gray-200 dark:border-gray-700 p-2 space-y-2" id="leaderboard-list">
+                <!-- 動態注入排名 -->
+            </div>
+
+            <!-- 匯出按鈕組 -->
+            <div class="grid grid-cols-3 gap-2 mb-3">
+                <button id="export-csv-btn" class="px-2.5 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-1.5 transition">
+                    <i class="fas fa-file-csv"></i> 匯出 CSV
+                </button>
+                <button id="copy-summary-btn" class="px-2.5 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-1.5 transition">
+                    <i class="fas fa-copy"></i> 複製成績
+                </button>
+                <button id="export-json-btn" class="px-2.5 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-1.5 transition">
+                    <i class="fas fa-code"></i> 匯出 JSON
+                </button>
+            </div>
+
+            <div class="flex gap-2">
+                <button id="game-over-close-btn" class="flex-1 py-2 text-xs font-medium border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800">
+                    檢視棋盤
+                </button>
+                <button id="restart-game-btn" class="flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-900">
+                    再玩一局
+                </button>
+            </div>
+        </div>
+
     </div>
 
-    <div class="footer">
-        Copyright © Liyuchiutiger Gongminshen
+    <div class="footer flex flex-col items-center justify-center gap-1.5 text-center my-3">
+        <a href="https://www.facebook.com/happyliyuchilltiger/" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-full bg-[#1877F2]/10 hover:bg-[#1877F2]/20 text-[#1877F2] dark:text-[#60a5fa] transition-all hover:scale-105 border border-[#1877F2]/30 shadow-sm" 
+           title="前往 Facebook 粉絲專頁：快樂鯉魚秋老虎">
+            <i class="fab fa-facebook text-base text-[#1877F2]"></i>
+            <span>快樂鯉魚秋老虎</span>
+        </a>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Copyright © Liyuchiutiger Gongminshen</div>
     </div>
     
     <!-- NEW: Mascot element -->
@@ -1111,6 +1198,17 @@
         const quizCardElement = el('quiz-card'), quizTitleElement = el('quiz-title');
         const quizQuestionElement = el('quiz-question'), quizOptionsElement = el('quiz-options');
         const quizFeedbackElement = el('quiz-feedback');
+        const quizExplanationBox = el('quiz-explanation-box'), quizExplanationText = el('quiz-explanation-text');
+        const quizNextBtn = el('quiz-next-btn');
+        const chanceTaskExplanationBox = el('chance-task-explanation-box'), chanceTaskExplanationText = el('chance-task-explanation-text');
+        const winConditionSelect = el('win-condition');
+        const endGameBtn = el('end-game-btn');
+        const gameOverModal = el('game-over-modal');
+        const exportCsvBtn = el('export-csv-btn');
+        const copySummaryBtn = el('copy-summary-btn');
+        const exportJsonBtn = el('export-json-btn');
+        const gameOverCloseBtn = el('game-over-close-btn');
+        const restartGameBtn = el('restart-game-btn');
         const fateWheelCardElement = el('fate-wheel-card'), fateWheelCanvas = el('fate-wheel-canvas');
         const fateWheelResultElement = el('fate-wheel-result'), spinWheelButton = el('spin-wheel-button');
         const chanceTaskCardElement = el('chance-task-card'), chanceTaskTitleElement = el('chance-task-title');
@@ -1130,85 +1228,1031 @@
         const gameState = {
             currentPlayer: 1, players: {}, playerCount: 2, diceRolling: false, boardPath: [], 
             gameStarted: false, currentQuiz: null, currentChanceTask: null, endSquareIndex: -1,
+            winCondition: 'exact_land', // 預設：剛好停在終點 ('exact_land' | 'pass_end' | 'endless')
             playerColors: ['#E53935', '#1E88E5', '#43A047', '#FDD835', '#8E24AA', '#FB8C00', '#00ACC1', '#D81B60', '#6D4C41', '#7CB342', '#5E35B1', '#039BE5'],
             currentPlayerGetsExtraRoll: false,
-            quizData: { 
-                "勞動契約": [
-                    { q: "依勞動基準法規定，勞動契約分為定期契約與不定期契約，有繼續性工作應為何種契約？", o: ["不定期契約", "定期契約", "承攬契約", "委任契約"], a: 0 },
-                    { q: "關於職場上常見的「試用期」，下列何項敘述最符合勞動法令？", o: ["試用期內雇主不須投保勞保", "試用期勞工仍受勞基法保障，薪資不得低於最低工資", "試用期解僱一律不須給資遣費", "法定試用期強制為六個月"], a: 1 },
-                    { q: "雇主與勞工約定「離職後競業禁止條款」，下列哪一項「不是」法定有效要件？", o: ["雇主有應受保護之正當營業利益", "限制期間不得逾兩年", "限制期間無須提供任何合理補償", "限制之區域與業務範圍合理"], a: 2 }
-                ],
-                "最低工資": [
-                    { q: "依《最低工資法》規定，勞雇雙方議定之工資不得低於最低工資，若雇主違反規定將面臨何種處罰？", o: ["處新臺幣2萬元以上100萬元以下罰鍰", "處新臺幣1千元罰鍰", "僅口頭勸導不予罰鍰", "勒令負責人入監服刑"], a: 0 },
-                    { q: "雇主計算全勤獎金時，下列哪種情形雇主「不得」扣發全勤獎金？", o: ["勞工依法請婚假或喪假", "勞工無故曠職", "勞工多次無故遲到", "勞工請一般事假"], a: 0 },
-                    { q: "關於工資發給之原則，下列何者符合勞動基準法規定？", o: ["雇主得以庫存產品抵充全額工資", "工資應全額直接給付勞工，除法令另有規定或雙方另有約定外", "雇主可預扣工資作為違約金", "發放時間由雇主當天任意決定"], a: 1 }
-                ],
-                "工時規範": [
-                    { q: "依勞動基準法第30條規定，法定正常工作時間每日與每週上限分別為多少？", o: ["每日不得超過8小時，每週不得超過40小時", "每日不得超過10小時，每週不得超過48小時", "每日不得超過7小時，每週不得超過35小時", "每日與每週皆無法定上限"], a: 0 },
-                    { q: "勞工繼續工作4小時，雇主至少應給予多少時間之休息？", o: ["10分鐘", "15分鐘", "30分鐘", "60分鐘"], a: 2 },
-                    { q: "關於變形工時（彈性工時）的實施要件，下列敘述何者正確？", o: ["任何行業老闆口頭宣布即可實施", "須屬勞動部指定之行業，且經工會或勞資會議同意", "實施後每日工時可無限延長", "所有兼職人員一律強制適用"], a: 1 }
-                ],
-                "加班權益": [
-                    { q: "勞工在平日正常工時外延長工時（加班）在2小時以內者，加班費按平日每小時工資額至少加給多少？", o: ["三分之一以上 (約1.34倍)", "三分之二以上", "一倍以上", "無須額外加給"], a: 0 },
-                    { q: "依勞基法規定，雇主延長勞工之工作時間連同正常工作時間，一日合計不得超過多少小時？", o: ["10小時", "12小時", "14小時", "16小時"], a: 1 },
-                    { q: "勞工平日或休息日加班後，關於加班費與補休之選擇，下列何者正確？", o: ["雇主得片面硬性規定一律只能補休", "依勞工意願選擇換取補休，並經雇主同意", "補休逾期未休完雇主可直接作廢不給錢", "補休時數一律打八折折算"], a: 1 }
-                ],
-                "例假休息": [
-                    { q: "勞動基準法第36條規定俗稱的「一例一休」，是指勞工每7日中至少應有幾日之休息？", o: ["應有1日例假，1日休息日", "應有2日例假", "應有2日休息日", "應有1日休假即可"], a: 0 },
-                    { q: "關於「例假日」要求勞工出勤之嚴格限制，下列敘述何者正確？", o: ["只要老闆多給薪水隨時可出勤", "除非天災、事變或突發事件，否則不得使勞工於例假出勤", "員工只要口頭同意即可出勤", "例假日出勤完全不須給薪"], a: 1 },
-                    { q: "勞工在同一雇主繼續工作滿6個月以上但未滿1年者，依法享有幾日特別休假？", o: ["1日", "3日", "7日", "10日"], a: 1 }
-                ],
-                "國定假日": [
-                    { q: "紀念日、勞動節日及其他由中央主管機關規定應放假之日（國定假日），勞工休假期間工資應如何發給？", o: ["工資照給", "不發給工資", "只發給半薪", "扣除全勤獎金"], a: 0 },
-                    { q: "每年5月1日「國際勞動節」，適用勞動基準法之勞工享有何種法定權利？", o: ["法定應放假日，經勞工同意出勤者工資應加倍發給", "必須自行請特休才能休假", "僅限戶外體力勞動者才能放假", "屬一般上班日無加給"], a: 0 },
-                    { q: "國定假日若適逢勞工排定之例假或休息日，雇主依法應如何處理？", o: ["直接視為抵銷不另補假", "應予補假一日", "由雇主逕行沒收", "補發泡麵一碗抵充"], a: 1 }
-                ],
-                "請假權利": [
-                    { q: "依《勞工請假規則》規定，普通傷病假一年內未超過幾日之部分，工資折半發給？", o: ["14日", "30日", "60日", "90日"], a: 1 },
-                    { q: "勞工結婚者，依勞工請假規則享有幾日有薪婚假？", o: ["3日", "5日", "8日", "14日"], a: 2 },
-                    { q: "勞工因遭遇職業災害而致受傷休養期間，雇主應給予何種假別且工資如何給付？", o: ["事假且不給薪", "普通病假且領半薪", "公傷病假，並按原領工資數額予以補償", "強制留職停薪"], a: 2 }
-                ],
-                "職業安全": [
-                    { q: "依《職業安全衛生法》規定，提供必要安全衛生防護設施與個人防護裝備是誰的法定義務？", o: ["勞工自費購買", "雇主", "勞保局", "工會自籌"], a: 1 },
-                    { q: "勞工在作業場所發現有立即發生危險之虞時，依法享有何種法定權利？", o: ["留在原地等待主管前來", "得在不危及他人安全下，自行停止作業並退避至安全場所（退避權）", "雇主可因此予以開除", "必須先呈報主管機關核准才能離開"], a: 1 },
-                    { q: "雇主對新進勞工或在職勞工變更工作時，應辦理下列何者以預防職業災害發生？", o: ["體能耐力極限挑戰", "必要的安全衛生教育及訓練", "簽署職災免責切結書", "繳交工傷保證金"], a: 1 }
-                ],
-                "勞保勞退": [
-                    { q: "依《勞工退休金條例》（勞退新制），雇主每月為勞工提繳之退休金，不得低於勞工每月工資的多少？", o: ["3%", "6%", "8%", "10%"], a: 1 },
-                    { q: "雇主應負擔之勞工退休金提繳費用（6%），是否可以從勞工約定薪資中內扣？", o: ["可以，雇主得自行從薪水扣減", "不可以，此為雇主法定強制負擔，不得內扣", "只要員工簽切結書即可內扣", "由勞雇雙方平分各3%"], a: 1 },
-                    { q: "勞工到職當日雇主即應申報參加勞工保險，若雇主未依法加保致勞工發生事故，雇主應承擔何種責任？", o: ["無任何責任", "除面臨裁罰外，須按勞保給付標準賠償勞工損失", "僅需補繳保費", "要求勞工自行就醫承擔"], a: 1 }
-                ],
-                "性別平權": [
-                    { q: "依《性別平等工作法》規定，女性受僱者分娩前後，雇主應使其停止工作給予產假幾星期？", o: ["4星期", "6星期", "8星期", "12星期"], a: 2 },
-                    { q: "受僱者任職滿6個月後，於每一子女滿三歲前，得申請育嬰留職停薪，期間最長至何時？", o: ["半年", "一年", "最長不得超過二年", "最長不得超過五年"], a: 2 },
-                    { q: "雇主於知悉職場發生性騷擾之情形時，依法應採取何種作為？", o: ["大事化小勸導私下和解", "採取立即有效之糾正及補救措施", "將申訴勞工直接降調或免職", "置之不理交由司法自行審理"], a: 1 }
-                ],
-                "友善職場": [
-                    { q: "雇主為預防員工遭受職場霸凌或不法侵害，應採取何種法定義務措施？", o: ["訂定職場不法侵害預防指引與妥善申訴處理程序", "嚴禁同仁對外宣揚並息事寧人", "要求受害者自請離職", "視為私人恩怨不予理會"], a: 0 },
-                    { q: "女性受僱者因生理期致工作有困難者，每月得請生理假一日，全年請假日數未逾三日者：", o: ["不併入病假計算，其餘日數併入病假，且薪資折半發給", "一律視為曠工扣薪", "雇主可強制要求提供醫院診斷證明", "生理假完全不給工資"], a: 0 },
-                    { q: "受僱者提出職場霸凌、性騷擾申訴或檢舉違法時，雇主「不得」採取下列何種不利對待？", o: ["啟動公正調查程序", "解僱、降調、減薪或為損害其權益之不利處分", "提供心理諮商與保護措施", "調整工作環境防範二度傷害"], a: 1 }
-                ],
-                "資遣解僱": [
-                    { q: "雇主依勞基法第11條資遣勞工，勞工繼續工作3年以上者，法定預告期間為幾日前？", o: ["10日前", "20日前", "30日前", "60日前"], a: 2 },
-                    { q: "勞工於接到資遣預告後，為另謀工作得於工作時間請假外出（謀職假），每星期最多幾日且工資照給？", o: ["1日", "2日", "3日", "4日"], a: 1 },
-                    { q: "雇主若無正當法定事由違法片面解僱勞工，勞工得循法律途徑主張何種權益？", o: ["確認僱傭關係存在，並請求補發解僱期間工資", "只能自認倒楣無解", "向警局報案逮捕老闆", "自動放棄所有年資退撫金"], a: 0 }
-                ],
-                "勞資爭議": [
-                    { q: "勞雇雙方發生積欠工資或資遣費等爭議時，勞工可向所在地勞工局申請何種程序尋求協助？", o: ["勞資爭議調解", "公司破產清算", "國際法庭仲裁", "申請憲法法庭審理"], a: 0 },
-                    { q: "勞資爭議在法定調解或仲裁期間，勞工享有何種法律保障？", o: ["雇主得立即予以停職處分", "雇主不得因該爭議事件終止契約或為不利待遇", "勞工須繳納十萬元調解保證金", "調解結果不具法律公信力"], a: 1 },
-                    { q: "勞工面臨重大勞資訴訟時，可向勞動部或法律扶助基金會申請何種資源協助？", o: ["勞工訴訟扶助與律師費用補助", "發行公司債券補助", "查封全部同事帳戶", "免繳當年度綜合所得稅"], a: 0 }
-                ],
-                "工會組織": [
-                    { q: "憲法與國際勞動公約保障的「勞動三權」，包含團結權、團體協商權以及哪一項基本權利？", o: ["爭議權（罷工權）", "雇主免責權", "任意降薪權", "單方解僱權"], a: 0 },
-                    { q: "雇主因勞工組織工會、加入工會或參與合法工會活動而給予解僱或降薪，屬於何種違法行為？", o: ["合法企業人事自治", "不當勞動行為", "正常的績效考核處分", "一般商業合約抗辯"], a: 1 },
-                    { q: "工會代表勞方與雇主簽訂並具有高於個別勞動契約效力的法律文件為何？", o: ["團體協約", "員工守則", "出勤管理要點", "公司章程"], a: 0 }
-                ],
-                "勞動檢查": [
-                    { q: "勞檢員依法執行勞動檢查時，雇主若無正當理由拒絕、規避或阻撓檢查，主管機關得：", o: ["處新臺幣3萬元以上15萬元以下罰鍰", "僅能口頭致謝", "完全無罰則規定", "幫雇主頒發模範獎牌"], a: 0 },
-                    { q: "勞工發現事業單位違反勞動法規向勞檢機關提出申訴時，法令對檢舉人有何保障？", o: ["機關對申訴人身分嚴格保密，且雇主不得為解僱等報復對待", "必須將申訴人全名公告於全公司", "雇主可依法直接扣薪解僱申訴人", "申訴人必須先向雇主自首道歉"], a: 0 },
-                    { q: "經勞動檢查查獲事業單位違反勞基法裁處確定者，主管機關依法應公布何種資訊？", o: ["公布事業單位名稱、負責人姓名及處分事由", "公布申訴員工的身分證字號與地址", "僅公布檢查員姓名", "依法不得對外公布任何資訊"], a: 0 }
-                ]
-            }
+            quizData: {
+          "勞動契約": [
+                    {
+                              "q": "依勞動基準法規定，勞動契約分為定期契約與不定期契約，有繼續性工作應為何種契約？",
+                              "o": [
+                                        "不定期契約",
+                                        "定期契約",
+                                        "承攬契約",
+                                        "委任契約"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第9條第1項規定，勞動契約分為定期契約及不定期契約。臨時性、短期性、季節性及特定性工作得為定期契約；有繼續性工作應為不定期契約，以保障勞工之工作權與就業安定。"
+                    },
+                    {
+                              "q": "關於職場上常見的「試用期」，下列何項敘述最符合勞動法令？",
+                              "o": [
+                                        "試用期內雇主不須投保勞保",
+                                        "試用期勞工仍受勞基法保障，薪資不得低於最低工資",
+                                        "試用期解僱一律不須給資遣費",
+                                        "法定試用期強制為六個月"
+                              ],
+                              "a": 1,
+                              "explanation": "我國現行勞基法雖無試用期明文，但勞雇雙方得本於契約自由原則約定合理試用期。試用期間勞工仍享有勞基法全部基本權益保障，包含雇主必須投保勞保、薪資不得低於法定最低工資、終止契約仍須符合法定解僱事由並依法給付資遣費。"
+                    },
+                    {
+                              "q": "雇主與勞工約定「離職後競業禁止條款」，下列哪一項「不是」法定有效要件？",
+                              "o": [
+                                        "雇主有應受保護之正當營業利益",
+                                        "限制期間不得逾兩年",
+                                        "限制期間無須提供任何合理補償",
+                                        "限制之區域與業務範圍合理"
+                              ],
+                              "a": 2,
+                              "explanation": "依勞動基準法第9條之1規定，離職後競業禁止條款必須具備四大要件：雇主有應受保護之正當營業利益、勞工之職位能接觸營業秘密、限制之期間（最長不逾2年）區域範圍合理，且「雇主對勞工因不從事競業行為所受損失，應給予合理補償」。若未給予合理補償，約定依法無效。"
+                    },
+                    {
+                              "q": "依勞動基準法第9條規定，定期契約屆滿後在何種情形下，依法會「視為不定期契約」？",
+                              "o": [
+                                        "勞工繼續工作而雇主不即表示反對意思者",
+                                        "勞工每個月工作滿100小時以上",
+                                        "雇主口頭答應給予全勤獎金",
+                                        "勞工主動提出調薪要求"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第9條第2項第1款規定，定期契約屆滿後，勞工繼續工作而雇主不即表示反對意思者，依法視為不定期契約。此外，雖經另訂新約，但前後契約之工作期間超過90日，前後契約間斷期間未超過30日者，亦同。"
+                    },
+                    {
+                              "q": "雇主與勞工約定「最低服務年限條款」（綁約約定），下列何者為法定之必要條件？",
+                              "o": [
+                                        "雇主為勞工進行專業技術培訓並負擔培訓費用，或提供合理補償",
+                                        "只要雙方簽字即可任意約定十年以上",
+                                        "由人資主管口頭告知即具法律效力",
+                                        "勞工離職時必須無條件賠償一整年年薪"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第15條之1規定，雇主與勞工約定最低服務年限，必須符合「雇主為勞工進行專業技術培訓並負擔培訓費用」或「雇主為勞工提供合理補償」，且約定之服務年限長短與違約金數額須具備相當合理性，否則該約定全部無效。"
+                    },
+                    {
+                              "q": "關於雇主調動勞工工作之「調動五原則」（勞基法第10條之1），下列敘述何者錯誤？",
+                              "o": [
+                                        "基於企業經營上所必須，且不得有不當動機",
+                                        "對勞工之工資及其他勞動條件，未作不利之變更",
+                                        "調動後工作為勞工體能及技術可勝任",
+                                        "雇主可任意跨縣市調動且無須提供任何交通或住宿協助"
+                              ],
+                              "a": 3,
+                              "explanation": "依勞動基準法第10條之1規定，雇主調動工作若調動工作地點過遠，雇主應予以必要之協助（如提供交通車、交通津貼或宿舍）。選項中「無須提供任何交通或住宿協助」違反調動五原則之規定。"
+                    }
+          ],
+          "最低工資": [
+                    {
+                              "q": "依《最低工資法》規定，勞雇雙方議定之工資不得低於最低工資，若雇主違反規定將面臨何種處罰？",
+                              "o": [
+                                        "處新臺幣2萬元以上100萬元以下罰鍰",
+                                        "處新臺幣1千元罰鍰",
+                                        "僅口頭勸導不予罰鍰",
+                                        "勒令負責人入監服刑"
+                              ],
+                              "a": 0,
+                              "explanation": "依《最低工資法》第17條規定，勞雇雙方議定之工資低於最低工資者，由主管機關處新臺幣2萬元以上100萬元以下罰鍰，並得依事業單位規模、違反人數或違反情節加重處罰，且公告事業單位與負責人名稱。"
+                    },
+                    {
+                              "q": "雇主計算全勤獎金時，下列哪種情形雇主「不得」扣發全勤獎金？",
+                              "o": [
+                                        "勞工依法請婚假或喪假",
+                                        "勞工無故曠職",
+                                        "勞工多次無故遲到",
+                                        "勞工請一般事假"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞工請假規則》第9條及性別平等工作法相關規定，勞工依法請婚假、喪假、公傷病假、公假或產假、陪產檢及陪產假、育嬰留職停薪等，雇主均不得扣發全勤獎金或為其他不利處分。"
+                    },
+                    {
+                              "q": "關於工資發給之原則，下列何者符合勞動基準法規定？",
+                              "o": [
+                                        "雇主得以庫存產品抵充全額工資",
+                                        "工資應全額直接給付勞工，除法令另有規定或雙方另有約定外",
+                                        "雇主可預扣工資作為違約金",
+                                        "發放時間由雇主當天任意決定"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第22條第2項規定，工資應全額直接給付勞工。但法令另有規定（如法定健保勞保自付額、所得稅扣繳）或勞雇雙方另有約定者，不在此限。雇主不得片面以商品抵充或預扣違約金。"
+                    },
+                    {
+                              "q": "依勞動基準法規定，雇主每月發放工資時，應提供勞工何種文件以供核對？",
+                              "o": [
+                                        "薪資明細表（記載工資各項目計算方式與扣款明細）",
+                                        "僅需口頭告知轉帳金額",
+                                        "半年發放一次出勤紀錄",
+                                        "無須提供任何明細文件"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第23條第1項規定，雇主應置備勞工名冊及工資清冊，工資發給時並應提供工資各項目計算方式明細（即薪資單），載明工資總額、本薪、加班費、獎金及法定應扣除各項目，以保障勞工知情權。"
+                    },
+                    {
+                              "q": "若雇主以「員工打破餐具或作業疏失」為由，逕自扣抵勞工應得之薪資，是否合法？",
+                              "o": [
+                                        "違法，工資應全額直接給付，未經協商確定賠償責任雇主不得擅自扣除",
+                                        "完全合法，損失理應由員工薪資全額扣抵",
+                                        "只要員工在勞動契約簽名就可以任意扣款",
+                                        "只要扣款金額在二千元以下就完全合法"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第26條規定，雇主不得預扣勞工工資作為違約金或賠償費用。勞工工作疏失造成損害，其賠償金額應由雙方本於事實協商或透過司法程序確認，雇主絕不得擅自從工資中扣抵。"
+                    },
+                    {
+                              "q": "關於「工資」的法定定義，下列何者屬於勞動基準法所規範之工資？",
+                              "o": [
+                                        "因工作而獲得之經常性報酬（如本薪、全勤獎金、績效獎金）",
+                                        "偶發性發給之春節開工紅包",
+                                        "非經常性給予之三節慰問金",
+                                        "雇主私人餽贈之生日禮金"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第2條第3款規定，工資謂勞工因工作而獲得之報酬，包括工資、薪金及按計時、計日、計月、計件以現金或實物等方式給付之獎金、津貼及其他任何名義之經常性給與。三節慰問金與偶發性紅包不具對價性與經常性，屬恩惠性給與。"
+                    }
+          ],
+          "工時規範": [
+                    {
+                              "q": "依勞動基準法第30條規定，法定正常工作時間每日與每週上限分別為多少？",
+                              "o": [
+                                        "每日不得超過8小時，每週不得超過40小時",
+                                        "每日不得超過10小時，每週不得超過48小時",
+                                        "每日不得超過7小時，每週不得超過35小時",
+                                        "每日與每週皆無法定上限"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第30條第1項規定，勞工正常工作時間，每日不得超過8小時，每週不得超過40小時。超過正常工時之部分，即屬延長工作時間（加班），雇主必須依法給付加班費。"
+                    },
+                    {
+                              "q": "勞工繼續工作4小時，雇主至少應給予多少時間之休息？",
+                              "o": [
+                                        "10分鐘",
+                                        "15分鐘",
+                                        "30分鐘",
+                                        "60分鐘"
+                              ],
+                              "a": 2,
+                              "explanation": "依勞動基準法第35條規定，勞工繼續工作4小時，至少應有30分鐘之休息。但實行輪班制或其工作有連續性或緊急性者，雇主得在工作時間內另行調配其休息時間。"
+                    },
+                    {
+                              "q": "關於變形工時（彈性工時）的實施要件，下列敘述何者正確？",
+                              "o": [
+                                        "任何行業老闆口頭宣布即可實施",
+                                        "須屬勞動部指定之行業，且經工會或勞資會議同意",
+                                        "實施後每日工時可無限延長",
+                                        "所有兼職人員一律強制適用"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第30條第2項、第30條之1規定，實施二週、四週或八週變形工時，事業單位必須先屬於中央主管機關（勞動部）指定之適用行業，且必須取得工會同意，事業單位無工會者須經勞資會議同意，缺一即屬違法。"
+                    },
+                    {
+                              "q": "依勞動基準法第30條第5項規定，雇主應置備勞工出勤紀錄，並保存多久期限？",
+                              "o": [
+                                        "1年",
+                                        "3年",
+                                        "5年",
+                                        "10年"
+                              ],
+                              "a": 2,
+                              "explanation": "依勞動基準法第30條第5項規定，雇主應置備勞工出勤紀錄，並保存5年。違反者依勞基法第79條可處新臺幣9萬元以上45萬元以下罰鍰，此為維護勞工工時計算與加班費權益之關鍵法令。"
+                    },
+                    {
+                              "q": "依勞動基準法施行細則規定，雇主置備之出勤紀錄，記錄出勤時間應精確至何種單位？",
+                              "o": [
+                                        "記錄至半天",
+                                        "記錄至小時",
+                                        "記錄至分鐘",
+                                        "記錄至半小時"
+                              ],
+                              "a": 2,
+                              "explanation": "依勞動基準法施行細則第21條第1項規定，出勤紀錄包括以簽到簿、出勤卡、刷卡機、門禁系統、生物辨識系統或電子差勤系統記載，其記錄出勤時間應記入至「分鐘」為止，不得概括以小時登記。"
+                    },
+                    {
+                              "q": "雇主依法實施「四週彈性工時（變形工時）」時，勞工每四週內至少應有幾日之例假與休息日？",
+                              "o": [
+                                        "至少4日例假及4日休息日",
+                                        "至少2日例假及2日休息日",
+                                        "僅需1日例假即可",
+                                        "完全無須安排例假"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第30條之1第1項第3款規定，勞工每二週內至少應有二日之例假，每四週內之例假及休息日至少應有八日（即四例四休），以保障四週彈性工時勞工之充分休息與身心健康。"
+                    }
+          ],
+          "加班權益": [
+                    {
+                              "q": "勞工在平日正常工時外延長工時（加班）在2小時以內者，加班費按平日每小時工資額至少加給多少？",
+                              "o": [
+                                        "三分之一以上 (約1.34倍)",
+                                        "三分之二以上",
+                                        "一倍以上",
+                                        "無須額外加給"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第24條第1項第1款規定，雇主延長勞工工作時間在2小時以內者，應按平日每小時工資額加給三分之一以上（即至少給予1又1/3倍，折算約1.34倍平日時薪）。"
+                    },
+                    {
+                              "q": "依勞基法規定，雇主延長勞工之工作時間連同正常工作時間，一日合計不得超過多少小時？",
+                              "o": [
+                                        "10小時",
+                                        "12小時",
+                                        "14小時",
+                                        "16小時"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第32條第2項規定，雇主延長勞工之工作時間連同正常工作時間，一日不得超過12小時；延長之工作時間，一個月不得超過46小時。此為防止過勞之法定強制工時紅線。"
+                    },
+                    {
+                              "q": "勞工平日或休息日加班後，關於加班費與補休之選擇，下列何者正確？",
+                              "o": [
+                                        "雇主得片面硬性規定一律只能補休",
+                                        "依勞工意願選擇換取補休，並經雇主同意",
+                                        "補休逾期未休完雇主可直接作廢不給錢",
+                                        "補休時數一律打八折折算"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第32條之1規定，勞工加班後依其意願選擇換取補休並經雇主同意者，得按加班時數折算補休。雇主絕對不得片面規定只能補休；若補休期限屆滿或契約終止仍未休畢之時數，雇主依法仍須按加班日工資標準發給加班費。"
+                    },
+                    {
+                              "q": "勞工於平日延長工作時間（加班）超過2小時（即第3、4小時）者，加班費應按平日每小時工資額至少加給多少？",
+                              "o": [
+                                        "三分之二以上 (約1.67倍)",
+                                        "三分之一以上",
+                                        "一倍以上",
+                                        "二倍以上"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第24條第1項第2款規定，再延長工作時間在2小時以內者（即平日加班第3、4小時），按平日每小時工資額加給三分之二以上（即至少給予1又2/3倍，折算約1.67倍平日時薪）。"
+                    },
+                    {
+                              "q": "雇主延長勞工之工作時間（加班），一個月總時數原則上不得超過多少小時？",
+                              "o": [
+                                        "36小時",
+                                        "46小時",
+                                        "60小時",
+                                        "80小時"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第32條第2項規定，雇主延長勞工之工作時間，一個月原則上不得超過46小時。若經工會同意（無工會經勞資會議同意），得放寬為一個月不得超過54小時，且每三個月不得超過138小時。"
+                    },
+                    {
+                              "q": "勞工於「休息日」出勤工作，其加班工作時數是否應計入每月加班46小時之法定上限？",
+                              "o": [
+                                        "是，休息日工作時數應計入每月延長工作時間上限內",
+                                        "否，休息日工時完全不計入任何上限",
+                                        "僅有高階主管才需要計入",
+                                        "只要雙方口頭約定即可不計入"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第32條及勞動部函釋，休息日工作時數依法屬於延長工作時間（加班），該出勤時數必須併入每月46小時（或經同意之54小時）加班時數總量上限內計算，以避免勞工過度連續勞動。"
+                    }
+          ],
+          "例假休息": [
+                    {
+                              "q": "勞動基準法第36條規定俗稱的「一例一休」，是指勞工每7日中至少應有幾日之休息？",
+                              "o": [
+                                        "應有1日例假，1日休息日",
+                                        "應有2日例假",
+                                        "應有2日休息日",
+                                        "應有1日休假即可"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第36條第1項規定，勞工每7日中應有2日之休息，其中1日為例假，1日為休息日。例假出勤限制極為嚴格，休息日則允許經勞工同意後出勤並依法領取加成加班費。"
+                    },
+                    {
+                              "q": "關於「例假日」要求勞工出勤之嚴格限制，下列敘述何者正確？",
+                              "o": [
+                                        "只要老闆多給薪水隨時可出勤",
+                                        "除非天災、事變或突發事件，否則不得使勞工於例假出勤",
+                                        "員工只要口頭同意即可出勤",
+                                        "例假日出勤完全不須給薪"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第40條規定，除非因天災、事變或突發事件，雇主認有繼續工作之必要，否則絕對不得使勞工於例假日出勤。縱使合法停止假期出勤，工資亦應加倍發給，事後並須給予勞工補假休息，且於事後24小時內報請當地主管機關核備。"
+                    },
+                    {
+                              "q": "勞工在同一雇主繼續工作滿6個月以上但未滿1年者，依法享有幾日特別休假？",
+                              "o": [
+                                        "1日",
+                                        "3日",
+                                        "7日",
+                                        "10日"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第38條第1項第1款規定，勞工在同一雇主或事業單位，繼續工作滿6個月以上1年未滿者，享有特別休假3日，請假期間工資照給。"
+                    },
+                    {
+                              "q": "勞工在同一雇主繼續工作滿1年以上未滿2年者，依法享有幾日特別休假？",
+                              "o": [
+                                        "3日",
+                                        "7日",
+                                        "10日",
+                                        "14日"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第38條第1項第2款規定，勞工在同一雇主繼續工作滿1年以上2年未滿者，享有特別休假7日；滿2年以上3年未滿者為10日；滿3年以上5年未滿者為14日。"
+                    },
+                    {
+                              "q": "勞工之特別休假因年度終結或勞動契約終止而未休完之日數，雇主依法應如何處理？",
+                              "o": [
+                                        "直接歸零作廢不予補發",
+                                        "應發給未休日數之工資（經協商得遞延至次年度）",
+                                        "強制勞工接受無薪假扣抵",
+                                        "發給公司折價券抵充"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第38條第4項規定，特別休假因年度終結或契約終止而未休之日數，雇主應發給工資。年度終結未休之日數，得經勞雇雙方協商遞延至次一年度實施，但次一年度終結或契約終止仍未休之日數，雇主仍應發給工資。"
+                    },
+                    {
+                              "q": "依勞動基準法第34條規定，輪班制勞工更換班次時，原則上至少應有連續多少小時之休息時間？",
+                              "o": [
+                                        "8小時",
+                                        "11小時",
+                                        "14小時",
+                                        "24小時"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第34條第2項規定，勞工工作採輪班制者，其更換班次時，至少應有連續11小時之休息時間，以確保輪班勞工維持足夠生理休息與睡眠品質。"
+                    }
+          ],
+          "國定假日": [
+                    {
+                              "q": "紀念日、勞動節日及其他由中央主管機關規定應放假之日（國定假日），勞工休假期間工資應如何發給？",
+                              "o": [
+                                        "工資照給",
+                                        "不發給工資",
+                                        "只發給半薪",
+                                        "扣除全勤獎金"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第39條規定，第37條所定之應放假日（國定假日、勞動節等），勞工均應休假，休假期間工資由雇主照給。雇主不得藉故扣薪或要求無償補班。"
+                    },
+                    {
+                              "q": "每年5月1日「國際勞動節」，適用勞動基準法之勞工享有何種法定權利？",
+                              "o": [
+                                        "法定應放假日，經勞工同意出勤者工資應加倍發給",
+                                        "必須自行請特休才能休假",
+                                        "僅限戶外體力勞動者才能放假",
+                                        "屬一般上班日無加給"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第37條第1項規定，5月1日勞動節為適用勞動基準法全體勞工之法定應放假日。若雇主徵得勞工同意於該日出勤，依勞基法第39條工資應加倍發給（即除原本工資外另再加發一日工資）。"
+                    },
+                    {
+                              "q": "國定假日若適逢勞工排定之例假或休息日，雇主依法應如何處理？",
+                              "o": [
+                                        "直接視為抵銷不另補假",
+                                        "應予補假一日",
+                                        "由雇主逕行沒收",
+                                        "補發泡麵一碗抵充"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法施行細則第23條之1規定，國定假日適逢勞工之例假或休息日，應予補假一日；其補假日期由勞雇雙方協商排定，確保勞工法定應放假天數不受休假日重疊而減損。"
+                    },
+                    {
+                              "q": "雇主徵得勞工同意於國定假日出勤工作，依法當日工資應如何發給？",
+                              "o": [
+                                        "加倍發給（除原約定工資外，另再加發一日工資）",
+                                        "發給半薪即可",
+                                        "以補休半小時抵充",
+                                        "完全無須額外發給工資"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第39條規定，雇主經徵得勞工同意於國定假日工作者，工資應加倍發給。月薪制勞工原本月薪已包含當日工資，出勤者應額外加發一日平日工資；時薪制勞工當日出勤每小時均以2倍時薪計薪。"
+                    },
+                    {
+                              "q": "部分工時勞工（工讀生/時薪制兼職人員）若於國定假日出勤工作，當日工資應如何計給？",
+                              "o": [
+                                        "出勤時數之每小時工資應加倍（2倍時薪）給付",
+                                        "維持原約定時薪無加倍",
+                                        "打八折發給",
+                                        "僅補貼交通津貼50元"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第39條及勞動部《僱用部分時間工作勞工應行注意事項》，時薪制兼職勞工於國定假日約定出勤者，其每小時工資應加倍給付（即原時薪 × 2），未滿8小時部分依實際出勤時數加倍計給。"
+                    },
+                    {
+                              "q": "各級公職人員選舉投票日，對於具投票權且當日原定有工作義務之勞工，法令有何規定？",
+                              "o": [
+                                        "指定為應放假日，放假一日且工資照給",
+                                        "一律強制上班且不得投票",
+                                        "勞工必須自請事假並扣發薪水",
+                                        "僅公務人員享有放假權利，勞工不適用"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第37條及勞動部勞動條2字第1070131393號公告，各類公職人員選舉罷免投票日為應放假日，具投票權且原定出勤之勞工放假一日，工資照給；若徵得同意出勤者，應加倍發給出勤時段工資且不得妨礙勞工投票。"
+                    }
+          ],
+          "請假權利": [
+                    {
+                              "q": "依《勞工請假規則》規定，普通傷病假一年內未超過幾日之部分，工資折半發給？",
+                              "o": [
+                                        "14日",
+                                        "30日",
+                                        "60日",
+                                        "90日"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞工請假規則》第4條規定，勞工普通傷害、疾病或生理原因必須治療或休養者，未住院者一年內合計不得超過30日。普通傷病假一年內未超過30日部分，工資折半發給。"
+                    },
+                    {
+                              "q": "依《勞工請假規則》第2條最新規定（自民國115年10月1日起施行），勞工結婚者享有幾日有薪婚假且工資照給？",
+                              "o": [
+                                        "5日",
+                                        "8日",
+                                        "10日",
+                                        "14日"
+                              ],
+                              "a": 3,
+                              "explanation": "依民國115年（2026年）10月1日起施行之《勞工請假規則》第2條修正規定，為積極鼓勵婚育並落實家庭友善職場，勞工結婚者享有14日之有薪婚假（由原先的8日延長至14日），請假期間工資照給，且得自結婚之日前10日起3個月內請畢（經雇主同意者得於一年內請畢）。"
+                    },
+                    {
+                              "q": "勞工因遭遇職業災害而致受傷休養期間，雇主應給予何種假別且工資如何給付？",
+                              "o": [
+                                        "事假且不給薪",
+                                        "普通病假且領半薪",
+                                        "公傷病假，並按原領工資數額予以補償",
+                                        "強制留職停薪"
+                              ],
+                              "a": 2,
+                              "explanation": "依《勞工請假規則》第6條及勞動基準法第59條第2款規定，勞工因遭遇職業災害而致失能、傷害或疾病在治療、休養期間，雇主應給予公傷病假，並應按其原領工資數額予以全額補償，不得扣薪或強迫請事病假。"
+                    },
+                    {
+                              "q": "依《勞工請假規則》規定，父母、養父母、繼父母或配偶喪亡者，勞工得請喪假幾日且工資照給？",
+                              "o": [
+                                        "3日",
+                                        "6日",
+                                        "8日",
+                                        "14日"
+                              ],
+                              "a": 2,
+                              "explanation": "依《勞工請假規則》第3條第1款規定，父母、養父母、繼父母、配偶喪亡者，給予喪假8日，喪假期間工資照給，雇主不得扣發全勤獎金。"
+                    },
+                    {
+                              "q": "勞工因有重大私事必須親自處理者得請事假，依規定一年內合計最多不得超過幾日？",
+                              "o": [
+                                        "7日",
+                                        "14日",
+                                        "21日",
+                                        "30日"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞工請假規則》第7條規定，勞工因有事故必須親自處理者，得請事假，一年內合計不得超過14日。事假期間雇主得不給工資。"
+                    },
+                    {
+                              "q": "受僱者依法令規定應受召集（如後備軍人教育召集教召）時，雇主應給予何種假別？",
+                              "o": [
+                                        "公假，期間工資照給且不得扣發全勤獎金",
+                                        "事假，期間不給工資",
+                                        "強迫使用特休假抵充",
+                                        "停職處分不發薪"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞工請假規則》第8條及兵役法施行法第73條規定，受僱者依法令規定應受召集（如教育召集、後備軍人動員召集）出勤期間，雇主應給予公假，期間工資照給，且不得扣發全勤獎金或為任何不利處分。"
+                    }
+          ],
+          "職業安全": [
+                    {
+                              "q": "依《職業安全衛生法》規定，提供必要安全衛生防護設施與個人防護裝備是誰的法定義務？",
+                              "o": [
+                                        "勞工自費購買",
+                                        "雇主",
+                                        "勞保局",
+                                        "工會自籌"
+                              ],
+                              "a": 1,
+                              "explanation": "依《職業安全衛生法》第6條規定，雇主對機械、設備、場所及各類作業環境危害，應有符合規定之必要安全衛生設備及措施，並免費提供勞工安全防護器具，絕不可轉嫁勞工自行承擔。"
+                    },
+                    {
+                              "q": "勞工在作業場所發現有立即發生危險之虞時，依法享有何種法定權利？",
+                              "o": [
+                                        "留在原地等待主管前來",
+                                        "得在不危及他人安全下，自行停止作業並退避至安全場所（退避權）",
+                                        "雇主可因此予以開除",
+                                        "必須先呈報主管機關核准才能離開"
+                              ],
+                              "a": 1,
+                              "explanation": "依《職業安全衛生法》第18條第2項規定，勞工執行職務發現有立即發生危險之虞時，得在不危及其他工作者安全情形下，自行停止作業並退避至安全場所，並立刻向直屬主管報告。雇主不得因此對勞工予以解僱、降調或為其他不利處分。"
+                    },
+                    {
+                              "q": "雇主對新進勞工或在職勞工變更工作時，應辦理下列何者以預防職業災害發生？",
+                              "o": [
+                                        "體能耐力極限挑戰",
+                                        "必要的安全衛生教育及訓練",
+                                        "簽署職災免責切結書",
+                                        "繳交工傷保證金"
+                              ],
+                              "a": 1,
+                              "explanation": "依《職業安全衛生法》第32條規定，雇主對新進勞工或在職勞工於變更工作前，應使其接受適於各該工作所必要之安全衛生教育及訓練，且勞工受訓時間應計入工作時間，工資照給。"
+                    },
+                    {
+                              "q": "事業單位工作場所發生死亡或罹災人數在3人以上之重大職業災害時，雇主應於多久期限內通報勞檢機構？",
+                              "o": [
+                                        "8小時內",
+                                        "24小時內",
+                                        "48小時內",
+                                        "一週內"
+                              ],
+                              "a": 0,
+                              "explanation": "依《職業安全衛生法》第37條第2項規定，工作場所發生死亡災害、罹災人數在3人以上、或罹災人數在1人以上且需住院治療之災害時，雇主應於8小時內通報勞動檢查機構，並保持現場完整以供調查。"
+                    },
+                    {
+                              "q": "勞工於夏季高溫戶外作業或高空作業時，依職安法令規定雇主應採取何種必要作為？",
+                              "o": [
+                                        "提供足夠飲用水、遮陽休息區及防墜安全裝備",
+                                        "要求勞工簽立切結書自行承擔風險",
+                                        "催促加速完工以縮短曝曬時間",
+                                        "嚴禁勞工攜帶安全帽等防護用具"
+                              ],
+                              "a": 0,
+                              "explanation": "依《職業安全衛生設施規則》及高氣溫戶外作業勞工熱危害預防指引，雇主應設置遮陽休息區、提供充足飲用水與電解質，並調整作業時間；高空作業時則必須設置防墜護欄、安全網並提供全身背負式安全帶等護具。"
+                    },
+                    {
+                              "q": "依職業安全衛生法規定，雇主依法指派之職業安全衛生管理人員，其主要任務為何？",
+                              "o": [
+                                        "規劃、推動及督導安全衛生管理業務與職災預防措施",
+                                        "替公司出面承擔司法責任",
+                                        "監控員工私人通訊隱私",
+                                        "專責執行勞工考績懲處"
+                              ],
+                              "a": 0,
+                              "explanation": "依《職業安全衛生管理辦法》第5條之1規定，職業安全衛生管理人員係輔助雇主擬訂、規劃、推動及督導安全衛生管理業務，落實自動檢查與職災預防措施，守護工作者生命身體安全。"
+                    }
+          ],
+          "勞保勞退": [
+                    {
+                              "q": "依《勞工退休金條例》（勞退新制），雇主每月為勞工提繳之退休金，不得低於勞工每月工資的多少？",
+                              "o": [
+                                        "3%",
+                                        "6%",
+                                        "8%",
+                                        "10%"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞工退休金條例》第14條第1項規定，雇主應為適用本條例之勞工，按月提繳退休金，儲存於勞保局設立之勞工退休金個人專戶。雇主每月負擔之勞工退休金提繳率，不得低於勞工每月工資之6%。"
+                    },
+                    {
+                              "q": "雇主應負擔之勞工退休金提繳費用（6%），是否可以從勞工約定薪資中內扣？",
+                              "o": [
+                                        "可以，雇主得自行從薪水扣減",
+                                        "不可以，此為雇主法定強制負擔，不得內扣",
+                                        "只要員工簽切結書即可內扣",
+                                        "由勞雇雙方平分各3%"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞工退休金條例》第15條規定，雇主應負擔之提繳費用由雇主全額負擔，不得自勞工之約定工資中扣除。雇主若將6%退休金轉嫁或從工資中扣除，屬違法未全額給付工資，主管機關得依法重罰。"
+                    },
+                    {
+                              "q": "勞工到職當日雇主即應申報參加勞工保險，若雇主未依法加保致勞工發生事故，雇主應承擔何種責任？",
+                              "o": [
+                                        "無任何責任",
+                                        "除面臨裁罰外，須按勞保給付標準賠償勞工損失",
+                                        "僅需補繳保費",
+                                        "要求勞工自行就醫承擔"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞工保險條例》第72條及勞動基準法第59條規定，投保單位不依規定為勞工辦理加保手續者，除處以應負擔保險費之罰鍰外，勞工因此所受之損失，應由雇主按勞保條例規定之給付標準全額賠償勞工。"
+                    },
+                    {
+                              "q": "依《勞工職業災害保險及保護法》規定，受僱於登記有案之事業單位勞工，職災保險效力何時生效？",
+                              "o": [
+                                        "到職當日即生效（即使雇主尚未申報，發生職災仍享有保險給付）",
+                                        "通過試用期當日起算",
+                                        "任職滿三個月後生效",
+                                        "簽署正式合約後才生效"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞工職業災害保險及保護法》第13條規定，受僱於登記有案事業單位之勞工，其保險效力自到職當日零時起算。縱使雇主未依法辦理申報加保，勞工發生職災依然享有完整保險給付，保障不中斷。"
+                    },
+                    {
+                              "q": "雇主申報勞工之投保薪資或勞退提繳工資時，若有「以多報少（高薪低報）」之違法行為，會產生何種法律效果？",
+                              "o": [
+                                        "侵害勞工各項給付權益，雇主將遭主管機關處罰並須負賠償責任",
+                                        "完全合法且可替勞工避稅",
+                                        "只要員工知情便完全免責",
+                                        "勞動部會發函獎勵節約成本"
+                              ],
+                              "a": 0,
+                              "explanation": "高薪低報會嚴重侵害勞工之傷病、育嬰、老年、資遣與失業給付權益。雇主除面臨勞保局依短報金額按倍處以罰鍰外，勞工可請求民事賠償，且雇主負責人可能涉及刑法第215條業務登載不實罪及詐欺得利罪。"
+                    },
+                    {
+                              "q": "依現行勞工保險條例規定，僱用員工達幾人以上之事業單位，即屬於強制參加勞工保險之投保單位？",
+                              "o": [
+                                        "3人",
+                                        "5人",
+                                        "10人",
+                                        "30人"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞工保險條例》第6條第1項規定，僱用員工達5人以上之公司行號，為強制參加勞工保險之單位。另依勞工職業災害保險及保護法，只要僱用1人以上即為職災保險強制投保單位。"
+                    }
+          ],
+          "性別平權": [
+                    {
+                              "q": "依《性別平等工作法》規定，女性受僱者分娩前後，雇主應使其停止工作給予產假幾星期？",
+                              "o": [
+                                        "4星期",
+                                        "6星期",
+                                        "8星期",
+                                        "12星期"
+                              ],
+                              "a": 2,
+                              "explanation": "依《性別平等工作法》第15條第1項及勞動基準法第50條規定，女性受僱者分娩前後，雇主應使其停止工作，給予產假8星期；受僱工作滿6個月者產假期間工資照給，未滿6個月者工資折半發給。"
+                    },
+                    {
+                              "q": "受僱者任職滿6個月後，於每一子女滿三歲前，得申請育嬰留職停薪，期間最長至何時？",
+                              "o": [
+                                        "半年",
+                                        "一年",
+                                        "最長不得超過二年",
+                                        "最長不得超過五年"
+                              ],
+                              "a": 2,
+                              "explanation": "依《性別平等工作法》第16條第1項規定，受僱者任職滿6個月後，於每一子女滿3歲前，得申請育嬰留職停薪，期間至該子女滿3歲止，但最長不得超過2年。同時撫育子女二人以上者，其育嬰留職停薪期間應合併計算。"
+                    },
+                    {
+                              "q": "雇主於知悉職場發生性騷擾之情形時，依法應採取何種作為？",
+                              "o": [
+                                        "大事化小勸導私下和解",
+                                        "採取立即有效之糾正及補救措施",
+                                        "將申訴勞工直接降調或免職",
+                                        "置之不理交由司法自行審理"
+                              ],
+                              "a": 1,
+                              "explanation": "依《性別平等工作法》第13條第2項規定，雇主於知悉職場性騷擾之情形時，應採取立即有效之糾正及補救措施，包含保護被害人身心安全、啟動公正調查程序、協助轉介心理諮商及對行為人採取適當懲戒。"
+                    },
+                    {
+                              "q": "依《性別平等工作法》規定，受僱者陪伴其配偶妊娠產檢或分娩時，雇主應給予幾日之產檢假及陪產檢及陪產假？",
+                              "o": [
+                                        "3日",
+                                        "5日",
+                                        "7日",
+                                        "10日"
+                              ],
+                              "a": 2,
+                              "explanation": "依《性別平等工作法》第15條第5項規定，受僱者陪伴其配偶妊娠產檢或分娩時，雇主應給予陪產檢及陪產假7日；受僱者妊娠產檢亦享有產檢假7日，請假期間工資均照給。"
+                    },
+                    {
+                              "q": "受僱者於育嬰留職停薪期間，依就業保險法及相關補助規定，育嬰留職停薪津貼合併補助最高可達平均月投保薪資的多少？",
+                              "o": [
+                                        "50%",
+                                        "60%",
+                                        "80%",
+                                        "100%"
+                              ],
+                              "a": 2,
+                              "explanation": "依《就業保險法》第19條之2規定，育嬰留職停薪津貼按平均月投保薪資之60%發給，政府並加碼發給20%育嬰留職停薪薪資補助，合計最高可達平均月投保薪資之80%（相當於領取八成薪）。"
+                    },
+                    {
+                              "q": "事業單位僱用受僱者達多少人以上時，雇主依法應訂定性騷擾防治措施、申訴及懲戒規範，並在工作場所公開揭示？",
+                              "o": [
+                                        "10人以上",
+                                        "30人以上",
+                                        "50人以上",
+                                        "100人以上"
+                              ],
+                              "a": 1,
+                              "explanation": "依《性別平等工作法》第13條第1項規定，僱用受僱者30人以上之雇主，應訂定性騷擾防治措施、申訴及懲戒規範，並在工作場所公開揭示；僱用10人以上未達30人者，則應訂定申訴管道並公開揭示。"
+                    }
+          ],
+          "友善職場": [
+                    {
+                              "q": "雇主為預防員工遭受職場霸凌或不法侵害，應採取何種法定義務措施？",
+                              "o": [
+                                        "訂定職場不法侵害預防指引與妥善申訴處理程序",
+                                        "嚴禁同仁對外宣揚並息事寧人",
+                                        "要求受害者自請離職",
+                                        "視為私人恩怨不予理會"
+                              ],
+                              "a": 0,
+                              "explanation": "依《職業安全衛生設施規則》第324條之3規定，雇主應採取預防勞工因執行職務遭受他人不法侵害之必要措施，包括建立工作場所不法侵害預防指引、申訴處理流程、危害評估並提供身心健康協助。"
+                    },
+                    {
+                              "q": "女性受僱者因生理期致工作有困難者，每月得請生理假一日，全年請假日數未逾三日者：",
+                              "o": [
+                                        "不併入病假計算，其餘日數併入病假，且薪資折半發給",
+                                        "一律視為曠工扣薪",
+                                        "雇主可強制要求提供醫院診斷證明",
+                                        "生理假完全不給工資"
+                              ],
+                              "a": 0,
+                              "explanation": "依《性別平等工作法》第14條規定，女性受僱者每月得請生理假1日，全年請假日數未逾3日者，不併入普通傷病假計算，其餘日數併入病假；請假期間工資折半發給，且依施行細則雇主不得要求勞工提出醫療診斷證明。"
+                    },
+                    {
+                              "q": "受僱者提出職場霸凌、性騷擾申訴或檢舉違法時，雇主「不得」採取下列何種不利對待？",
+                              "o": [
+                                        "啟動公正調查程序",
+                                        "解僱、降調、減薪或為損害其權益之不利處分",
+                                        "提供心理諮商與保護措施",
+                                        "調整工作環境防範二度傷害"
+                              ],
+                              "a": 1,
+                              "explanation": "依性別平等工作法第36條及勞動基準法第74條規定，受僱者提出申訴、協查或檢舉時，雇主不得因此給予解僱、調職、降薪或任何不利之對待與處分，違反者主管機關得處以重罰並命其回復權益。"
+                    },
+                    {
+                              "q": "受僱者為撫育未滿一歲之子女，除法定休息時間外，雇主每日應給予多少時間之哺乳時間？",
+                              "o": [
+                                        "哺乳時間二次，每次以30分鐘為度，且視為工作時間",
+                                        "哺乳時間一次10分鐘",
+                                        "只能在午休時間自行處理",
+                                        "雇主可要求扣薪一小時"
+                              ],
+                              "a": 0,
+                              "explanation": "依《性別平等工作法》第18條規定，受僱者撫育未滿1歲之子女，除法定休息時間外，雇主每日應給予哺乳時間二次，每次以30分鐘為度；受僱者每日正常工作時間以外之延長工作時間達1小時以上者，雇主並應另給予哺乳時間一次30分鐘。哺乳時間均視為工作時間，工資照給。"
+                    },
+                    {
+                              "q": "受僱者其家庭成員預防接種或發生重大事故須親自照顧時，得請家庭照顧假，其請假日數一年內最多幾日？",
+                              "o": [
+                                        "3日",
+                                        "7日",
+                                        "14日",
+                                        "30日"
+                              ],
+                              "a": 1,
+                              "explanation": "依《性別平等工作法》第20條規定，受僱者於其家庭成員預防接種、發生嚴重之疾病或其他重大事故須親自照顧時，得請家庭照顧假；其請假日數一年內合計不得超過7日，請假日數併入事假計算。"
+                    },
+                    {
+                              "q": "事業單位僱用受僱者人數達多少人以上者，雇主應設置哺（集）乳室並提供托兒設施或適當托兒措施？",
+                              "o": [
+                                        "30人以上",
+                                        "50人以上",
+                                        "100人以上",
+                                        "200人以上"
+                              ],
+                              "a": 2,
+                              "explanation": "依《性別平等工作法》第23條規定，僱用受僱者100人以上之雇主，應設置哺（集）乳室並提供托兒設施或適當之托兒措施（如簽約幼兒園或提供托兒津貼）。主管機關亦提供經費補助輔導企業設置。"
+                    }
+          ],
+          "資遣解僱": [
+                    {
+                              "q": "雇主依勞基法第11條資遣勞工，勞工繼續工作3年以上者，法定預告期間為幾日前？",
+                              "o": [
+                                        "10日前",
+                                        "20日前",
+                                        "30日前",
+                                        "60日前"
+                              ],
+                              "a": 2,
+                              "explanation": "依勞動基準法第16條第1項第3款規定，雇主依法資遣勞工時，勞工繼續工作3年以上者，法定預告期間為30日前通知；工作3個月以上1年未滿者為10日前；1年以上3年未滿者為20日前。"
+                    },
+                    {
+                              "q": "勞工於接到資遣預告後，為另謀工作得於工作時間請假外出（謀職假），每星期最多幾日且工資照給？",
+                              "o": [
+                                        "1日",
+                                        "2日",
+                                        "3日",
+                                        "4日"
+                              ],
+                              "a": 1,
+                              "explanation": "依勞動基準法第16條第2項規定，勞工於接到資遣預告後，為另謀工作得於工作時間請假外出（謀職假）。其請假時數，每星期不得超過2日之工作時間，請假期間之工資照給。"
+                    },
+                    {
+                              "q": "雇主若無正當法定事由違法片面解僱勞工，勞工得循法律途徑主張何種權益？",
+                              "o": [
+                                        "確認僱傭關係存在，並請求補發解僱期間工資",
+                                        "只能自認倒楣無解",
+                                        "向警局報案逮捕老闆",
+                                        "自動放棄所有年資退撫金"
+                              ],
+                              "a": 0,
+                              "explanation": "雇主解僱勞工必須具備勞基法第11條或第12條之法定事由（解僱最後手段性原則）。若雇主違法解僱，勞工得向法院提起「確認僱傭關係存在」訴訟，勝訴確定後雙方僱傭關係依然有效，雇主必須補發非法解僱期間全部工資與利息。"
+                    },
+                    {
+                              "q": "依《勞工退休金條例》（勞退新制）規定計算資遣費，勞工每工作滿一年發給0.5個月平均工資，最高以發給幾個月為限？",
+                              "o": [
+                                        "3個月",
+                                        "6個月",
+                                        "12個月",
+                                        "無最高上限"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞工退休金條例》第12條規定，勞工適用新制資遣費者，工作年資每滿1年發給二分之一個月之平均工資，未滿1年者按比例計給；最高以發給6個月平均工資為限。"
+                    },
+                    {
+                              "q": "勞工若有無正當理由繼續曠工三日等違反勞動契約情節重大之情形，雇主依法得採取何種作為？",
+                              "o": [
+                                        "得不經預告逕行終止勞動契約（開除），且不須發給資遣費",
+                                        "仍須提前三十日預告並發給資遣費",
+                                        "必須給付加倍資遣費",
+                                        "扣押勞工身分證件"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第12條第1項第6款規定，勞工無正當理由繼續曠工3日，或一個月內曠工達6日者，雇主得不經預告終止契約，且依法無須發給資遣費，但應自知悉其情形之日起30日內為之。"
+                    },
+                    {
+                              "q": "雇主依勞動基準法第16條資遣勞工，若未依規定期間預告即終止契約，依法應給付勞工何種款項？",
+                              "o": [
+                                        "預告期間之工資",
+                                        "額外三個月資遣費",
+                                        "全年度獎金總額",
+                                        "無須給予任何補償款項"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第16條第3項規定，雇主未依第1項規定期間預告而終止契約者，應給付預告期間之工資。例如勞工年資滿3年應有30日預告期，雇主要求當天離職，即應加發30日預告期間工資及法定資遣費。"
+                    }
+          ],
+          "勞資爭議": [
+                    {
+                              "q": "勞雇雙方發生積欠工資或資遣費等爭議時，勞工可向所在地勞工局申請何種程序尋求協助？",
+                              "o": [
+                                        "勞資爭議調解",
+                                        "公司破產清算",
+                                        "國際法庭仲裁",
+                                        "申請憲法法庭審理"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞資爭議處理法》第9條規定，勞雇雙方發生權利事項或調整事項爭議時，得向勞工工作所在地直轄市或縣市主管機關（勞工局）申請調解，由公正中立之調解人或調解委員會協調解決糾紛。"
+                    },
+                    {
+                              "q": "勞資爭議在法定調解或仲裁期間，勞工享有何種法律保障？",
+                              "o": [
+                                        "雇主得立即予以停職處分",
+                                        "雇主不得因該爭議事件終止契約或為不利待遇",
+                                        "勞工須繳納十萬元調解保證金",
+                                        "調解結果不具法律公信力"
+                              ],
+                              "a": 1,
+                              "explanation": "依《勞資爭議處理法》第8條規定，勞資爭議在調解、仲裁或裁決期間，資方不得因該爭議事件而歇業、停工、終止勞動契約或為其他不利於勞工之待遇，以保障勞工於爭議處理期間之工作生存權。"
+                    },
+                    {
+                              "q": "勞工面臨重大勞資訴訟時，可向勞動部或法律扶助基金會申請何種資源協助？",
+                              "o": [
+                                        "勞工訴訟扶助與律師費用補助",
+                                        "發行公司債券補助",
+                                        "查封全部同事帳戶",
+                                        "免繳當年度綜合所得稅"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動部《勞工訴訟扶助實施要點》，勞工因勞資爭議涉訟時，可透過法律扶助基金會申請專業律師代理訴訟、裁判費保證金以及審理期間必要生活費用補助，減輕弱勢勞工之訴訟負擔。"
+                    },
+                    {
+                              "q": "依勞資爭議處理法規定，勞資雙方於調解委員會達成共識並在調解紀錄簽名時，其法律效力為何？",
+                              "o": [
+                                        "調解成立，視為雙方當事人間之契約，具有法律拘束力",
+                                        "僅供參考，任一方隨時可反悔不認帳",
+                                        "不具任何法律效力",
+                                        "自動轉為行政處分罰單"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞資爭議處理法》第21條規定，勞資爭議經調解成立者，視為雙方當事人間之契約；民間爭議當事人為工會者，視為團體協約，對勞資雙方均具有法律拘束力，雙方均應誠信遵守履行。"
+                    },
+                    {
+                              "q": "勞資爭議調解成立後，若雇主未依調解書內容給付金額，勞工得向法院聲請何種救濟程序？",
+                              "o": [
+                                        "聲請裁定准予強制執行，免經訴訟即可直接強制執行",
+                                        "重新回原公司免費上班三個月",
+                                        "要求主管機關發行救濟彩券",
+                                        "請求召開股東臨時會"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞資爭議處理法》第59條規定，勞資爭議經調解成立，雇主若不履行調解書之金錢給付義務，勞工得向管轄法院聲請裁定准予強制執行，經法院裁定後即可免經漫長起訴審判，直接向行政執行署或法院查封執行其財產。"
+                    },
+                    {
+                              "q": "雇主若因歇業、清算或宣告破產而積欠工資或資遣費，勞工得向勞保局申請何種代償救濟？",
+                              "o": [
+                                        "積欠工資墊償基金墊償",
+                                        "國民年金急難補助",
+                                        "全民健保特種救助金",
+                                        "失业生活互助借貸"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第28條規定，雇主因歇業、清算或破產而積欠勞工未滿6個月之工資、勞退新制資遣費或退休金時，勞工得向勞保局申請由「積欠工資墊償基金」先行全額墊償，再由勞保局向雇主代位求償。"
+                    }
+          ],
+          "工會組織": [
+                    {
+                              "q": "憲法與國際勞動公約保障的「勞動三權」，包含團結權、團體協商權以及哪一項基本權利？",
+                              "o": [
+                                        "爭議權（罷工權）",
+                                        "雇主免責權",
+                                        "任意降薪權",
+                                        "單方解僱權"
+                              ],
+                              "a": 0,
+                              "explanation": "憲法第15條及國際勞工組織（ILO）核心公約保障勞動三權：即團結權（組織工會）、團體協商權（工會與雇主集體協商）及爭議權（包括發動合法罷工及爭議行為），以平衡勞雇雙方實質力量對等。"
+                    },
+                    {
+                              "q": "雇主因勞工組織工會、加入工會或參與合法工會活動而給予解僱或降薪，屬於何種違法行為？",
+                              "o": [
+                                        "合法企業人事自治",
+                                        "不當勞動行為",
+                                        "正常的績效考核處分",
+                                        "一般商業合約抗辯"
+                              ],
+                              "a": 1,
+                              "explanation": "依《工會法》第35條規定，雇主不得因勞工發起組織工會、加入工會或參與合法工會活動，而拒絕僱用、解僱、降調、減薪或為其他不利待遇，此等行為構成「不當勞動行為」，依法得由勞動部裁決並處罰。"
+                    },
+                    {
+                              "q": "工會代表勞方與雇主簽訂並具有高於個別勞動契約效力的法律文件為何？",
+                              "o": [
+                                        "團體協約",
+                                        "員工守則",
+                                        "出勤管理要點",
+                                        "公司章程"
+                              ],
+                              "a": 0,
+                              "explanation": "依《團體協約法》第19條規定，團體協約所約定勞動條件優於個別勞動契約者，其效力高於個別勞動契約；個別勞動契約若約定較低標準者無效，應以團體協約之約定代替之。"
+                    },
+                    {
+                              "q": "依工會法規定，勞工發起籌組企業工會或產業工會時，法定連署發起人人數門檻為多少人？",
+                              "o": [
+                                        "10人以上",
+                                        "20人以上",
+                                        "30人以上",
+                                        "50人以上"
+                              ],
+                              "a": 2,
+                              "explanation": "依《工會法》第11條規定，組織企業工會、產業工會或職業工會，應有勞工30人以上之連署發起，組成籌備會辦理公開徵求會員及召開成立大會事宜。"
+                    },
+                    {
+                              "q": "工會依法發動合法罷工等爭議行為時，必須經過下列何項法定前置程序？",
+                              "o": [
+                                        "經調解不成立，並由會員以直接、無記名投票且經全體過半數同意",
+                                        "理事長在社群平臺發文宣布即可",
+                                        "任何會員隨時發動皆屬合法",
+                                        "必須先獲得雇主書面同意認可"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞資爭議處理法》第54條規定，工會非經調解不成立，且由會員以直接、無記名投票並經全體過半數同意，不得宣告罷工及設置罷工糾察線。符合程序之合法罷工享有民事及刑事免責權保障。"
+                    },
+                    {
+                              "q": "雇主若有打壓工會幹部或違反誠信協商等不當勞動行為，工會可向勞動部哪一單位申請裁決救濟？",
+                              "o": [
+                                        "不當勞動行為裁決委員會",
+                                        "公平交易委員會",
+                                        "消費者保護會",
+                                        "公平租稅調查會"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞資爭議處理法》第39條規定，勞工或工會認為雇主有違反工會法第35條或團體協約法第6條之不當勞動行為時，得向勞動部設立之「不當勞動行為裁決委員會」申請裁決，命雇主回復原狀或停止違法行為。"
+                    }
+          ],
+          "勞動檢查": [
+                    {
+                              "q": "勞檢員依法執行勞動檢查時，雇主若無正當理由拒絕、規避或阻撓檢查，主管機關得：",
+                              "o": [
+                                        "處新臺幣3萬元以上15萬元以下罰鍰",
+                                        "僅能口頭致謝",
+                                        "完全無罰則規定",
+                                        "幫雇主頒發模範獎牌"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞動檢查法》第15條第2項規定，事業單位及其負責人、代理人或受檢場所人員，無正當理由拒絕、規避或阻撓勞動檢查員執行職務者，主管機關得處新臺幣3萬元以上15萬元以下罰鍰，並得連續處罰及強制執行。"
+                    },
+                    {
+                              "q": "勞工發現事業單位違反勞動法規向勞檢機關提出申訴時，法令對檢舉人有何保障？",
+                              "o": [
+                                        "機關對申訴人身分嚴格保密，且雇主不得為解僱等報復對待",
+                                        "必須將申訴人全名公告於全公司",
+                                        "雇主可依法直接扣薪解僱申訴人",
+                                        "申訴人必須先向雇主自首道歉"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞動基準法》第74條規定，勞工發現事業單位違反法令時得向主管機關申訴；主管機關或檢查機構對申訴人身分應嚴守秘密；雇主不得因勞工申訴而予以解僱、降調、減薪、損害其依法應享有之權益或為其他不利之處分。"
+                    },
+                    {
+                              "q": "經勞動檢查查獲事業單位違反勞基法裁處確定者，主管機關依法應公布何種資訊？",
+                              "o": [
+                                        "公布事業單位名稱、負責人姓名及處分事由",
+                                        "公布申訴員工的身分證字號與地址",
+                                        "僅公布檢查員姓名",
+                                        "依法不得對外公布任何資訊"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第80條之1規定，事業單位違反本法經主管機關處以罰鍰確定者，主管機關應公布其事業單位名稱、負責人姓名、處分期日、違反條文及罰鍰金額，以透過社會監督落實企業法令遵循。"
+                    },
+                    {
+                              "q": "勞動檢查員在執行法定檢查職務時，依法享有下列哪一項檢查職權？",
+                              "o": [
+                                        "得隨時進入工作場所檢查，並得詢問相關人員及調閱必要帳冊出勤紀錄",
+                                        "必須提前三個月具名預約才能拜訪",
+                                        "僅能在門口拍照無權進入工作現場",
+                                        "無權向雇主調閱任何勞工工資清冊"
+                              ],
+                              "a": 0,
+                              "explanation": "依《勞動檢查法》第15條規定，勞動檢查員執行職務得隨時進入勞動場所，出示身分證件後進行檢查，詢問有關人員、通知其提供證明文件或說明，並得查閱工資清冊、出勤紀錄、安全衛生設備等相關帳冊資料。"
+                    },
+                    {
+                              "q": "主管機關實施勞動檢查查獲事業單位違反法令規定時，得採取下列何項處分措施？",
+                              "o": [
+                                        "依法裁處罰鍰，並通知限期改善；屆期未改善者得按次處罰",
+                                        "要求違規事業單位全體員工繳納罰金",
+                                        "下令將公司資產直接分發全體員工",
+                                        "免除該單位未來所有檢查責任"
+                              ],
+                              "a": 0,
+                              "explanation": "依勞動基準法第79條及相關法令規定，勞動主管機關查獲違法情事，除依法開立行政罰鍰處分外，並得限期令事業單位改善；屆期未改善者，得按次連續處罰，主管機關亦可視違規情節加重處罰至150萬元。"
+                    },
+                    {
+                              "q": "工作場所有立即發生危險之虞（如重大高處作業缺乏防護設施）時，勞檢機構依法得為如何之處分？",
+                              "o": [
+                                        "得下達停工通知書，令其立即部分或全部停工改善",
+                                        "僅能拍照存證並口頭勸導",
+                                        "下令員工加班儘速完工以避開危險",
+                                        "要求員工自行承擔職災責任後方能動工"
+                              ],
+                              "a": 0,
+                              "explanation": "依《職業安全衛生法》第36條及《勞動檢查法》第28條規定，工作場所有立即發生危險之虞時，勞動檢查員得就該作業場所下達書面停工通知書，令其立即部分或全部停工，非經檢查機構派員複查合格不得復工。"
+                    }
+          ]
+}
         };
         const DICE_ICONS = ["fa-dice-d6", "fa-dice-one", "fa-dice-two", "fa-dice-three", "fa-dice-four", "fa-dice-five", "fa-dice-six"];
         
@@ -1224,12 +2268,72 @@
         ];
 
         const chanceTasks = [
-            { id: "ct1_overtime_calc", type: "question", text: "下班後主管頻繁傳 LINE 交辦業務並要求立即處理，是否應計入工作時間並核發加班費？", options: ["是，通訊軟體交辦工作屬實際提供勞務，應核算工時與加班費", "否，非上班時間訊息純屬員工間私誼交流", "否，除非親自進辦公室刷卡否則不算", "由主管個人心情決定是否發放"], answer: 0, reward: 75, penalty: -15 },
-            { id: "ct2_leave_notice", type: "question", text: "依勞動基準法第38條，特別休假之排定期日權利依法歸屬於誰？", options: ["由勞工排定（雇主基於經營急迫需求得與勞工協商調整）", "由雇主片面指定，員工不得有任何異議", "由部門主管每季公開抽籤決定", "一律由人資部門隨機分派"], answer: 0, reward: 60, penalty: -10 },
-            { id: "ct3_safety_cert", type: "action_confirm", text: "公司舉辦職業安全急救員培訓，需投入進修心力與自備教材費25金幣，考取後將成為職場工安守護者。是否參加？", confirmText: "報名受訓 (-25金幣)", cost: 25, successMessage: "順利取得職安急救員合格證照，提升自我競爭力！花費25金幣。", reward: 0, penalty: 0 },
-            { id: "ct4_report_reward", type: "auto_event", text: "你主動協助職場新進同仁檢視勞動契約，及時修正違法條款，獲選為「友善勞權楷模」！", reward: 50, penalty: 0, successMessage: "熱心守護同仁權益！獲得50金幣獎勵。" },
-            { id: "ct5_pension_voluntary", type: "question", text: "依勞工退休金條例，勞工在每月工資6%範圍內自願另行提繳退休金（自提），享有何種租稅優惠？", options: ["自提金額自當年度個人綜合所得總額中全數扣除", "享有免費健康檢查一次", "可折抵個人汽機車牌照稅", "無任何稅賦優惠"], answer: 0, reward: 50, penalty: -10 }
-        ];
+        {
+                "id": "ct1_overtime_calc",
+                "type": "question",
+                "text": "下班後主管頻繁傳 LINE 交辦業務並要求立即處理，是否應計入工作時間並核發加班費？",
+                "options": [
+                        "是，通訊軟體交辦工作屬實際提供勞務，應核算工時與加班費",
+                        "否，非上班時間訊息純屬員工間私誼交流",
+                        "否，除非親自進辦公室刷卡否則不算",
+                        "由主管個人心情決定是否發放"
+                ],
+                "answer": 0,
+                "reward": 75,
+                "penalty": -15,
+                "explanation": "依勞動部函釋及勞基法第24條規定，雇主於非上班時間以 LINE 等通訊軟體交辦業務，勞工如實際提供勞務並提出對話截圖與交付成果佐證，該時段依法應計入工作時間，雇主必須核實發給延長工時工資（加班費）。"
+        },
+        {
+                "id": "ct2_leave_notice",
+                "type": "question",
+                "text": "依勞動基準法第38條，特別休假之排定期日權利依法歸屬於誰？",
+                "options": [
+                        "由勞工排定（雇主基於經營急迫需求得與勞工協商調整）",
+                        "由雇主片面指定，員工不得有任何異議",
+                        "由部門主管每季公開抽籤決定",
+                        "一律由人資部門隨機分派"
+                ],
+                "answer": 0,
+                "reward": 60,
+                "penalty": -10,
+                "explanation": "依勞動基準法第38條第2項規定，特別休假期日，由勞工排定之。雇主基於企業經營上之急迫需求或勞工因個人因素，得與他方協商調整，但雇主不得片面強制指定勞工排休或將特休強迫抵充無薪假。"
+        },
+        {
+                "id": "ct3_safety_cert",
+                "type": "action_confirm",
+                "text": "公司舉辦職業安全急救員培訓，需投入進修心力與自備教材費25金幣，考取後將成為職場工安守護者。是否參加？",
+                "confirmText": "報名受訓 (-25金幣)",
+                "cost": 25,
+                "successMessage": "順利取得職安急救員合格證照，提升自我競爭力！花費25金幣。",
+                "reward": 0,
+                "penalty": 0,
+                "explanation": "依《職業安全衛生教育訓練規則》，事業單位依法培訓合格急救人員及職安人員，能第一時間搶救傷患降低傷害，建構安心職場。"
+        },
+        {
+                "id": "ct4_report_reward",
+                "type": "auto_event",
+                "text": "你主動協助職場新進同仁檢視勞動契約，及時修正違法條款，獲選為「友善勞權楷模」！",
+                "reward": 50,
+                "penalty": 0,
+                "successMessage": "熱心守護同仁權益！獲得50金幣獎勵。",
+                "explanation": "依勞基法第1條，法令所定之勞動條件為最低標準，勞雇雙方訂立契約不得低於法定標準，協助同仁確保契約合法是守護勞權典範。"
+        },
+        {
+                "id": "ct5_pension_voluntary",
+                "type": "question",
+                "text": "依勞工退休金條例，勞工在每月工資6%範圍內自願另行提繳退休金（自提），享有何種租稅優惠？",
+                "options": [
+                        "自提金額自當年度個人綜合所得總額中全數扣除",
+                        "享有免費健康檢查一次",
+                        "可折抵個人汽機車牌照稅",
+                        "無任何稅賦優惠"
+                ],
+                "answer": 0,
+                "reward": 50,
+                "penalty": -10,
+                "explanation": "依《勞工退休金條例》第14條第3項規定，勞工在每月工資6%範圍內自願提繳之退休金，得自當年度個人綜合所得總額中全數扣除，不僅強迫儲蓄累積未來退休金專戶，同時享有免繳所得稅之節稅優惠！"
+        }
+];
 
         const audioManager = { 
             ctx: null, sounds: {}, masterGain: null, isMuted: false, 
@@ -1285,7 +2389,7 @@
         const updateGameMessage = (message) => {
             gameMessageElement.style.opacity = '0';
             setTimeout(() => {
-                gameMessageElement.textContent = message;
+                gameMessageElement.innerHTML = message;
                 gameMessageElement.style.opacity = '1';
             }, 150);
         };
@@ -1380,7 +2484,12 @@
                 gameState.players[i] = { 
                     id: i, name: playerName, position: 0, money: 1000, 
                     color: gameState.playerColors[(i-1)%gameState.playerColors.length],
-                    tokenElement: playerToken, infoBoxElement: playerInfoBox, skipNextTurn: false 
+                    tokenElement: playerToken, infoBoxElement: playerInfoBox, skipNextTurn: false,
+                    stats: {
+                        questionsAnswered: 0,
+                        correctAnswers: 0,
+                        stepsCount: 0
+                    }
                 };
             }
             positionPlayers(); updateAllMoneyDisplays();
@@ -1428,8 +2537,13 @@
         };
 
         const rollDice = async () => {
-            if (gameState.diceRolling || !gameState.gameStarted) {
-                console.log("Dice roll prevented. Rolling:", gameState.diceRolling, "Game Started:", gameState.gameStarted);
+            if (gameState.diceRolling || !gameState.gameStarted) return;
+            const currentPlayerObj = gameState.players[gameState.currentPlayer];
+            if (currentPlayerObj && currentPlayerObj.skipNextTurn) {
+                currentPlayerObj.skipNextTurn = false;
+                updateGameMessage(`${currentPlayerObj.name} 本回合暫停，由下一位玩家進行！`);
+                audioManager.play('skipTurn');
+                setTimeout(nextPlayerTurn, 1400);
                 return;
             }
             gameState.diceRolling = true;
@@ -1441,20 +2555,73 @@
             await new Promise(resolve => setTimeout(resolve, 1200)); 
             const roll = Math.floor(Math.random() * 6) + 1;
             diceElement.classList.remove('rolling'); diceElement.innerHTML = `<i class="fas ${DICE_ICONS[roll]}"></i>`;
-            updateGameMessage(`${player.name} 擲出 ${roll}點...`);
-            const startPosition = player.position; let hasWon = false;
-            for (let i = 1; i <= roll; i++) {
-                let currentStepPos = startPosition + i;
-                if (currentStepPos >= gameState.endSquareIndex) { player.position = gameState.endSquareIndex; hasWon = true; } 
-                else { player.position = currentStepPos % gameState.boardPath.length; }
-                positionPlayers(); audioManager.play('playerStep');
-                if (hasWon) { await new Promise(resolve => setTimeout(resolve, 300)); break; }
-                await new Promise(resolve => setTimeout(resolve, 250)); 
+            updateGameMessage(`${player.name} 擲出 ${roll} 點...`);
+
+            const startPosition = player.position; 
+            let hasWon = false;
+            const endIdx = gameState.endSquareIndex; 
+            const pathLen = gameState.boardPath.length;
+
+            if (gameState.winCondition === 'pass_end') {
+                // 方式一：看誰先走經過終點 (只要 currentStepPos >= endIdx 即獲勝)
+                for (let i = 1; i <= roll; i++) {
+                    let currentStepPos = startPosition + i;
+                    if (currentStepPos >= endIdx) { 
+                        player.position = endIdx; 
+                        hasWon = true; 
+                    } else { 
+                        player.position = currentStepPos % pathLen; 
+                    }
+                    if (player.stats) player.stats.stepsCount++;
+                    positionPlayers(); 
+                    audioManager.play('playerStep');
+                    if (hasWon) { 
+                        await new Promise(resolve => setTimeout(resolve, 300)); 
+                        break; 
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 250)); 
+                }
+            } else if (gameState.winCondition === 'exact_land') {
+                // 方式二：看誰剛好停在終點，如果只是經過沒有停留不算，只是經過的話從起點繼續走 (預設)
+                for (let i = 1; i <= roll; i++) {
+                    let currentStepPos = (startPosition + i) % pathLen;
+                    player.position = currentStepPos;
+                    if (player.stats) player.stats.stepsCount++;
+                    positionPlayers(); 
+                    audioManager.play('playerStep');
+                    await new Promise(resolve => setTimeout(resolve, 250)); 
+                }
+                if (player.position === endIdx) {
+                    hasWon = true;
+                }
+            } else if (gameState.winCondition === 'endless') {
+                // 方式三：無限輪迴一直玩 (不以到達終點結束遊戲，經過或停留從起點繼續走)
+                for (let i = 1; i <= roll; i++) {
+                    let currentStepPos = (startPosition + i) % pathLen;
+                    player.position = currentStepPos;
+                    if (player.stats) player.stats.stepsCount++;
+                    positionPlayers(); 
+                    audioManager.play('playerStep');
+                    await new Promise(resolve => setTimeout(resolve, 250)); 
+                }
+                if (player.position === endIdx) {
+                    const bonus = 200;
+                    player.money += bonus;
+                    showScoreAnimation(bonus, player.id);
+                    updatePlayerMoneyDisplay(player.id);
+                    audioManager.play('moneyGain');
+                    updateGameMessage(`<i class="fas fa-star text-amber-500 mr-1.5"></i>${player.name} 踏上勞權贏神終點格，獲得加碼獎勵 ${bonus} 金幣！繼續下一輪！`);
+                }
             }
+
             const landedSquareData = gameState.boardPath[player.position];
             landedSquareData.element?.classList.add('highlight');
-            if (hasWon) handleWin();
-            else { updateGameMessage(`${player.name} 抵達 ${landedSquareData.name}`); setTimeout(() => handleSquareAction(landedSquareData), 800); }
+            if (hasWon) {
+                handleWin();
+            } else { 
+                updateGameMessage(`${player.name} 抵達 ${landedSquareData.name}`); 
+                setTimeout(() => handleSquareAction(landedSquareData), 800); 
+            }
         };
         
         function handleWin() {
@@ -1464,14 +2631,19 @@
             player.money += winAmount;
             showScoreAnimation(winAmount, player.id);
             updatePlayerMoneyDisplay(gameState.currentPlayer);
-            updateGameMessage(`🎉 ${player.name} 抵達終點 ${endSquareData.name} 並獲勝！🎉`);
+            updateGameMessage(`<i class="fas fa-trophy text-amber-500 mr-1.5"></i>${player.name} 成功抵達終點 ${endSquareData.name} 並獲勝！`);
             audioManager.play('winGame');
-            diceElement.style.pointerEvents = 'none'; diceElement.innerHTML = `<i class="fas fa-trophy"></i>`;
+            diceElement.style.pointerEvents = 'none'; 
+            diceElement.innerHTML = `<i class="fas fa-trophy"></i>`;
             gameState.gameStarted = false; 
-            showEventCardWithCustomMessage(
-                `🎉 恭喜 ${player.name}！ 🎉`,
-                `你已成功抵達 ${endSquareData.name}，成為勞動權益步佈為贏神！獲得 ${winAmount} 金幣獎勵！遊戲結束。點擊確定以準備重新開始。`
-            );
+            startGameButton.disabled = false;
+            playerCountSelect.disabled = false;
+            winConditionSelect.disabled = false;
+            endGameBtn.style.display = 'none';
+
+            setTimeout(() => {
+                showGameOverModal(player.name);
+            }, 600);
         }
         
         function handleSquareAction(squareData) {
@@ -1481,7 +2653,13 @@
                 case 'fate': showFateWheel(); break; 
                 case 'rest': case 'start': showRestEvent(squareData.name, squareData.type); break;
                 case 'attraction': showQuiz(squareData.name); break;
-                case 'end': handleWin(); break;
+                case 'end': 
+                    if (gameState.winCondition === 'pass_end' || gameState.winCondition === 'exact_land') {
+                        handleWin();
+                    } else {
+                        setTimeout(nextPlayerTurn, 800);
+                    }
+                    break;
                 default: setTimeout(nextPlayerTurn, 700); 
             }
         }
@@ -1565,43 +2743,104 @@
 
         const showQuiz = (locationName) => { 
             const quizzesForLocation = gameState.quizData[locationName];
-            if (!quizzesForLocation || quizzesForLocation.length === 0) { updateGameMessage(`抱歉，${locationName} 目前沒有問答題目。`); setTimeout(nextPlayerTurn, 1500); return; }
-            const randomIndex = Math.floor(Math.random() * quizzesForLocation.length); const quiz = quizzesForLocation[randomIndex];
+            if (!quizzesForLocation || quizzesForLocation.length === 0) { 
+                updateGameMessage(`抱歉，${locationName} 目前沒有問答題目。`); 
+                setTimeout(nextPlayerTurn, 1500); 
+                return; 
+            }
+            const randomIndex = Math.floor(Math.random() * quizzesForLocation.length); 
+            const quiz = quizzesForLocation[randomIndex];
             gameState.currentQuiz = { ...quiz, location: locationName }; 
-            quizTitleElement.textContent = `${locationName} 問答`; quizQuestionElement.textContent = quiz.q;
+            quizTitleElement.textContent = `${locationName} 問答`; 
+            quizQuestionElement.textContent = quiz.q;
             quizOptionsElement.innerHTML = '';
+            
+            // 重設解析展示與確定按鈕
+            quizFeedbackElement.textContent = ''; 
+            quizFeedbackElement.style.color = '';
+            quizExplanationBox.classList.add('hidden');
+            quizExplanationText.textContent = '';
+            quizNextBtn.classList.add('hidden');
+
             quiz.o.forEach((optionText, index) => {
-                const button = document.createElement('button'); button.textContent = `${String.fromCharCode(65 + index)}. ${optionText}`;
-                button.dataset.index = index; button.addEventListener('click', (e) => { audioManager.play('buttonClick'); handleQuizAnswer(e);});
+                const button = document.createElement('button'); 
+                button.textContent = `${String.fromCharCode(65 + index)}. ${optionText}`;
+                button.dataset.index = index; 
+                button.addEventListener('click', (e) => { 
+                    audioManager.play('buttonClick'); 
+                    handleQuizAnswer(e);
+                });
                 quizOptionsElement.appendChild(button);
             });
-            quizFeedbackElement.textContent = ''; quizFeedbackElement.style.color = ''; showPopup(quizCardElement);
+            showPopup(quizCardElement);
         };
+
         function handleQuizAnswer(event) { 
-            const selectedIndex = parseInt(event.target.dataset.index); const quiz = gameState.currentQuiz;
-            const player = gameState.players[gameState.currentPlayer]; let feedback = ""; let moneyChange = 0;
-            if (selectedIndex === quiz.a) {
-                audioManager.play('correctAnswer'); feedback = "答對了！真厲害！獲得 50 金幣！"; moneyChange = 50;
-                quizFeedbackElement.style.color = 'var(--accent-color-1)';
-            } else {
-                audioManager.play('incorrectAnswer'); feedback = `答錯了，正確答案是 ${String.fromCharCode(65 + quiz.a)}. ${quiz.o[quiz.a]}。損失 20 金幣。`; moneyChange = -20;
-                quizFeedbackElement.style.color = 'red';
+            const selectedIndex = parseInt(event.target.dataset.index); 
+            const quiz = gameState.currentQuiz;
+            const player = gameState.players[gameState.currentPlayer]; 
+            let feedback = ""; 
+            let moneyChange = 0;
+
+            if (!player.stats) {
+                player.stats = { questionsAnswered: 0, correctAnswers: 0, stepsCount: 0 };
             }
+            player.stats.questionsAnswered++;
+
+            const optionButtons = quizOptionsElement.querySelectorAll('button');
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                const idx = parseInt(btn.dataset.index);
+                if (idx === quiz.a) {
+                    btn.classList.add('bg-green-100', 'dark:bg-green-900/60', 'text-green-800', 'dark:text-green-200', 'border-green-500', 'font-bold');
+                } else if (idx === selectedIndex && selectedIndex !== quiz.a) {
+                    btn.classList.add('bg-red-100', 'dark:bg-red-900/60', 'text-red-800', 'dark:text-red-200', 'border-red-500');
+                }
+            });
+
+            if (selectedIndex === quiz.a) {
+                player.stats.correctAnswers++;
+                audioManager.play('correctAnswer'); 
+                feedback = '<i class="fas fa-circle-check text-green-500 mr-1.5"></i>答對了！真厲害！獲得 50 金幣！'; 
+                moneyChange = 50;
+                quizFeedbackElement.style.color = '#16a34a';
+            } else {
+                audioManager.play('incorrectAnswer'); 
+                feedback = `<i class="fas fa-circle-xmark text-red-500 mr-1.5"></i>答錯了！正確答案是 ${String.fromCharCode(65 + quiz.a)}. ${quiz.o[quiz.a]}。損失 20 金幣。`; 
+                moneyChange = -20;
+                quizFeedbackElement.style.color = '#dc2626';
+            }
+
             player.money += moneyChange; 
             if (moneyChange !== 0) showScoreAnimation(moneyChange, player.id);
             updatePlayerMoneyDisplay(gameState.currentPlayer);
-            if(moneyChange !== 0) audioManager.play(moneyChange > 0 ? 'moneyGain' : 'moneyLoss');
-            quizFeedbackElement.textContent = feedback; quizOptionsElement.querySelectorAll('button').forEach(btn => btn.disabled = true);
-            setTimeout(() => { hidePopup(quizCardElement, nextPlayerTurn); }, 2800); 
+            if (moneyChange !== 0) audioManager.play(moneyChange > 0 ? 'moneyGain' : 'moneyLoss');
+            quizFeedbackElement.innerHTML = feedback;
+
+            // 顯示詳細法規解析（絕不敷衍）
+            if (quiz.explanation) {
+                quizExplanationText.textContent = quiz.explanation;
+                quizExplanationBox.classList.remove('hidden');
+            }
+
+            // 必須由玩家主動點擊確定才消失，絕不自己消失，讓玩家有充足時間檢討！
+            quizNextBtn.classList.remove('hidden');
+            quizNextBtn.innerHTML = '<i class="fas fa-check mr-1.5"></i>確定';
+            quizNextBtn.onclick = () => {
+                audioManager.play('buttonClick');
+                hidePopup(quizCardElement, nextPlayerTurn);
+            };
         }
 
         function showChanceTask(locationName) { 
             const task = chanceTasks[Math.floor(Math.random() * chanceTasks.length)];
             gameState.currentChanceTask = task;
-            chanceTaskTitleElement.textContent = `機會任務 @ ${locationName}`; // Use locationName for context
+            chanceTaskTitleElement.textContent = `機會任務 @ ${locationName}`;
             chanceTaskTextElement.textContent = task.text;
             chanceTaskOptionsElement.innerHTML = '';
             chanceTaskFeedbackElement.textContent = '';
+            chanceTaskExplanationBox.classList.add('hidden');
+            chanceTaskExplanationText.textContent = '';
             chanceTaskCloseButton.style.display = 'none';
 
             if (task.type === "question") {
@@ -1622,46 +2861,88 @@
                 const player = gameState.players[gameState.currentPlayer];
                 let moneyChange = task.reward - (task.penalty || 0);
                 player.money += moneyChange;
-                 if (moneyChange !== 0) showScoreAnimation(moneyChange, player.id, true); 
+                if (moneyChange !== 0) showScoreAnimation(moneyChange, player.id, true); 
                 updatePlayerMoneyDisplay(gameState.currentPlayer);
                 if (moneyChange !== 0) audioManager.play(moneyChange > 0 ? 'moneyGain' : 'moneyLoss');
                 chanceTaskFeedbackElement.textContent = task.successMessage || (moneyChange > 0 ? `獲得 ${moneyChange} 金幣` : (moneyChange < 0 ? `損失 ${Math.abs(moneyChange)} 金幣` : "事件發生了！"));
                 chanceTaskFeedbackElement.style.color = moneyChange >= 0 ? 'var(--accent-color-1)' : 'red';
+                
+                if (task.explanation) {
+                    chanceTaskExplanationText.textContent = task.explanation;
+                    chanceTaskExplanationBox.classList.remove('hidden');
+                }
                 chanceTaskCloseButton.style.display = 'block';
+                chanceTaskCloseButton.innerHTML = '<i class="fas fa-check mr-1.5"></i>確定';
             }
             showPopup(chanceTaskCardElement);
         }
+
         function handleChanceTaskAnswer(event) {
             audioManager.play('buttonClick');
             const task = gameState.currentChanceTask;
             const player = gameState.players[gameState.currentPlayer];
-            let feedback = ""; let moneyChange = 0;
+            let feedback = ""; 
+            let moneyChange = 0;
             chanceTaskOptionsElement.querySelectorAll('button').forEach(btn => btn.disabled = true);
+
             if (task.type === "question") {
+                if (!player.stats) player.stats = { questionsAnswered: 0, correctAnswers: 0, stepsCount: 0 };
+                player.stats.questionsAnswered++;
                 const selectedIndex = parseInt(event.target.dataset.index);
+                
+                const optionButtons = chanceTaskOptionsElement.querySelectorAll('button');
+                optionButtons.forEach(btn => {
+                    const idx = parseInt(btn.dataset.index);
+                    if (idx === task.answer) {
+                        btn.classList.add('bg-green-100', 'dark:bg-green-900/60', 'text-green-800', 'dark:text-green-200', 'border-green-500', 'font-bold');
+                    } else if (idx === selectedIndex && selectedIndex !== task.answer) {
+                        btn.classList.add('bg-red-100', 'dark:bg-red-900/60', 'text-red-800', 'dark:text-red-200', 'border-red-500');
+                    }
+                });
+
                 if (selectedIndex === task.answer) {
+                    player.stats.correctAnswers++;
                     moneyChange = task.reward;
-                    feedback = `答對了！${task.successMessage || `獲得 ${task.reward} 金幣！`}`;
-                    chanceTaskFeedbackElement.style.color = 'var(--accent-color-1)'; audioManager.play('correctAnswer');
+                    feedback = `<i class="fas fa-circle-check text-green-500 mr-1.5"></i>答對了！${task.successMessage || `獲得 ${task.reward} 金幣！`}`;
+                    chanceTaskFeedbackElement.style.color = '#16a34a'; 
+                    audioManager.play('correctAnswer');
                 } else {
                     moneyChange = task.penalty || 0; 
-                    feedback = `答錯了。${task.failureMessage || (task.penalty ? `損失 ${Math.abs(task.penalty)} 金幣。` : "再接再厲！")}`;
-                    chanceTaskFeedbackElement.style.color = 'red'; audioManager.play('incorrectAnswer');
+                    feedback = `<i class="fas fa-circle-xmark text-red-500 mr-1.5"></i>答錯了！正確答案是 ${String.fromCharCode(65 + task.answer)}. ${task.options[task.answer]}。${task.failureMessage || (task.penalty ? `損失 ${Math.abs(task.penalty)} 金幣。` : "再接再厲！")}`;
+                    chanceTaskFeedbackElement.style.color = '#dc2626'; 
+                    audioManager.play('incorrectAnswer');
+                }
+
+                if (task.explanation) {
+                    chanceTaskExplanationText.textContent = task.explanation;
+                    chanceTaskExplanationBox.classList.remove('hidden');
                 }
             } else if (task.type === "action_confirm") {
                 if (event.target.dataset.action === "confirm") {
                     moneyChange = (task.reward || 0) - (task.cost || 0);
                     feedback = task.successMessage || `任務完成！`;
                     chanceTaskFeedbackElement.style.color = moneyChange >= 0 ? 'var(--accent-color-1)' : 'red';
-                } else { feedback = "你選擇不執行任務。"; chanceTaskFeedbackElement.style.color = 'var(--text-general)';}
+                } else { 
+                    feedback = "你選擇不執行任務。"; 
+                    chanceTaskFeedbackElement.style.color = 'var(--text-general)';
+                }
+                if (task.explanation) {
+                    chanceTaskExplanationText.textContent = task.explanation;
+                    chanceTaskExplanationBox.classList.remove('hidden');
+                }
             }
+
             player.money += moneyChange;
             if (moneyChange !== 0) showScoreAnimation(moneyChange, player.id, true);
             updatePlayerMoneyDisplay(gameState.currentPlayer);
             if (moneyChange !== 0) audioManager.play(moneyChange > 0 ? 'moneyGain' : 'moneyLoss');
-            chanceTaskFeedbackElement.textContent = feedback;
+            chanceTaskFeedbackElement.innerHTML = feedback;
+            
+            // 按確定才消失，不要自己消失！
             chanceTaskCloseButton.style.display = 'block'; 
+            chanceTaskCloseButton.innerHTML = '<i class="fas fa-check mr-1.5"></i>確定';
         }
+        
         chanceTaskCloseButton.addEventListener('click', () => {
             audioManager.play('buttonClick');
             hidePopup(chanceTaskCardElement, nextPlayerTurn);
@@ -1749,24 +3030,62 @@
                     message += (outcome.value > 0 ? ` 獲得 ${outcome.value}` : ` 損失 ${Math.abs(outcome.value)}`) + " 金幣。";
                     break;
                 case 'move': 
-                    const oldPos = player.position; let newPos = player.position + outcome.value;
-                    if (newPos >= gameState.endSquareIndex && outcome.value > 0) newPos = gameState.endSquareIndex;
-                    else if (newPos < 0) newPos = 0; 
-                    if (newPos < gameState.endSquareIndex && newPos >= 0) newPos %= gameState.boardPath.length; 
-                    const stepsToMove = newPos - player.position; const stepDir = Math.sign(stepsToMove);
-                    if (stepsToMove !== 0) {
-                        for (let i = 0; i < Math.abs(stepsToMove); i++) {
-                            player.position += stepDir;
-                            if (player.position >= gameState.endSquareIndex && stepDir > 0) { player.position = gameState.endSquareIndex; positionPlayers(); audioManager.play('playerStep'); break; } 
-                            else if (player.position < 0 && stepDir < 0) { player.position = 0; positionPlayers(); audioManager.play('playerStep'); break; }
-                            player.position = (player.position + gameState.boardPath.length) % gameState.boardPath.length;
-                            positionPlayers(); audioManager.play('playerStep'); await new Promise(resolve => setTimeout(resolve, 200));
+                    const pathLen = gameState.boardPath.length;
+                    const endIdx = gameState.endSquareIndex;
+                    const stepsToMove = outcome.value;
+                    let wheelWon = false;
+
+                    if (gameState.winCondition === 'pass_end') {
+                        let finalPos = player.position + stepsToMove;
+                        if (finalPos >= endIdx && stepsToMove > 0) {
+                            finalPos = endIdx;
+                            wheelWon = true;
+                        } else if (finalPos < 0) {
+                            finalPos = 0;
+                        } else {
+                            finalPos %= pathLen;
                         }
-                    } else positionPlayers(); 
+                        const diff = finalPos - player.position;
+                        const dir = Math.sign(diff);
+                        for (let i = 0; i < Math.abs(diff); i++) {
+                            player.position += dir;
+                            if (player.stats) player.stats.stepsCount++;
+                            positionPlayers();
+                            audioManager.play('playerStep');
+                            await new Promise(resolve => setTimeout(resolve, 200));
+                        }
+                    } else if (gameState.winCondition === 'exact_land') {
+                        const steps = Math.abs(stepsToMove);
+                        const dir = Math.sign(stepsToMove);
+                        for (let i = 0; i < steps; i++) {
+                            player.position = (player.position + dir + pathLen) % pathLen;
+                            if (player.stats) player.stats.stepsCount++;
+                            positionPlayers();
+                            audioManager.play('playerStep');
+                            await new Promise(resolve => setTimeout(resolve, 200));
+                        }
+                        if (player.position === endIdx) {
+                            wheelWon = true;
+                        }
+                    } else {
+                        // endless 模式
+                        const steps = Math.abs(stepsToMove);
+                        const dir = Math.sign(stepsToMove);
+                        for (let i = 0; i < steps; i++) {
+                            player.position = (player.position + dir + pathLen) % pathLen;
+                            if (player.stats) player.stats.stepsCount++;
+                            positionPlayers();
+                            audioManager.play('playerStep');
+                            await new Promise(resolve => setTimeout(resolve, 200));
+                        }
+                    }
+
                     message += ` 移動 ${outcome.value} 格。`;
-                    if (player.position === gameState.endSquareIndex) {
-                        fateWheelResultElement.textContent = outcome.text; updateGameMessage(message);
-                        hidePopup(fateWheelCardElement, () => setTimeout(handleWin, 300)); return; 
+                    if (wheelWon) {
+                        fateWheelResultElement.textContent = outcome.text;
+                        updateGameMessage(message);
+                        hidePopup(fateWheelCardElement, () => setTimeout(handleWin, 300));
+                        return;
                     }
                     break;
                 case 'skip': player.skipNextTurn = true; message += " 下一回合暫停一次。"; break;
@@ -1917,15 +3236,70 @@
             }
         }
 
-        // NEW: Mascot click listener
+        // 吉祥物拖曳移來移去與點擊特效
         if (mascotElement) {
-            mascotElement.addEventListener('click', (e) => {
-                audioManager.play('sparkle');
+            let isDraggingMascot = false;
+            let startPointerX = 0, startPointerY = 0;
+            let initialMascotLeft = 0, initialMascotTop = 0;
+            let movedDistance = 0;
+
+            mascotElement.setAttribute('draggable', 'false');
+
+            mascotElement.addEventListener('pointerdown', (e) => {
+                isDraggingMascot = true;
+                movedDistance = 0;
+                startPointerX = e.clientX;
+                startPointerY = e.clientY;
+                
                 const rect = mascotElement.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                createParticles(centerX, centerY);
+                initialMascotLeft = rect.left;
+                initialMascotTop = rect.top;
+
+                mascotElement.style.bottom = 'auto';
+                mascotElement.style.right = 'auto';
+                mascotElement.style.left = `${initialMascotLeft}px`;
+                mascotElement.style.top = `${initialMascotTop}px`;
+                mascotElement.classList.add('dragging');
+                mascotElement.setPointerCapture(e.pointerId);
+                e.preventDefault();
             });
+
+            mascotElement.addEventListener('pointermove', (e) => {
+                if (!isDraggingMascot) return;
+                const dx = e.clientX - startPointerX;
+                const dy = e.clientY - startPointerY;
+                movedDistance += Math.hypot(e.movementX || dx, e.movementY || dy);
+
+                let newLeft = initialMascotLeft + dx;
+                let newTop = initialMascotTop + dy;
+
+                const maxLeft = window.innerWidth - mascotElement.offsetWidth;
+                const maxTop = window.innerHeight - mascotElement.offsetHeight;
+                newLeft = Math.max(5, Math.min(newLeft, maxLeft - 5));
+                newTop = Math.max(5, Math.min(newTop, maxTop - 5));
+
+                mascotElement.style.left = `${newLeft}px`;
+                mascotElement.style.top = `${newTop}px`;
+            });
+
+            const finishDrag = (e) => {
+                if (!isDraggingMascot) return;
+                isDraggingMascot = false;
+                mascotElement.classList.remove('dragging');
+                try { mascotElement.releasePointerCapture(e.pointerId); } catch(err) {}
+
+                // 若位移小於 6px 則視為點擊，播放閃爍音效與散發粒子特效
+                if (movedDistance < 6) {
+                    audioManager.play('sparkle');
+                    const rect = mascotElement.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    createParticles(centerX, centerY);
+                }
+            };
+
+            mascotElement.addEventListener('pointerup', finishDrag);
+            mascotElement.addEventListener('pointercancel', finishDrag);
         }
 
 
@@ -1936,6 +3310,155 @@
         playerCountSelect.addEventListener('change', () => {
              audioManager.play('buttonClick');
              if (!gameState.gameStarted) setupNameInputsUI(parseInt(playerCountSelect.value));
+        });
+
+        // 排行榜與成績結算匯出模組
+        function getLeaderboardData() {
+            const playersList = Object.values(gameState.players);
+            return playersList.map(p => {
+                const totalQ = p.stats ? p.stats.questionsAnswered : 0;
+                const correctQ = p.stats ? p.stats.correctAnswers : 0;
+                const acc = totalQ > 0 ? Math.round((correctQ / totalQ) * 100) : 0;
+                const locName = (gameState.boardPath[p.position] && gameState.boardPath[p.position].name) || '踏入職場';
+                return {
+                    id: p.id,
+                    name: p.name,
+                    money: p.money,
+                    questionsAnswered: totalQ,
+                    correctAnswers: correctQ,
+                    accuracy: acc,
+                    stepsCount: p.stats ? p.stats.stepsCount : 0,
+                    location: locName
+                };
+            }).sort((a, b) => b.money - a.money);
+        }
+
+        function showGameOverModal(winnerName = null) {
+            const list = getLeaderboardData();
+            const leaderboardList = el('leaderboard-list');
+            const gameOverTitle = el('game-over-title');
+            const gameOverDesc = el('game-over-desc');
+
+            if (winnerName) {
+                gameOverTitle.innerHTML = `<i class="fas fa-trophy text-amber-500 mr-2"></i>恭喜 ${escapeHtml(winnerName)} 獲勝！`;
+                gameOverDesc.textContent = `成功奪得勞動權益步佈為贏神寶座！以下為全員結算戰報：`;
+            } else {
+                gameOverTitle.innerHTML = `<i class="fas fa-chart-column text-blue-500 mr-2"></i>遊戲成績結算排行榜`;
+                gameOverDesc.textContent = `全員勞權競技結算戰報：`;
+            }
+
+            leaderboardList.innerHTML = '';
+            list.forEach((p, idx) => {
+                const rankBadge = idx === 0 ? '<i class="fas fa-crown text-amber-500 mr-1"></i>冠軍'
+                                : idx === 1 ? '<i class="fas fa-medal text-slate-400 mr-1"></i>亞軍'
+                                : idx === 2 ? '<i class="fas fa-award text-amber-700 mr-1"></i>季軍'
+                                : `<i class="fas fa-user text-gray-400 mr-1"></i>第 ${idx + 1} 名`;
+                const rankColor = idx === 0 ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 border-amber-300' 
+                                : idx === 1 ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300'
+                                : idx === 2 ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-200'
+                                : 'bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700';
+
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border flex items-center justify-between gap-2 ${rankColor}`;
+                card.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-white/70 dark:bg-black/30 shadow-sm">${rankBadge}</span>
+                        <div>
+                            <div class="font-bold text-sm text-gray-900 dark:text-gray-100">${escapeHtml(p.name)}</div>
+                            <div class="text-[11px] text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-0.5">
+                                <span class="flex items-center gap-1"><i class="fas fa-location-dot text-rose-500"></i>${escapeHtml(p.location)}</span>
+                                <span class="flex items-center gap-1"><i class="fas fa-shoe-prints text-gray-400"></i>步數: ${p.stepsCount}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-sm text-amber-600 dark:text-amber-400 flex items-center justify-end gap-1"><i class="fas fa-coins text-amber-500"></i>${p.money} 金幣</div>
+                        <div class="text-[11px] text-blue-600 dark:text-blue-400 font-semibold flex items-center justify-end gap-1 mt-0.5"><i class="fas fa-bullseye text-blue-500"></i>答對 ${p.correctAnswers}/${p.questionsAnswered} (${p.accuracy}%)</div>
+                    </div>
+                `;
+                leaderboardList.appendChild(card);
+            });
+
+            showPopup(gameOverModal);
+        }
+
+        // 匯出 CSV (支援 UTF-8 BOM，Excel 打開不亂碼)
+        function exportLeaderboardCSV() {
+            const list = getLeaderboardData();
+            let csv = '\uFEFF'; // UTF-8 BOM
+            csv += '排名,玩家名稱,最終金幣,答對題數,總答題數,答題正確率(%),累計步數,最終停留位置\n';
+            list.forEach((p, idx) => {
+                csv += `第${idx + 1}名,"${p.name.replace(/"/g, '""')}",${p.money},${p.correctAnswers},${p.questionsAnswered},${p.accuracy}%,${p.stepsCount},"${p.location.replace(/"/g, '""')}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const now = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            a.href = url;
+            a.download = `勞動權益步佈為贏神_成績單_${now}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // 複製文字版成績單
+        function copyLeaderboardSummary() {
+            const list = getLeaderboardData();
+            const now = new Date().toLocaleString('zh-TW');
+            let text = `【勞動權益步佈為贏神】遊戲成績結算排行榜\n結算時間：${now}\n────────────────────────\n`;
+            list.forEach((p, idx) => {
+                const rankTitle = idx === 0 ? '[冠軍]' : idx === 1 ? '[亞軍]' : idx === 2 ? '[季軍]' : `[第${idx + 1}名]`;
+                text += `${rankTitle} ${p.name}\n   金幣：${p.money}\n   答題：答對 ${p.correctAnswers} / 共 ${p.questionsAnswered} 題（正確率 ${p.accuracy}%）\n   位置：${p.location}（累計步數：${p.stepsCount}）\n\n`;
+            });
+            text += `────────────────────────\n感謝參與勞動法令學習，勞動權益步佈為贏！`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert("已成功複製成績單至剪貼簿！可直接貼至 LINE、Facebook 或社群分享！");
+            }).catch(err => {
+                prompt("請手動複製以下成績單內容：", text);
+            });
+        }
+
+        // 匯出 JSON
+        function exportLeaderboardJSON() {
+            const list = getLeaderboardData();
+            const exportData = {
+                game: "勞動權益步佈為贏神",
+                exportTime: new Date().toISOString(),
+                winCondition: gameState.winCondition,
+                leaderboard: list
+            };
+            const jsonStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const now = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            a.href = url;
+            a.download = `勞動權益步佈為贏神_戰報_${now}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        exportCsvBtn.addEventListener('click', () => { audioManager.play('buttonClick'); exportLeaderboardCSV(); });
+        copySummaryBtn.addEventListener('click', () => { audioManager.play('buttonClick'); copyLeaderboardSummary(); });
+        exportJsonBtn.addEventListener('click', () => { audioManager.play('buttonClick'); exportLeaderboardJSON(); });
+        gameOverCloseBtn.addEventListener('click', () => { audioManager.play('buttonClick'); hidePopup(gameOverModal); });
+        restartGameBtn.addEventListener('click', () => { 
+            audioManager.play('buttonClick'); 
+            hidePopup(gameOverModal); 
+            startGameButton.click(); 
+        });
+
+        winConditionSelect.addEventListener('change', (e) => {
+            gameState.winCondition = e.target.value;
+        });
+
+        endGameBtn.addEventListener('click', () => {
+            audioManager.play('buttonClick');
+            showGameOverModal();
         });
 
         startGameButton.addEventListener('click', () => {
@@ -1972,8 +3495,11 @@
                 diceElement.style.pointerEvents = 'auto'; 
                 
                 gameState.playerCount = count;
+                gameState.winCondition = winConditionSelect.value;
                 initPlayers(count, customNames); 
-                gameState.gameStarted = true; 
+                gameState.gameStarted = true;
+                endGameBtn.style.display = 'inline-block';
+                winConditionSelect.disabled = true; 
                 
                 const firstPlayer = gameState.players[1];
                 currentPlayerIndicator.textContent = firstPlayer.id; 
@@ -2042,11 +3568,15 @@
 
         // 備份初始系統題庫供還原使用
         const DEFAULT_QUIZ_DATA = JSON.parse(JSON.stringify(gameState.quizData));
-        const QUIZ_STORAGE_KEY = 'labor_monopoly_custom_quiz_v1';
+        const QUIZ_STORAGE_KEY = 'labor_monopoly_custom_quiz_v3';
 
         // 載入自訂題庫 (若有)
         function loadCustomQuizzes() {
             try {
+                // 清理舊版本快取，避免覆蓋新的6題預設題庫
+                if (localStorage.getItem('labor_monopoly_custom_quiz_v1')) {
+                    localStorage.removeItem('labor_monopoly_custom_quiz_v1');
+                }
                 const stored = localStorage.getItem(QUIZ_STORAGE_KEY);
                 if (stored) {
                     const parsed = JSON.parse(stored);
@@ -2238,10 +3768,11 @@
                             </button>
                         </div>
                     </div>
-                    <p class="text-xs md:text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2.5 leading-relaxed">${escapeHtml(item.q)}</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+                    <p class="text-xs md:text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2 leading-relaxed">${escapeHtml(item.q)}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 mb-2">
                         ${optionsHtml}
                     </div>
+                    ${item.explanation ? `<div class="p-2 rounded-lg explanation-box !my-1 !p-2 !max-h-24 text-[11px] leading-relaxed"><b class="text-blue-600 dark:text-blue-400 mr-1"><i class="fas fa-lightbulb"></i> 解析：</b>${escapeHtml(item.explanation)}</div>` : ''}
                 `;
                 adminQuizList.appendChild(card);
             });
@@ -2273,6 +3804,8 @@
             editOriginalIndex.value = index;
             editQuizCategory.value = cat;
             editQuizQ.value = qItem.q;
+            const editQuizExp = el('edit-quiz-exp');
+            if (editQuizExp) editQuizExp.value = qItem.explanation || '';
 
             for (let i = 0; i < 4; i++) {
                 el(`edit-opt-${i}`).value = qItem.o[i] || '';
@@ -2297,6 +3830,8 @@
             }
 
             editQuizQ.value = '';
+            const editQuizExp = el('edit-quiz-exp');
+            if (editQuizExp) editQuizExp.value = '';
             for (let i = 0; i < 4; i++) {
                 el(`edit-opt-${i}`).value = '';
             }
@@ -2340,7 +3875,8 @@
 
             const origCat = editOriginalCat.value;
             const origIndexStr = editOriginalIndex.value;
-            const newQuizObj = { q: qText, o: options, a: answerIdx };
+            const expVal = el('edit-quiz-exp') ? el('edit-quiz-exp').value.trim() : '';
+            const newQuizObj = { q: qText, o: options, a: answerIdx, explanation: expVal };
 
             if (origCat && origIndexStr !== '') {
                 const origIdx = parseInt(origIndexStr);
