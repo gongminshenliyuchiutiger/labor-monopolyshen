@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勞動權益步佈為贏神</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        
+        :root {
+            --square-size: clamp(75px, 10vw, 90px);
+            --board-border-color: #1e40af; 
+            --board-border-color-rgb: 30, 64, 175;
+            --board-gap: 4px;
+            --accent-color-1: #2563eb; 
+            --accent-color-1-rgb: 37, 99, 235;
+            --accent-color-2: #f59e0b; 
+            --accent-color-2-rgb: 245, 158, 11;
+            --text-dark: #1e293b;
+            --text-light: #f8fafc;
+
+            /* Light Mode Defaults */
+            --bg-primary: #f0f4f8;
+            --bg-gradient-start: #eef2ff;
+            --bg-gradient-end: #e0e7ff;
+            --bg-radial-dot: rgba(147, 197, 253, 0.4);
+            --game-wrapper-bg: rgba(255, 255, 255, 0.96);
+            --game-wrapper-shadow: 0 15px 45px rgba(15, 23, 42, 0.15), 0 0 0 6px rgba(37, 99, 235, 0.22);
+            --board-path-bg: rgba(224, 231, 255, 0.7);
+            --board-path-bg-rgb: 224, 231, 255;
+            --board-square-bg: #ffffff;
+            --board-square-shadow: 0 2px 6px rgba(30, 64, 175, 0.08);
+            --board-center-bg: rgba(255, 255, 255, 0.98);
+            --board-center-shadow: 0 8px 24px rgba(30, 64, 175, 0.1);
+            --popup-bg: #ffffff;
+            --popup-text-color: #1e293b;
+            --input-bg: #f8fafc;
+            --input-border: #cbd5e1; /* Used for slider track base */
+            --input-focus-border: var(--accent-color-1);
+            --player-info-box-bg: #f1f5f9;
+            --player-info-box-border: #cbd5e1;
+            --player-info-box-active-bg: #dbeafe;
+            --game-message-bg: #eff6ff; 
+            --game-message-bg-rgb: 239, 246, 255;
+            --game-message-border: #93c5fd;
+            --game-message-text: #1e40af;
+            --footer-bg: rgba(224, 231, 255, 0.6);
+            --footer-border-top: rgba(37, 99, 235, 0.2);
+            --footer-text: #475569;
+            --text-heading-color: #1e3a8a; 
+            --text-subheading-color: #2563eb;
+            --text-quiz-title-color: #1d4ed8; 
+            --text-general: #1e293b;
+            --quiz-option-bg: #f8fafc;
+            --quiz-option-border: #cbd5e1;
+            --quiz-option-hover-bg: #eff6ff;
+            --square-end-bg: #f3e8ff !important; 
+            --square-end-border: 3px solid #9333ea !important;
+            --info-button-bg: var(--accent-color-1);
+            --info-button-text: var(--text-light);
+        }
+
+        body.dark-mode {
+            --bg-primary: #0b0f19; 
+            --bg-gradient-start: #0f172a; 
+            --bg-gradient-end: #020617; 
+            --bg-radial-dot: rgba(56, 189, 248, 0.15); 
+            --game-wrapper-bg: rgba(15, 23, 42, 0.96); 
+            --game-wrapper-shadow: 0 15px 45px rgba(0,0,0,0.5), 0 0 0 6px rgba(59, 130, 246, 0.3);
+            --board-border-color: #3b82f6; 
+            --board-border-color-rgb: 59, 130, 246;
+            --board-path-bg: rgba(30, 41, 59, 0.85); 
+            --board-path-bg-rgb: 30, 41, 59;
+            --board-square-bg: #1e293b; 
+            --board-square-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            --board-center-bg: rgba(15, 23, 42, 0.98); 
+            --board-center-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            --popup-bg: #1e293b; 
+            --popup-text-color: #f8fafc;
+            --input-bg: #334155; 
+            --input-border: #475569; /* Used for slider track base in dark mode */
+            --input-focus-border: var(--accent-color-2); 
+            --player-info-box-bg: #334155;
+            --player-info-box-border: #475569;
+            --player-info-box-active-bg: #1e3a8a; 
+            --game-message-bg: #172554; 
+            --game-message-bg-rgb: 23, 37, 84;
+            --game-message-border: #2563eb; 
+            --game-message-text: #93c5fd; 
+            --footer-bg: rgba(15, 23, 42, 0.7);
+            --footer-border-top: rgba(59, 130, 246, 0.3);
+            --footer-text: #94a3b8; 
+            --text-dark: #f8fafc; 
+            --text-heading-color: #60a5fa; 
+            --text-subheading-color: #93c5fd; 
+            --text-quiz-title-color: #38bdf8; 
+            --text-general: #f1f5f9;
+            --quiz-option-bg: #334155;
+            --quiz-option-border: #475569;
+            --quiz-option-hover-bg: #1e3a8a;
+            --square-end-bg: #3b0764 !important; 
+            --square-end-border: 3px solid #a855f7 !important;
+            --info-button-bg: var(--accent-color-2);
+            --info-button-text: #0f172a;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-primary);
+            background-image: linear-gradient(to bottom right, var(--bg-gradient-start), var(--bg-gradient-end)), 
+                              radial-gradient(var(--bg-radial-dot) 1.2px, transparent 1.2px);
+            background-size: cover, 28px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 1rem;
+            margin: 0;
+            color: var(--text-general);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden; 
+        }
+
+        .game-wrapper {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--game-wrapper-bg);
+            border-radius: 20px;
+            box-shadow: var(--game-wrapper-shadow);
+            padding: clamp(1rem, 2.5vw, 1.2rem);
+            border: 4px solid var(--board-border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: auto;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative; 
+        }
+        
+        #board-path-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--board-gap);
+            justify-content: center;
+            padding: var(--board-gap);
+            background-color: var(--board-path-bg);
+            border-radius: 12px;
+            margin-bottom: 1rem; 
+            position: relative; 
+            width: 100%;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .board-square {
+            width: var(--square-size);
+            height: var(--square-size);
+            border: 2px solid var(--board-border-color);
+            background-color: var(--board-square-bg);
+            transition: all 0.3s ease-in-out, transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5px;
+            overflow: hidden;
+            position: relative;
+            cursor: default;
+            border-radius: 10px;
+            box-shadow: var(--board-square-shadow);
+            color: var(--text-general);
+        }
+        .board-square:hover:not(.highlight) {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.12);
+        }
+        body.dark-mode .board-square:hover:not(.highlight) {
+            box-shadow: 0 5px 12px rgba(255,255,255,0.08);
+        }
+        
+        .board-square.highlight {
+            z-index: 10;
+            border-color: var(--accent-color-2);
+            animation: pulseHighlight 1.3s infinite alternate ease-in-out;
+        }
+        @keyframes pulseHighlight {
+            from { 
+                box-shadow: 0 0 18px 7px rgba(var(--accent-color-2-rgb), 0.7), 0 0 0 3px rgba(var(--accent-color-2-rgb), 0.5); 
+                transform: scale(1.04); 
+            }
+            to { 
+                box-shadow: 0 0 30px 12px rgba(var(--accent-color-2-rgb), 1), 0 0 0 5px rgba(var(--accent-color-2-rgb), 0.7); 
+                transform: scale(1.08); 
+            }
+        }
+
+        .square-chance { background-color: #e0f7fa !important; border: 3px dashed #00BCD4 !important; border-radius: 25px !important; }
+        .square-chance .location-icon i { color: #0097A7; }
+        body.dark-mode .square-chance { background-color: #1e606d !important; border-color: #4dd0e1 !important; }
+        body.dark-mode .square-chance .location-icon i { color: #80deea; }
+
+        .square-fate { background-color: #fff3e0 !important; border: 3px dotted #FF9800 !important; border-radius: 50% !important; }
+        .square-fate .location-icon i { color: #F57C00; }
+        body.dark-mode .square-fate { background-color: #734000 !important; border-color: #ffb74d !important; }
+        body.dark-mode .square-fate .location-icon i { color: #ffcc80; }
+
+        .square-rest { background-color: #fce4ec !important; border: 3px double #E91E63 !important; border-radius: 12px 38px !important; }
+        .square-rest .location-icon i { color: #C2185B; }
+        body.dark-mode .square-rest { background-color: #6d0f2b !important; border-color: #f06292 !important; }
+        body.dark-mode .square-rest .location-icon i { color: #f48fb1; }
+
+        .square-end { 
+            background-color: var(--square-end-bg) !important; 
+            border: var(--square-end-border) !important;
+            border-radius: 50% !important; 
+        }
+        .square-end .location-icon i { color: #FFD700; }
+        .square-end .location-text { font-weight: bold; color: #6a0dad; }
+        body.dark-mode .square-end .location-text { color: #ce93d8; }
+
+        .square-fate .location-text, .square-chance .location-text {
+             font-size: clamp(7px, 1.3vw, 9px);
+        }
+        
+        .player {
+            width: clamp(16px, 2.2vw, 20px);
+            height: clamp(16px, 2.2vw, 20px);
+            border-radius: 50%;
+            position: absolute; 
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+            z-index: 5;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            font-size: clamp(8px, 1.3vw, 10px);
+            border: 1px solid rgba(0,0,0,0.5);
+        }
+
+        #board-center {
+            background-color: var(--board-center-bg);
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            padding: clamp(10px, 1.8vw, 15px); 
+            box-shadow: var(--board-center-shadow);
+            width: 100%;
+            max-width: 900px; 
+            border: 3px solid var(--board-border-color);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .controls-top-bar {
+            display: flex;
+            flex-wrap: wrap; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 0.5rem 1rem; 
+            width: 100%;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem; 
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem; 
+            flex-shrink: 0; /* Prevent shrinking too much */
+        }
+        .music-controls button {
+            background: none;
+            border: 1.5px solid var(--board-border-color);
+            color: var(--text-subheading-color);
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            line-height: 1; /* Ensure icon is centered */
+        }
+        .music-controls button:hover {
+            background-color: rgba(var(--board-border-color-rgb), 0.1);
+        }
+        #volume-slider {
+            width: 70px; 
+            height: 8px; 
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--input-border); /* Base for the track */
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            margin: 0 5px; /* Some spacing */
+        }
+        /* Webkit Track Fill */
+        #volume-slider::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: linear-gradient(to right, 
+                var(--accent-color-1) 0%, 
+                var(--accent-color-1) var(--volume-percent, 50%), 
+                var(--input-border) var(--volume-percent, 50%), 
+                var(--input-border) 100%
+            );
+            border-radius: 4px;
+        }
+        /* Firefox Track (base) */
+        #volume-slider::-moz-range-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--input-border);
+            border-radius: 4px;
+            border: none;
+        }
+        /* Firefox Progress (fill) */
+        #volume-slider::-moz-range-progress {
+            background-color: var(--accent-color-1); 
+            height: 8px;
+            border-radius: 4px;
+        }
+        /* Thumb */
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--accent-color-1);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.1);
+            margin-top: -3px; /* Center thumb on track */
+        }
+        #volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            background: var(--accent-color-1);
+            cursor: pointer;
+            border-radius: 50%;
+            border: none; /* FF thumb doesn't need extra border for this look */
+        }
+        /* Dark Mode Slider */
+        body.dark-mode #volume-slider { background: var(--input-border); }
+        body.dark-mode #volume-slider::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, 
+                var(--accent-color-2) 0%, 
+                var(--accent-color-2) var(--volume-percent, 50%), 
+                var(--input-border) var(--volume-percent, 50%), 
+                var(--input-border) 100%
+            );
+        }
+        body.dark-mode #volume-slider::-moz-range-track { background: var(--input-border); }
+        body.dark-mode #volume-slider::-moz-range-progress { background-color: var(--accent-color-2); }
+        body.dark-mode #volume-slider::-webkit-slider-thumb { background: var(--accent-color-2); }
+        body.dark-mode #volume-slider::-moz-range-thumb { background: var(--accent-color-2); }
+
+
+        .game-title-container {
+            font-size: clamp(1rem, 1.8vw, 1.1rem); 
+            font-weight: bold;
+            color: var(--text-subheading-color);
+            text-align: left; 
+            flex-grow: 1; 
+            margin-right: 0.5rem;
+        }
+        
+        .game-setup-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        .game-setup-controls label {
+            font-size: clamp(0.75rem, 1.4vw, 0.85rem);
+            margin-right: 0.2rem;
+            color: var(--text-general);
+        }
+        .game-setup-controls select {
+            padding: 0.15rem 0.3rem;
+            font-size: clamp(0.75rem, 1.4vw, 0.85rem);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--text-general);
+            border: 1px solid var(--input-border);
+        }
+        .game-setup-controls .action-button {
+            padding: 0.25rem 0.5rem;
+            font-size: clamp(0.75rem, 1.4vw, 0.85rem);
+        }
+
+        .current-player-turn-info {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem 0.6rem; 
+            flex-wrap: nowrap; 
+            justify-content: center;
+            text-align: center;
+            font-size: clamp(0.75rem, 1.4vw, 0.85rem);
+            flex-shrink: 0;
+            color: var(--text-general);
+        }
+        .current-player-turn-info > div { 
+            display: flex;
+            align-items: center;
+            white-space: nowrap; 
+        }
+        .current-player-turn-info .font-medium { margin-right: 0.2rem;}
+        #current-player-name-display, #current-player-indicator { 
+            color: var(--accent-color-1); 
+            font-weight: bold;
+        }
+        body.dark-mode #current-player-name-display, body.dark-mode #current-player-indicator { 
+            color: var(--accent-color-2); 
+        }
+
+        .dice-container {
+            flex-shrink: 0; 
+        }
+        .dice {
+            width: clamp(45px, 6vw, 50px);  
+            height: clamp(45px, 6vw, 50px);
+            font-size: clamp(22px, 3.5vw, 28px);
+            border-radius: 8px;
+            background-color: var(--accent-color-1);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+        }
+        .dice:hover { transform: translateY(-2px) scale(1.1); box-shadow: 0 5px 10px rgba(0,0,0,0.25); }
+        .dice:active { transform: translateY(0px) scale(1.03) rotate(5deg); box-shadow: 0 2px 4px rgba(0,0,0,0.2) inset; } 
+        .dice.rolling { animation: diceRoll 0.5s ease-in-out infinite; }
+        @keyframes diceRoll { 
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(20deg) scale(1.08) translateY(-2px); }
+            50% { transform: rotate(-5deg) scale(1.02) translateY(1px); }
+            75% { transform: rotate(-20deg) scale(1.08) translateY(-2px); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+        
+        #player-name-setup { 
+            width: 100%; 
+            max-width: 500px; 
+            margin: 0.5rem auto; 
+            padding: 0.5rem;
+            border: 1px solid rgba(var(--board-border-color-rgb), 0.15);
+            border-radius: 8px;
+            background-color: rgba(var(--board-path-bg-rgb), 0.2);
+        }
+        body.dark-mode #player-name-setup {
+            border-color: rgba(var(--board-border-color-rgb), 0.25);
+            background-color: rgba(var(--board-path-bg-rgb), 0.4);
+        }
+        #player-name-setup h4 { color: var(--text-subheading-color); font-size: 0.9rem; text-align: center; margin-bottom: 0.5rem;}
+        #player-name-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+        .player-name-entry { display: flex; align-items: center; gap: 6px; padding: 5px 7px; background-color: var(--input-bg); border-radius: 6px; border: 1px solid var(--input-border); }
+        .player-name-input { flex-grow: 1; border: 1px solid var(--input-border); border-radius: 4px; padding: 4px 8px; font-size: 0.85rem; background-color: var(--input-bg); color: var(--text-general); }
+        .player-name-input::placeholder { color: #aaa; }
+        body.dark-mode .player-name-input::placeholder { color: #718096; }
+        .player-name-input:focus { border-color: var(--input-focus-border); box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-1-rgb),.25); outline: none;}
+        body.dark-mode .player-name-input:focus { box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-2-rgb),.25); }
+
+        .player-controls { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            gap: 8px; 
+            width: 100%; 
+            max-height: 120px; 
+            overflow-y: auto; 
+            padding: 8px; 
+            background-color: rgba(var(--board-path-bg-rgb), 0.4); 
+            border-radius: 8px;
+            margin-bottom: 0.75rem; 
+        }
+        body.dark-mode .player-controls { 
+            background-color: rgba(var(--board-path-bg-rgb), 0.6);
+        }
+        
+        .player-color-indicator { width: 14px; height: 14px; border-radius: 50%; display: inline-block; margin-right: 6px; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0;}
+        .player-info-box { background-color: var(--player-info-box-bg); padding: 5px 7px; border-radius: 6px; font-size: clamp(10.5px, 1.7vw, 11.5px); border: 1.5px solid var(--player-info-box-border); transition: all 0.3s ease; color: var(--text-general); }
+        .player-info-box .font-bold { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
+        .player-info-box.active { border: 2.5px solid var(--accent-color-1); box-shadow: 0 0 8px rgba(var(--accent-color-1-rgb), 0.5); transform: scale(1.03); background-color: var(--player-info-box-active-bg); }
+        body.dark-mode .player-info-box.active { box-shadow: 0 0 8px rgba(var(--accent-color-1-rgb), 0.7); }
+
+        .game-message-area { background-color: var(--game-message-bg); padding: clamp(8px, 1.5vw, 10px); border-radius: 10px; width: 100%; text-align: center; color: var(--game-message-text); border: 1.5px solid var(--game-message-border); font-weight: 500; font-size: clamp(12px, 2vw, 14px); min-height: 40px; transition: opacity 0.2s ease-in-out, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; margin-top: auto; }
+        
+        @media (max-width: 768px) { 
+            .controls-top-bar {
+                justify-content: center; 
+                flex-direction: column; 
+            }
+            .game-title-container, .game-setup-controls, .current-player-turn-info, .dice-container, .music-controls {
+                margin-right: 0;
+                margin-bottom: 0.5rem; 
+                width: auto; 
+                justify-content: center;
+            }
+            .game-title-container { text-align: center; } 
+        }
+         @media (max-width: 480px) {
+            .game-setup-controls {
+                 flex-direction: column; 
+                 gap: 0.3rem;
+            }
+            .current-player-turn-info {
+                flex-direction: column;
+                gap: 0.1rem;
+            }
+             .music-controls {
+                flex-wrap: wrap; 
+                justify-content: center;
+            }
+            #volume-slider { width: 100px; } 
+        }
+
+        .popup-card {
+            position: fixed;
+            width: clamp(300px, 85vw, 450px);
+            min-height: 180px;
+            background-color: var(--popup-bg);
+            color: var(--popup-text-color); 
+            border-radius: 15px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+            padding: 25px 30px;
+            z-index: 200;
+            top: 50%; left: 50%;
+            border: 4px solid var(--accent-color-1);
+            display: flex; 
+            flex-direction: column;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.85);
+            transition: opacity 0.3s ease-out, transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.3s ease, color 0.3s ease; 
+            pointer-events: none;
+        }
+        .popup-card.visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2); /* MODIFIED: Increased scale */
+            pointer-events: auto;
+        }
+         .popup-card h3 { color: var(--text-subheading-color); }
+        #quiz-card #quiz-title, #chance-task-card #chance-task-title { color: var(--text-quiz-title-color); }
+
+        .options-list button { 
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1.5px solid var(--quiz-option-border);
+            border-radius: 8px;
+            background-color: var(--quiz-option-bg);
+            color: var(--text-general);
+            transition: background-color 0.2s, border-color 0.2s;
+            font-size: 0.9rem;
+        }
+        .options-list button:hover { background-color: var(--quiz-option-hover-bg); border-color: var(--accent-color-1); }
+        .options-list button:disabled { background-color: #777; opacity: 0.7; color: #bbb; cursor: not-allowed; }
+        body.dark-mode .options-list button:disabled { background-color: #555; color: #888; }
+        
+        .location-icon i { font-size: clamp(24px, 3.8vw, 30px); margin-bottom: 5px; color: #2563eb; }
+        body.dark-mode .location-icon i { color: #60a5fa; } 
+        .location-text { font-size: clamp(8.5px, 1.6vw, 10.5px); font-weight: 500; line-height: 1.25; }
+        
+        .action-button { 
+            background-color: var(--accent-color-1);
+            color: var(--text-light);
+            padding: 7px 14px; 
+            border-radius: 6px;
+            font-size: 0.9rem; 
+            transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            border: none;
+            cursor: pointer;
+        }
+        .action-button:hover { background-color: #1d4ed8; filter: brightness(110%); transform: translateY(-1px); box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+        .action-button:active { transform: translateY(0px); filter: brightness(95%); box-shadow: 0 1px 2px rgba(0,0,0,0.15) inset; }
+        .action-button:disabled { background-color: #aaa; cursor: not-allowed; filter: grayscale(50%);}
+        body.dark-mode .action-button:disabled { background-color: #555; }
+        
+        .footer {
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.85rem;
+            color: var(--footer-text);
+            margin-top: 30px;
+            background-color: var(--footer-bg);
+            border-top: 1px solid var(--footer-border-top);
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease, border-top-color 0.3s ease;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color-1);
+            color: var(--text-light);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        body.dark-mode #theme-toggle {
+            background-color: var(--accent-color-2);
+            color: var(--text-dark);
+        }
+        .game-wrapper h1 { color: var(--text-heading-color); }
+
+        #info-link-button { 
+            position: fixed;
+            top: 60px; /* Position below theme-toggle: 10px (theme-toggle top) + 40px (theme-toggle height) + 10px (spacing) */
+            right: 10px;
+            background-color: var(--info-button-bg);
+            color: var(--info-button-text);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 999; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+        }
+        #info-link-button:hover {
+            transform: scale(1.1);
+            filter: brightness(110%);
+        }
+
+        /* 管理員模式按鈕與管理面板樣式 */
+        #admin-mode-button { 
+            position: fixed;
+            top: 110px;
+            right: 10px;
+            background-color: var(--accent-color-1);
+            color: var(--text-light);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 999; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+        }
+        #admin-mode-button:hover {
+            transform: scale(1.1);
+            filter: brightness(110%);
+        }
+        body.dark-mode #admin-mode-button {
+            background-color: var(--accent-color-2);
+            color: #0f172a;
+        }
+
+        .admin-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .admin-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .admin-modal-content {
+            background-color: var(--popup-bg);
+            color: var(--text-general);
+            border-radius: 16px;
+            border: 2px solid var(--board-border-color);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+            width: 100%;
+            max-width: 860px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+        .admin-modal-overlay.active .admin-modal-content {
+            transform: scale(1);
+        }
+
+        #wheel-container {
+            width: 220px; 
+            height: 220px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+        #fate-wheel-canvas {
+            transition: transform 3.5s cubic-bezier(0.23, 1, 0.32, 1); 
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        body.dark-mode #fate-wheel-canvas {
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+        #wheel-pointer {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid var(--accent-color-2); 
+            position: absolute;
+            top: -12px; 
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            filter: drop-shadow(0px -2px 2px rgba(0,0,0,0.3));
+        }
+        body.dark-mode #wheel-pointer {
+             border-top-color: var(--accent-color-1);
+        }
+
+        .score-animation {
+            position: absolute;
+            z-index: 1000;
+            font-size: clamp(28px, 5vw, 40px); 
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            opacity: 0;
+            pointer-events: none; 
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s ease-out;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* NEW: Mascot styles */
+        #mascot {
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            width: clamp(80px, 12vw, 120px);
+            z-index: 998;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
+        }
+        #mascot:hover {
+            transform: scale(1.1);
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: scale(1.1) translate3d(-1px, 0, 0); }
+            20%, 80% { transform: scale(1.1) translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: scale(1.1) translate3d(-3px, 0, 0); }
+            40%, 60% { transform: scale(1.1) translate3d(3px, 0, 0); }
+        }
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 1001;
+        }
+
+    </style>
+</head>
+<body>
+    <button id="theme-toggle" title="切換色彩模式">
+        <i class="fas fa-sun"></i>
+    </button>
+    <a href="https://www.mol.gov.tw/" 
+       id="info-link-button" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       title="勞動部全球資訊網｜掌握勞動權益">
+        <i class="fas fa-info-circle"></i>
+    </a>
+    <button id="admin-mode-button" title="管理員模式（題庫管理）">
+        <i class="fas fa-user-shield"></i>
+    </button>
+
+    <audio id="bg-music" src="music/background.mp3" loop></audio>
+
+    <div class="game-wrapper">
+        <h1 class="text-2xl md:text-3xl font-bold text-center mb-4">勞動權益步佈為贏神</h1>
+        
+        <div id="board-path-container">
+            <!-- Squares -->
+            <div class="board-square" data-type="start" data-location="踏入職場"><div class="location-icon"><i class="fas fa-briefcase"></i></div><div class="location-text">踏入職場</div></div>
+            <div class="board-square" data-type="attraction" data-location="勞動契約"><div class="location-icon"><i class="fas fa-file-signature"></i></div><div class="location-text">勞動契約</div></div>
+            <div class="board-square" data-type="attraction" data-location="最低工資"><div class="location-icon"><i class="fas fa-coins"></i></div><div class="location-text">最低工資</div></div>
+            <div class="board-square square-fate" data-type="fate" data-location="市場風雲"><div class="location-icon"><i class="fas fa-shuffle"></i></div><div class="location-text">市場風雲</div></div>
+            <div class="board-square" data-type="attraction" data-location="工時規範"><div class="location-icon"><i class="fas fa-clock"></i></div><div class="location-text">工時規範</div></div>
+            <div class="board-square square-rest" data-type="rest" data-location="特休充電"><div class="location-icon"><i class="fas fa-mug-hot"></i></div><div class="location-text">特休充電</div></div>
+            <div class="board-square" data-type="attraction" data-location="加班權益"><div class="location-icon"><i class="fas fa-business-time"></i></div><div class="location-text">加班權益</div></div>
+            <div class="board-square" data-type="attraction" data-location="例假休息"><div class="location-icon"><i class="fas fa-calendar-check"></i></div><div class="location-text">例假休息</div></div>
+            <div class="board-square square-chance" data-type="chance" data-location="專業培訓"><div class="location-icon"><i class="fas fa-graduation-cap"></i></div><div class="location-text">專業培訓</div></div>
+            <div class="board-square" data-type="attraction" data-location="國定假日"><div class="location-icon"><i class="fas fa-champagne-glasses"></i></div><div class="location-text">國定假日</div></div>
+            <div class="board-square" data-type="attraction" data-location="請假權利"><div class="location-icon"><i class="fas fa-notes-medical"></i></div><div class="location-text">請假權利</div></div>
+            <div class="board-square square-rest" data-type="rest" data-location="員工福利"><div class="location-icon"><i class="fas fa-cake-candles"></i></div><div class="location-text">員工福利</div></div>
+            <div class="board-square" data-type="attraction" data-location="職業安全"><div class="location-icon"><i class="fas fa-helmet-safety"></i></div><div class="location-text">職業安全</div></div>
+            <div class="board-square" data-type="attraction" data-location="勞保勞退"><div class="location-icon"><i class="fas fa-shield-halved"></i></div><div class="location-text">勞保勞退</div></div>
+            <div class="board-square square-chance" data-type="chance" data-location="加薪晉升"><div class="location-icon"><i class="fas fa-arrow-trend-up"></i></div><div class="location-text">加薪晉升</div></div>
+            <div class="board-square" data-type="attraction" data-location="性別平權"><div class="location-icon"><i class="fas fa-venus-mars"></i></div><div class="location-text">性別平權</div></div>
+            <div class="board-square" data-type="attraction" data-location="友善職場"><div class="location-icon"><i class="fas fa-hand-holding-heart"></i></div><div class="location-text">友善職場</div></div>
+            <div class="board-square square-fate" data-type="fate" data-location="法規考驗"><div class="location-icon"><i class="fas fa-scale-balanced"></i></div><div class="location-text">法規考驗</div></div>
+            <div class="board-square" data-type="attraction" data-location="資遣解僱"><div class="location-icon"><i class="fas fa-handshake-slash"></i></div><div class="location-text">資遣解僱</div></div>
+            <div class="board-square square-rest" data-type="rest" data-location="年終獎金"><div class="location-icon"><i class="fas fa-gift"></i></div><div class="location-text">年終獎金</div></div>
+            <div class="board-square square-chance" data-type="chance" data-location="友善企業"><div class="location-icon"><i class="fas fa-award"></i></div><div class="location-text">友善企業</div></div>
+            <div class="board-square" data-type="attraction" data-location="勞資爭議"><div class="location-icon"><i class="fas fa-comments"></i></div><div class="location-text">勞資爭議</div></div>
+            <div class="board-square" data-type="attraction" data-location="工會組織"><div class="location-icon"><i class="fas fa-users-gear"></i></div><div class="location-text">工會組織</div></div>
+            <div class="board-square" data-type="attraction" data-location="勞動檢查"><div class="location-icon"><i class="fas fa-clipboard-check"></i></div><div class="location-text">勞動檢查</div></div>
+            <div class="board-square square-end" data-type="end" data-location="尊嚴勞動"><div class="location-icon"><i class="fas fa-trophy"></i></div><div class="location-text">尊嚴勞動</div></div>
+        </div> 
+        
+        <div id="board-center">
+            <div class="controls-top-bar">
+                <div class="game-title-container">遊戲控制板</div>
+                <div class="music-controls flex items-center gap-2">
+                    <button id="toggle-music-button" title="播放音樂"><i class="fas fa-play"></i></button> 
+                    <label for="volume-slider" class="sr-only">音量</label>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" title="調整音量">
+                </div>
+                <div class="game-setup-controls">
+                    <div>
+                        <label for="player-count">人數:</label>
+                        <select id="player-count">
+                            <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option>
+                            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                            <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                        </select>
+                    </div>
+                    <button id="start-game" class="action-button">開始遊戲</button>
+                </div>
+                <div class="current-player-turn-info">
+                    <div>
+                        <span class="font-medium">輪到:</span>
+                        <span id="current-player-name-display"></span>
+                    </div>
+                    <div>
+                        <span class="font-medium">玩家:</span>
+                        <span id="current-player-indicator"></span>
+                    </div>
+                </div>
+                <div class="dice-container">
+                    <div class="dice" id="dice"><i class="fas fa-dice-d6"></i></div>
+                </div>
+            </div>
+            
+            <div id="player-name-setup" style="display: none;"> 
+                 <h4 class="font-semibold mb-1.5 text-sm">設定玩家名稱 (選填):</h4>
+                 <div id="player-name-inputs"></div>
+            </div>
+
+            <div class="player-controls" id="player-controls">
+                <!-- Player info boxes will be generated here -->
+            </div>
+
+            <div class="game-message-area" id="game-message">選擇人數並開始遊戲！</div>
+        </div>
+        
+        <!-- Event Card -->
+        <div class="popup-card event-card" id="event-card">
+            <h3 class="text-xl font-bold mb-3" id="event-title">事件卡</h3>
+            <p id="event-description" class="mb-5 text-base flex-grow">事件描述</p>
+            <button id="event-close" class="action-button w-full py-2.5">確定</button>
+        </div>
+
+        <!-- Quiz Card -->
+        <div class="popup-card quiz-card" id="quiz-card">
+            <h3 class="text-xl font-bold mb-3" id="quiz-title">勞權問答</h3>
+            <p id="quiz-question" class="mb-4 text-base font-medium">問題內容...</p>
+            <div id="quiz-options" class="options-list mb-4 flex-grow">
+                <!-- Options will be generated here -->
+            </div>
+            <p id="quiz-feedback" class="text-base font-bold mb-4 h-6 text-center"></p>
+        </div>
+
+        <!-- Chance Task Card -->
+        <div class="popup-card chance-task-card" id="chance-task-card">
+            <h3 class="text-xl font-bold mb-3" id="chance-task-title">機會任務</h3>
+            <p id="chance-task-text" class="mb-4 text-base font-medium">任務描述...</p>
+            <div id="chance-task-options" class="options-list mb-4 flex-grow">
+                <!-- Options or confirm button here -->
+            </div>
+            <p id="chance-task-feedback" class="text-base font-bold mb-4 h-6 text-center"></p>
+             <button id="chance-task-close" class="action-button w-full py-2.5 mt-auto" style="display:none;">確定</button>
+        </div>
+
+
+        <!-- Fate Wheel Card -->
+        <div class="popup-card fate-wheel-card" id="fate-wheel-card">
+            <h3 class="text-xl font-bold mb-2" id="fate-wheel-title">命運輪盤</h3>
+            <div id="wheel-container" class="my-3">
+                <canvas id="fate-wheel-canvas" width="220" height="220"></canvas>
+                <div id="wheel-pointer"></div>
+            </div>
+            <p id="fate-wheel-result" class="text-sm font-semibold my-2 h-10 text-center flex-grow content-center">點擊旋轉決定你的命運！</p>
+            <button id="spin-wheel-button" class="action-button w-full py-2.5 mt-2">旋轉輪盤</button>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Copyright © Liyuchiutiger Gongminshen
+    </div>
+    
+    <!-- NEW: Mascot element -->
+    <img id="mascot" src="image/LiyuChillGuy.svg" alt="吉祥物 LiyuChillGuy" title="成為勞動權益步佈為贏神，不再只是夢想！">
+
+    <!-- 管理員身分驗證彈窗 -->
+    <div id="admin-login-modal" class="admin-modal-overlay">
+        <div class="admin-modal-content" style="max-width: 380px;">
+            <div class="p-4 px-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <h3 class="text-base font-bold flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                    <i class="fas fa-shield-halved"></i> 管理員身分驗證
+                </h3>
+                <button id="admin-login-close" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-5">
+                <label for="admin-password-input" class="block text-sm font-medium mb-2">請輸入管理密碼：</label>
+                <input type="password" id="admin-password-input" placeholder="請輸入密碼" 
+                       class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 mb-2">
+                <p id="admin-login-error" class="text-red-500 text-xs mb-3 hidden">密碼錯誤，請重新輸入！</p>
+                <div class="flex gap-2">
+                    <button id="admin-login-cancel" class="w-1/3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        取消
+                    </button>
+                    <button id="admin-login-submit" class="w-2/3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition">
+                        驗證進入
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 題庫管理主面板 -->
+    <div id="admin-panel-modal" class="admin-modal-overlay">
+        <div class="admin-modal-content">
+            <!-- 標題欄 -->
+            <div class="p-4 px-6 border-b border-gray-200 dark:border-gray-700 flex flex-wrap justify-between items-center gap-2 bg-slate-50 dark:bg-slate-800">
+                <div class="flex items-center gap-3">
+                    <span class="p-2 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-lg">
+                        <i class="fas fa-book-bookmark text-lg"></i>
+                    </span>
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            勞動權益題庫管理中心
+                            <span class="text-xs px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-normal">管理員模式</span>
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400" id="admin-quiz-summary">載入題庫中...</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="admin-reset-default-btn" class="px-2.5 py-1.5 text-xs font-medium border border-amber-500 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950 rounded-lg transition" title="還原至系統原始預設題庫">
+                        <i class="fas fa-rotate-left mr-1"></i>還原預設
+                    </button>
+                    <button id="admin-logout-btn" class="px-2.5 py-1.5 text-xs font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+                        <i class="fas fa-sign-out-alt mr-1"></i>登出
+                    </button>
+                    <button id="admin-panel-close" class="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 工具列 (篩選與新增) -->
+            <div class="p-3 px-6 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900">
+                <div class="flex items-center gap-2 flex-grow max-w-sm">
+                    <label for="admin-category-filter" class="text-xs font-medium whitespace-nowrap text-gray-600 dark:text-gray-300">主題篩選：</label>
+                    <select id="admin-category-filter" class="px-2.5 py-1.5 text-xs md:text-sm border rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow">
+                        <!-- 動態填充分類 -->
+                    </select>
+                </div>
+                <button id="admin-add-quiz-btn" class="px-3.5 py-1.5 text-xs md:text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition flex items-center gap-1.5">
+                    <i class="fas fa-plus"></i> 新增題目
+                </button>
+            </div>
+
+            <!-- 新增/編輯題目表單區塊 (可收合) -->
+            <div id="admin-edit-form-container" class="p-4 px-6 border-b border-blue-200 dark:border-blue-900 bg-blue-50/70 dark:bg-slate-800/80 hidden">
+                <div class="flex justify-between items-center mb-3">
+                    <h4 id="admin-form-title" class="font-bold text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
+                        <i class="fas fa-pen-to-square"></i> 編輯題目
+                    </h4>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">* 請點選正確答案之單選鈕</span>
+                </div>
+                <form id="admin-quiz-form" class="space-y-3">
+                    <input type="hidden" id="edit-original-cat">
+                    <input type="hidden" id="edit-original-index">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">所屬主題分類</label>
+                        <select id="edit-quiz-category" class="w-full px-3 py-1.5 text-xs md:text-sm border rounded-lg bg-white dark:bg-slate-900 border-gray-300 dark:border-gray-600" required>
+                            <!-- 分類項目 -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">題目內容 (問題敘述)</label>
+                        <textarea id="edit-quiz-q" rows="2" class="w-full px-3 py-2 text-xs md:text-sm border rounded-lg bg-white dark:bg-slate-900 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required placeholder="請輸入題目內容..."></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                        <div class="p-2 border rounded-lg bg-white dark:bg-slate-900 border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400">選項 A</label>
+                                <label class="text-xs text-blue-600 dark:text-blue-400 cursor-pointer flex items-center gap-1 font-medium">
+                                    <input type="radio" name="correct_answer" value="0" required> 設為正確答案
+                                </label>
+                            </div>
+                            <input type="text" id="edit-opt-0" class="w-full px-2.5 py-1 text-xs border rounded bg-gray-50 dark:bg-slate-800 border-gray-300 dark:border-gray-600" required placeholder="選項 A 內容">
+                        </div>
+                        <div class="p-2 border rounded-lg bg-white dark:bg-slate-900 border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400">選項 B</label>
+                                <label class="text-xs text-blue-600 dark:text-blue-400 cursor-pointer flex items-center gap-1 font-medium">
+                                    <input type="radio" name="correct_answer" value="1"> 設為正確答案
+                                </label>
+                            </div>
+                            <input type="text" id="edit-opt-1" class="w-full px-2.5 py-1 text-xs border rounded bg-gray-50 dark:bg-slate-800 border-gray-300 dark:border-gray-600" required placeholder="選項 B 內容">
+                        </div>
+                        <div class="p-2 border rounded-lg bg-white dark:bg-slate-900 border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400">選項 C</label>
+                                <label class="text-xs text-blue-600 dark:text-blue-400 cursor-pointer flex items-center gap-1 font-medium">
+                                    <input type="radio" name="correct_answer" value="2"> 設為正確答案
+                                </label>
+                            </div>
+                            <input type="text" id="edit-opt-2" class="w-full px-2.5 py-1 text-xs border rounded bg-gray-50 dark:bg-slate-800 border-gray-300 dark:border-gray-600" required placeholder="選項 C 內容">
+                        </div>
+                        <div class="p-2 border rounded-lg bg-white dark:bg-slate-900 border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400">選項 D</label>
+                                <label class="text-xs text-blue-600 dark:text-blue-400 cursor-pointer flex items-center gap-1 font-medium">
+                                    <input type="radio" name="correct_answer" value="3"> 設為正確答案
+                                </label>
+                            </div>
+                            <input type="text" id="edit-opt-3" class="w-full px-2.5 py-1 text-xs border rounded bg-gray-50 dark:bg-slate-800 border-gray-300 dark:border-gray-600" required placeholder="選項 D 內容">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2 pt-1">
+                        <button type="button" id="admin-form-cancel" class="px-3 py-1.5 text-xs font-medium border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+                            取消
+                        </button>
+                        <button type="submit" class="px-4 py-1.5 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition">
+                            <i class="fas fa-check mr-1"></i> 儲存確認
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 題目列表區 -->
+            <div id="admin-quiz-list" class="p-4 px-6 overflow-y-auto space-y-3 flex-grow max-h-[55vh]">
+                <!-- 動態載入題目卡片 -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const el = (id) => document.getElementById(id);
+        // Game elements
+        const diceElement = el('dice'), gameMessageElement = el('game-message'), playerCountSelect = el('player-count');
+        const startGameButton = el('start-game'), currentPlayerIndicator = el('current-player-indicator');
+        const currentPlayerNameDisplay = el('current-player-name-display');
+        const playerControlsContainer = el('player-controls'), boardPathContainer = el('board-path-container');
+        const playerNameSetupDiv = el('player-name-setup'), playerNameInputsDiv = el('player-name-inputs');
+        const themeToggleButton = el('theme-toggle');
+        const infoLinkButton = el('info-link-button');
+        const mascotElement = el('mascot'); // NEW: Mascot element
+        // Popups
+        const eventCardElement = el('event-card'), eventTitleElement = el('event-title');
+        const eventDescriptionElement = el('event-description'), eventCloseButton = el('event-close');
+        const quizCardElement = el('quiz-card'), quizTitleElement = el('quiz-title');
+        const quizQuestionElement = el('quiz-question'), quizOptionsElement = el('quiz-options');
+        const quizFeedbackElement = el('quiz-feedback');
+        const fateWheelCardElement = el('fate-wheel-card'), fateWheelCanvas = el('fate-wheel-canvas');
+        const fateWheelResultElement = el('fate-wheel-result'), spinWheelButton = el('spin-wheel-button');
+        const chanceTaskCardElement = el('chance-task-card'), chanceTaskTitleElement = el('chance-task-title');
+        const chanceTaskTextElement = el('chance-task-text'), chanceTaskOptionsElement = el('chance-task-options');
+        const chanceTaskFeedbackElement = el('chance-task-feedback'), chanceTaskCloseButton = el('chance-task-close');
+        // Music
+        const bgMusic = el('bg-music'); 
+        const volumeSlider = el('volume-slider');
+        const toggleMusicButton = el('toggle-music-button'); 
+
+        let wheelCtx = fateWheelCanvas.getContext('2d');
+        let currentWheelAngle = 0; 
+        let wheelTickInterval = null;
+
+        const CHANCE_OF_DOUBLING_MONEY_EVENT = 0.15; 
+
+        const gameState = {
+            currentPlayer: 1, players: {}, playerCount: 2, diceRolling: false, boardPath: [], 
+            gameStarted: false, currentQuiz: null, currentChanceTask: null, endSquareIndex: -1,
+            playerColors: ['#E53935', '#1E88E5', '#43A047', '#FDD835', '#8E24AA', '#FB8C00', '#00ACC1', '#D81B60', '#6D4C41', '#7CB342', '#5E35B1', '#039BE5'],
+            currentPlayerGetsExtraRoll: false,
+            quizData: { 
+                "勞動契約": [
+                    { q: "依勞動基準法規定，勞動契約分為定期契約與不定期契約，有繼續性工作應為何種契約？", o: ["不定期契約", "定期契約", "承攬契約", "委任契約"], a: 0 },
+                    { q: "關於職場上常見的「試用期」，下列何項敘述最符合勞動法令？", o: ["試用期內雇主不須投保勞保", "試用期勞工仍受勞基法保障，薪資不得低於最低工資", "試用期解僱一律不須給資遣費", "法定試用期強制為六個月"], a: 1 },
+                    { q: "雇主與勞工約定「離職後競業禁止條款」，下列哪一項「不是」法定有效要件？", o: ["雇主有應受保護之正當營業利益", "限制期間不得逾兩年", "限制期間無須提供任何合理補償", "限制之區域與業務範圍合理"], a: 2 }
+                ],
+                "最低工資": [
+                    { q: "依《最低工資法》規定，勞雇雙方議定之工資不得低於最低工資，若雇主違反規定將面臨何種處罰？", o: ["處新臺幣2萬元以上100萬元以下罰鍰", "處新臺幣1千元罰鍰", "僅口頭勸導不予罰鍰", "勒令負責人入監服刑"], a: 0 },
+                    { q: "雇主計算全勤獎金時，下列哪種情形雇主「不得」扣發全勤獎金？", o: ["勞工依法請婚假或喪假", "勞工無故曠職", "勞工多次無故遲到", "勞工請一般事假"], a: 0 },
+                    { q: "關於工資發給之原則，下列何者符合勞動基準法規定？", o: ["雇主得以庫存產品抵充全額工資", "工資應全額直接給付勞工，除法令另有規定或雙方另有約定外", "雇主可預扣工資作為違約金", "發放時間由雇主當天任意決定"], a: 1 }
+                ],
+                "工時規範": [
+                    { q: "依勞動基準法第30條規定，法定正常工作時間每日與每週上限分別為多少？", o: ["每日不得超過8小時，每週不得超過40小時", "每日不得超過10小時，每週不得超過48小時", "每日不得超過7小時，每週不得超過35小時", "每日與每週皆無法定上限"], a: 0 },
+                    { q: "勞工繼續工作4小時，雇主至少應給予多少時間之休息？", o: ["10分鐘", "15分鐘", "30分鐘", "60分鐘"], a: 2 },
+                    { q: "關於變形工時（彈性工時）的實施要件，下列敘述何者正確？", o: ["任何行業老闆口頭宣布即可實施", "須屬勞動部指定之行業，且經工會或勞資會議同意", "實施後每日工時可無限延長", "所有兼職人員一律強制適用"], a: 1 }
+                ],
+                "加班權益": [
+                    { q: "勞工在平日正常工時外延長工時（加班）在2小時以內者，加班費按平日每小時工資額至少加給多少？", o: ["三分之一以上 (約1.34倍)", "三分之二以上", "一倍以上", "無須額外加給"], a: 0 },
+                    { q: "依勞基法規定，雇主延長勞工之工作時間連同正常工作時間，一日合計不得超過多少小時？", o: ["10小時", "12小時", "14小時", "16小時"], a: 1 },
+                    { q: "勞工平日或休息日加班後，關於加班費與補休之選擇，下列何者正確？", o: ["雇主得片面硬性規定一律只能補休", "依勞工意願選擇換取補休，並經雇主同意", "補休逾期未休完雇主可直接作廢不給錢", "補休時數一律打八折折算"], a: 1 }
+                ],
+                "例假休息": [
+                    { q: "勞動基準法第36條規定俗稱的「一例一休」，是指勞工每7日中至少應有幾日之休息？", o: ["應有1日例假，1日休息日", "應有2日例假", "應有2日休息日", "應有1日休假即可"], a: 0 },
+                    { q: "關於「例假日」要求勞工出勤之嚴格限制，下列敘述何者正確？", o: ["只要老闆多給薪水隨時可出勤", "除非天災、事變或突發事件，否則不得使勞工於例假出勤", "員工只要口頭同意即可出勤", "例假日出勤完全不須給薪"], a: 1 },
+                    { q: "勞工在同一雇主繼續工作滿6個月以上但未滿1年者，依法享有幾日特別休假？", o: ["1日", "3日", "7日", "10日"], a: 1 }
+                ],
+                "國定假日": [
+                    { q: "紀念日、勞動節日及其他由中央主管機關規定應放假之日（國定假日），勞工休假期間工資應如何發給？", o: ["工資照給", "不發給工資", "只發給半薪", "扣除全勤獎金"], a: 0 },
+                    { q: "每年5月1日「國際勞動節」，適用勞動基準法之勞工享有何種法定權利？", o: ["法定應放假日，經勞工同意出勤者工資應加倍發給", "必須自行請特休才能休假", "僅限戶外體力勞動者才能放假", "屬一般上班日無加給"], a: 0 },
+                    { q: "國定假日若適逢勞工排定之例假或休息日，雇主依法應如何處理？", o: ["直接視為抵銷不另補假", "應予補假一日", "由雇主逕行沒收", "補發泡麵一碗抵充"], a: 1 }
+                ],
+                "請假權利": [
+                    { q: "依《勞工請假規則》規定，普通傷病假一年內未超過幾日之部分，工資折半發給？", o: ["14日", "30日", "60日", "90日"], a: 1 },
+                    { q: "勞工結婚者，依勞工請假規則享有幾日有薪婚假？", o: ["3日", "5日", "8日", "14日"], a: 2 },
+                    { q: "勞工因遭遇職業災害而致受傷休養期間，雇主應給予何種假別且工資如何給付？", o: ["事假且不給薪", "普通病假且領半薪", "公傷病假，並按原領工資數額予以補償", "強制留職停薪"], a: 2 }
+                ],
+                "職業安全": [
+                    { q: "依《職業安全衛生法》規定，提供必要安全衛生防護設施與個人防護裝備是誰的法定義務？", o: ["勞工自費購買", "雇主", "勞保局", "工會自籌"], a: 1 },
+                    { q: "勞工在作業場所發現有立即發生危險之虞時，依法享有何種法定權利？", o: ["留在原地等待主管前來", "得在不危及他人安全下，自行停止作業並退避至安全場所（退避權）", "雇主可因此予以開除", "必須先呈報主管機關核准才能離開"], a: 1 },
+                    { q: "雇主對新進勞工或在職勞工變更工作時，應辦理下列何者以預防職業災害發生？", o: ["體能耐力極限挑戰", "必要的安全衛生教育及訓練", "簽署職災免責切結書", "繳交工傷保證金"], a: 1 }
+                ],
+                "勞保勞退": [
+                    { q: "依《勞工退休金條例》（勞退新制），雇主每月為勞工提繳之退休金，不得低於勞工每月工資的多少？", o: ["3%", "6%", "8%", "10%"], a: 1 },
+                    { q: "雇主應負擔之勞工退休金提繳費用（6%），是否可以從勞工約定薪資中內扣？", o: ["可以，雇主得自行從薪水扣減", "不可以，此為雇主法定強制負擔，不得內扣", "只要員工簽切結書即可內扣", "由勞雇雙方平分各3%"], a: 1 },
+                    { q: "勞工到職當日雇主即應申報參加勞工保險，若雇主未依法加保致勞工發生事故，雇主應承擔何種責任？", o: ["無任何責任", "除面臨裁罰外，須按勞保給付標準賠償勞工損失", "僅需補繳保費", "要求勞工自行就醫承擔"], a: 1 }
+                ],
+                "性別平權": [
+                    { q: "依《性別平等工作法》規定，女性受僱者分娩前後，雇主應使其停止工作給予產假幾星期？", o: ["4星期", "6星期", "8星期", "12星期"], a: 2 },
+                    { q: "受僱者任職滿6個月後，於每一子女滿三歲前，得申請育嬰留職停薪，期間最長至何時？", o: ["半年", "一年", "最長不得超過二年", "最長不得超過五年"], a: 2 },
+                    { q: "雇主於知悉職場發生性騷擾之情形時，依法應採取何種作為？", o: ["大事化小勸導私下和解", "採取立即有效之糾正及補救措施", "將申訴勞工直接降調或免職", "置之不理交由司法自行審理"], a: 1 }
+                ],
+                "友善職場": [
+                    { q: "雇主為預防員工遭受職場霸凌或不法侵害，應採取何種法定義務措施？", o: ["訂定職場不法侵害預防指引與妥善申訴處理程序", "嚴禁同仁對外宣揚並息事寧人", "要求受害者自請離職", "視為私人恩怨不予理會"], a: 0 },
+                    { q: "女性受僱者因生理期致工作有困難者，每月得請生理假一日，全年請假日數未逾三日者：", o: ["不併入病假計算，其餘日數併入病假，且薪資折半發給", "一律視為曠工扣薪", "雇主可強制要求提供醫院診斷證明", "生理假完全不給工資"], a: 0 },
+                    { q: "受僱者提出職場霸凌、性騷擾申訴或檢舉違法時，雇主「不得」採取下列何種不利對待？", o: ["啟動公正調查程序", "解僱、降調、減薪或為損害其權益之不利處分", "提供心理諮商與保護措施", "調整工作環境防範二度傷害"], a: 1 }
+                ],
+                "資遣解僱": [
+                    { q: "雇主依勞基法第11條資遣勞工，勞工繼續工作3年以上者，法定預告期間為幾日前？", o: ["10日前", "20日前", "30日前", "60日前"], a: 2 },
+                    { q: "勞工於接到資遣預告後，為另謀工作得於工作時間請假外出（謀職假），每星期最多幾日且工資照給？", o: ["1日", "2日", "3日", "4日"], a: 1 },
+                    { q: "雇主若無正當法定事由違法片面解僱勞工，勞工得循法律途徑主張何種權益？", o: ["確認僱傭關係存在，並請求補發解僱期間工資", "只能自認倒楣無解", "向警局報案逮捕老闆", "自動放棄所有年資退撫金"], a: 0 }
+                ],
+                "勞資爭議": [
+                    { q: "勞雇雙方發生積欠工資或資遣費等爭議時，勞工可向所在地勞工局申請何種程序尋求協助？", o: ["勞資爭議調解", "公司破產清算", "國際法庭仲裁", "申請憲法法庭審理"], a: 0 },
+                    { q: "勞資爭議在法定調解或仲裁期間，勞工享有何種法律保障？", o: ["雇主得立即予以停職處分", "雇主不得因該爭議事件終止契約或為不利待遇", "勞工須繳納十萬元調解保證金", "調解結果不具法律公信力"], a: 1 },
+                    { q: "勞工面臨重大勞資訴訟時，可向勞動部或法律扶助基金會申請何種資源協助？", o: ["勞工訴訟扶助與律師費用補助", "發行公司債券補助", "查封全部同事帳戶", "免繳當年度綜合所得稅"], a: 0 }
+                ],
+                "工會組織": [
+                    { q: "憲法與國際勞動公約保障的「勞動三權」，包含團結權、團體協商權以及哪一項基本權利？", o: ["爭議權（罷工權）", "雇主免責權", "任意降薪權", "單方解僱權"], a: 0 },
+                    { q: "雇主因勞工組織工會、加入工會或參與合法工會活動而給予解僱或降薪，屬於何種違法行為？", o: ["合法企業人事自治", "不當勞動行為", "正常的績效考核處分", "一般商業合約抗辯"], a: 1 },
+                    { q: "工會代表勞方與雇主簽訂並具有高於個別勞動契約效力的法律文件為何？", o: ["團體協約", "員工守則", "出勤管理要點", "公司章程"], a: 0 }
+                ],
+                "勞動檢查": [
+                    { q: "勞檢員依法執行勞動檢查時，雇主若無正當理由拒絕、規避或阻撓檢查，主管機關得：", o: ["處新臺幣3萬元以上15萬元以下罰鍰", "僅能口頭致謝", "完全無罰則規定", "幫雇主頒發模範獎牌"], a: 0 },
+                    { q: "勞工發現事業單位違反勞動法規向勞檢機關提出申訴時，法令對檢舉人有何保障？", o: ["機關對申訴人身分嚴格保密，且雇主不得為解僱等報復對待", "必須將申訴人全名公告於全公司", "雇主可依法直接扣薪解僱申訴人", "申訴人必須先向雇主自首道歉"], a: 0 },
+                    { q: "經勞動檢查查獲事業單位違反勞基法裁處確定者，主管機關依法應公布何種資訊？", o: ["公布事業單位名稱、負責人姓名及處分事由", "公布申訴員工的身分證字號與地址", "僅公布檢查員姓名", "依法不得對外公布任何資訊"], a: 0 }
+                ]
+            }
+        };
+        const DICE_ICONS = ["fa-dice-d6", "fa-dice-one", "fa-dice-two", "fa-dice-three", "fa-dice-four", "fa-dice-five", "fa-dice-six"];
+        
+        const fateWheelOutcomes = [
+            { text: "+250 金幣", value: 250, type: "money", color: "#4CAF50", textColor: "#FFFFFF" },
+            { text: "-100 金幣", value: -100, type: "money", color: "#F44336", textColor: "#FFFFFF" },
+            { text: "前進 3 格", value: 3, type: "move", color: "#2196F3", textColor: "#FFFFFF" },
+            { text: "後退 2 格", value: -2, type: "move", color: "#FF9800", textColor: "#FFFFFF" },
+            { text: "暫停一回", type: "skip", color: "#9E9E9E", textColor: "#FFFFFF" },
+            { text: "再擲一次", type: "extra_roll", color: "#FFEB3B", textColor: "#333333" },
+            { text: "+150 金幣", value: 150, type: "money", color: "#8BC34A", textColor: "#FFFFFF" },
+            { text: "其他玩家退1格", type: "others_move_back", value: 1, color: "#673AB7", textColor: "#FFFFFF"},
+        ];
+
+        const chanceTasks = [
+            { id: "ct1_overtime_calc", type: "question", text: "下班後主管頻繁傳 LINE 交辦業務並要求立即處理，是否應計入工作時間並核發加班費？", options: ["是，通訊軟體交辦工作屬實際提供勞務，應核算工時與加班費", "否，非上班時間訊息純屬員工間私誼交流", "否，除非親自進辦公室刷卡否則不算", "由主管個人心情決定是否發放"], answer: 0, reward: 75, penalty: -15 },
+            { id: "ct2_leave_notice", type: "question", text: "依勞動基準法第38條，特別休假之排定期日權利依法歸屬於誰？", options: ["由勞工排定（雇主基於經營急迫需求得與勞工協商調整）", "由雇主片面指定，員工不得有任何異議", "由部門主管每季公開抽籤決定", "一律由人資部門隨機分派"], answer: 0, reward: 60, penalty: -10 },
+            { id: "ct3_safety_cert", type: "action_confirm", text: "公司舉辦職業安全急救員培訓，需投入進修心力與自備教材費25金幣，考取後將成為職場工安守護者。是否參加？", confirmText: "報名受訓 (-25金幣)", cost: 25, successMessage: "順利取得職安急救員合格證照，提升自我競爭力！花費25金幣。", reward: 0, penalty: 0 },
+            { id: "ct4_report_reward", type: "auto_event", text: "你主動協助職場新進同仁檢視勞動契約，及時修正違法條款，獲選為「友善勞權楷模」！", reward: 50, penalty: 0, successMessage: "熱心守護同仁權益！獲得50金幣獎勵。" },
+            { id: "ct5_pension_voluntary", type: "question", text: "依勞工退休金條例，勞工在每月工資6%範圍內自願另行提繳退休金（自提），享有何種租稅優惠？", options: ["自提金額自當年度個人綜合所得總額中全數扣除", "享有免費健康檢查一次", "可折抵個人汽機車牌照稅", "無任何稅賦優惠"], answer: 0, reward: 50, penalty: -10 }
+        ];
+
+        const audioManager = { 
+            ctx: null, sounds: {}, masterGain: null, isMuted: false, 
+            init: function() {
+                try {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    this.masterGain = this.ctx.createGain();
+                    this.masterGain.connect(this.ctx.destination);
+                    this.masterGain.gain.value = 0.25; 
+                } catch (e) { console.error("Web Audio API is not supported: " + e); this.ctx = null; }
+            },
+            _playSoundNode: function(type, frequency, duration, volume = 0.1, detune = 0, onended = null, rampTargetFreq = null, rampTime = 0) {
+                if (!this.ctx) return;
+                const oscillator = this.ctx.createOscillator(); const gainNode = this.ctx.createGain();
+                oscillator.connect(gainNode); gainNode.connect(this.masterGain);
+                oscillator.type = type; oscillator.frequency.setValueAtTime(frequency, this.ctx.currentTime);
+                if (rampTargetFreq !== null) oscillator.frequency.linearRampToValueAtTime(rampTargetFreq, this.ctx.currentTime + (rampTime > 0 ? rampTime : duration * 0.8));
+                if(detune !== 0) oscillator.detune.setValueAtTime(detune, this.ctx.currentTime);
+                gainNode.gain.setValueAtTime(volume, this.ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + duration);
+                oscillator.start(this.ctx.currentTime); oscillator.stop(this.ctx.currentTime + duration);
+                if (onended) oscillator.onended = onended;
+            },
+            play: async function(soundName, options = {}) {
+                if (!this.ctx) { console.warn("AudioContext NA:", soundName); return; }
+                if (this.ctx.state === 'suspended') {
+                    try { await this.ctx.resume(); console.log("AudioContext resumed for:", soundName); } 
+                    catch (e) { console.error("Resume AudioContext error:", e); return; }
+                }
+                if (this.isMuted && soundName !== 'buttonClick_special_for_resume') return;
+                switch (soundName) {
+                    case 'diceRoll': let bF = 300; for (let i=0;i<5;i++) setTimeout(()=>this._playSoundNode('square',bF+(Math.random()*200)-100,0.08,0.05), i*60); break;
+                    case 'playerStep': this._playSoundNode('sine',600+(Math.random()*100),0.1,0.04); break;
+                    case 'popupOpen': this._playSoundNode('triangle',300,0.25,0.08,0,null,700,0.2); break;
+                    case 'buttonClick': case 'buttonClick_special_for_resume': this._playSoundNode('square',1000,0.05,0.06,0); break;
+                    case 'correctAnswer': this._playSoundNode('sine',523.25,0.15,0.1,0,null,783.99,0.15); setTimeout(()=>this._playSoundNode('sine',783.99,0.2,0.1),160); break;
+                    case 'incorrectAnswer': this._playSoundNode('sawtooth',349.23,0.15,0.1,0,null,261.63,0.15); setTimeout(()=>this._playSoundNode('sawtooth',261.63,0.2,0.1),160); break;
+                    case 'moneyGain': this._playSoundNode('sine',700,0.08,0.08); setTimeout(()=>this._playSoundNode('sine',900,0.08,0.08),80); setTimeout(()=>this._playSoundNode('sine',1200,0.1,0.08),160); break;
+                    case 'moneyLoss': this._playSoundNode('triangle',400,0.1,0.08); setTimeout(()=>this._playSoundNode('triangle',300,0.1,0.08),100); setTimeout(()=>this._playSoundNode('triangle',200,0.15,0.08),200); break;
+                    case 'wheelSpinStart': this.stop('wheelSpinLoop'); const o=this.ctx.createOscillator(),g=this.ctx.createGain(); o.connect(g);g.connect(this.masterGain); o.type='sawtooth';o.frequency.setValueAtTime(50,this.ctx.currentTime);o.frequency.linearRampToValueAtTime(800,this.ctx.currentTime+0.5);g.gain.setValueAtTime(0.02,this.ctx.currentTime);o.start();this.sounds.wheelSpinLoop={osc:o,gain:g}; break;
+                    case 'wheelSpinStop': if(this.sounds.wheelSpinLoop&&this.sounds.wheelSpinLoop.osc){const{osc:o,gain:g}=this.sounds.wheelSpinLoop;o.frequency.cancelScheduledValues(this.ctx.currentTime);o.frequency.setValueAtTime(o.frequency.value,this.ctx.currentTime);o.frequency.linearRampToValueAtTime(50,this.ctx.currentTime+0.4);g.gain.exponentialRampToValueAtTime(0.0001,this.ctx.currentTime+0.5);o.stop(this.ctx.currentTime+0.5);delete this.sounds.wheelSpinLoop;} this._playSoundNode('square',200,0.15,0.08); break;
+                    case 'wheelTick': this._playSoundNode('square',1200+(Math.random()*300),0.03,0.015); break;
+                    case 'winGame': const bWF=261.63,ts=[0,0.2,0.4,0.65,0.9,1.2],fs=[bWF,bWF*5/4,bWF*3/2,bWF*2,bWF*3/2,bWF*2]; fs.forEach((f,i)=>setTimeout(()=>this._playSoundNode('triangle',f,0.35,0.12),ts[i]*1000)); break;
+                    case 'sparkle': this._playSoundNode('triangle',1500,0.1,0.07,0,null,2500,0.08); setTimeout(()=>this._playSoundNode('sine',2000,0.1,0.05),80); break; // NEW: Mascot sound
+                    default: console.warn("Unknown sound:",soundName);
+                }
+            },
+            stop: function(soundName) { if(!this.ctx||!this.sounds[soundName])return; if(this.sounds[soundName].osc){this.sounds[soundName].osc.stop(this.ctx.currentTime);this.sounds[soundName].osc.disconnect();} if(this.sounds[soundName].gain)this.sounds[soundName].gain.disconnect(); delete this.sounds[soundName]; },
+            toggleMute: function() { if(!this.ctx)return; this.isMuted=!this.isMuted; this.masterGain.gain.setValueAtTime(this.isMuted?0:0.25,this.ctx.currentTime); console.log("Audio muted:",this.isMuted); return this.isMuted; }
+        };
+        audioManager.init();
+
+        const updateGameMessage = (message) => {
+            gameMessageElement.style.opacity = '0';
+            setTimeout(() => {
+                gameMessageElement.textContent = message;
+                gameMessageElement.style.opacity = '1';
+            }, 150);
+        };
+
+        const initBoardPath = () => {
+            gameState.boardPath = [];
+            const squareElements = boardPathContainer.querySelectorAll('.board-square');
+            squareElements.forEach((el, index) => {
+                gameState.boardPath.push({ element: el, name: el.dataset.location, type: el.dataset.type });
+                if (el.dataset.type === 'end') gameState.endSquareIndex = index;
+            });
+            if (Object.keys(gameState.players).length > 0) positionPlayers();
+        };
+        
+        const setupNameInputsUI = (count) => {
+            // 先暫存目前已輸入的名字，避免切換人數時被清空
+            const existingValues = {};
+            for (let i = 1; i <= 12; i++) {
+                const existingInput = el(`player-name-input-${i}`);
+                if (existingInput && existingInput.value.trim()) {
+                    existingValues[i] = existingInput.value.trim();
+                }
+            }
+
+            playerNameInputsDiv.innerHTML = '';
+            if (count > 0 && !gameState.gameStarted) { 
+                playerNameSetupDiv.style.display = 'block';
+                for (let i = 1; i <= count; i++) {
+                    const entryDiv = document.createElement('div'); entryDiv.className = 'player-name-entry';
+                    const colorIndicator = document.createElement('span'); colorIndicator.className = 'player-color-indicator';
+                    colorIndicator.style.backgroundColor = gameState.playerColors[(i - 1) % gameState.playerColors.length];
+                    const input = document.createElement('input'); input.type = 'text'; input.id = `player-name-input-${i}`;
+                    input.placeholder = `玩家 ${i} 名稱`; input.className = 'player-name-input';
+                    if (existingValues[i]) {
+                        input.value = existingValues[i];
+                    }
+                    entryDiv.appendChild(colorIndicator); entryDiv.appendChild(input); playerNameInputsDiv.appendChild(entryDiv);
+                }
+            } else playerNameSetupDiv.style.display = 'none';
+        };
+
+        const resetGameState = () => {
+            gameState.players = {};
+            gameState.currentPlayer = 1;
+            gameState.gameStarted = false; 
+            gameState.diceRolling = false; 
+            gameState.currentPlayerGetsExtraRoll = false;
+            gameState.currentQuiz = null;
+            gameState.currentChanceTask = null;
+            currentWheelAngle = 0; 
+            fateWheelCanvas.style.transition = 'none'; 
+            fateWheelCanvas.style.transform = `rotate(0deg)`;
+            requestAnimationFrame(() => { 
+                 fateWheelCanvas.style.transition = 'transform 3.5s cubic-bezier(0.23, 1, 0.32, 1)';
+            });
+
+            document.querySelectorAll('.player').forEach(p => p.remove());
+            playerControlsContainer.innerHTML = '';
+            boardPathContainer.querySelectorAll('.board-square.highlight').forEach(sq => sq.classList.remove('highlight'));
+            diceElement.innerHTML = `<i class="fas fa-dice-d6"></i>`;
+            diceElement.style.pointerEvents = 'auto'; 
+            playerCountSelect.disabled = false;
+            startGameButton.disabled = false;
+            setupNameInputsUI(parseInt(playerCountSelect.value)); 
+            currentPlayerIndicator.textContent = "-";
+            currentPlayerNameDisplay.textContent = "等待開始";
+        };
+
+
+        const initPlayers = (count, customNames = []) => {
+            document.querySelectorAll('.player').forEach(p => p.remove());
+            playerControlsContainer.innerHTML = ''; 
+            gameState.players = {};
+
+            for (let i = 1; i <= count; i++) {
+                let playerName = `玩家 ${i}`;
+                if (customNames && customNames[i - 1]) {
+                    playerName = customNames[i - 1];
+                } else {
+                    const nameInput = el(`player-name-input-${i}`);
+                    if (nameInput && nameInput.value.trim()) {
+                        playerName = nameInput.value.trim();
+                    }
+                }
+                const playerToken = document.createElement('div'); playerToken.id = `player${i}-token`;
+                playerToken.className = 'player'; playerToken.style.backgroundColor = gameState.playerColors[(i-1)%gameState.playerColors.length];
+                playerToken.textContent = i; boardPathContainer.appendChild(playerToken);
+                const playerInfoBox = document.createElement('div'); playerInfoBox.id = `player${i}-infobox`;
+                playerInfoBox.className = 'player-info-box';
+                playerInfoBox.innerHTML = `<div class="flex items-center mb-0.5"><div class="player-color-indicator" style="background-color: ${gameState.playerColors[(i-1)%gameState.playerColors.length]}"></div><div class="font-bold">${playerName}</div></div><div>金幣: <span id="player${i}-money">1000</span></div>`;
+                playerControlsContainer.appendChild(playerInfoBox);
+                gameState.players[i] = { 
+                    id: i, name: playerName, position: 0, money: 1000, 
+                    color: gameState.playerColors[(i-1)%gameState.playerColors.length],
+                    tokenElement: playerToken, infoBoxElement: playerInfoBox, skipNextTurn: false 
+                };
+            }
+            positionPlayers(); updateAllMoneyDisplays();
+        };
+
+        const positionPlayers = () => { 
+            Object.values(gameState.players).forEach((playerData) => {
+                const playerToken = playerData.tokenElement; if (!playerToken) return; 
+                const squareData = gameState.boardPath[playerData.position];
+                if (!squareData || !squareData.element) { playerToken.style.display = 'none'; return; }
+                playerToken.style.display = 'flex'; 
+                const squareElement = squareData.element; const squareRect = squareElement.getBoundingClientRect(); 
+                let tokenWidth = parseFloat(getComputedStyle(playerToken).width); let tokenHeight = parseFloat(getComputedStyle(playerToken).height);
+                if(tokenWidth === 0 || tokenHeight === 0) { const tempRect = playerToken.getBoundingClientRect(); tokenWidth = tempRect.width || clamp(16,0.022*window.innerWidth,20); tokenHeight = tempRect.height || clamp(16,0.022*window.innerWidth,20); }
+                const playersOnThisSquare = Object.values(gameState.players).filter(p => p.position === playerData.position);
+                const playerIndexOnSquare = playersOnThisSquare.findIndex(p => p.id === playerData.id);
+                let offsetX = 0; let offsetY = 0; const gap = 2; 
+                if (playersOnThisSquare.length > 1) {
+                    const itemsPerRow = Math.min(2,Math.ceil(Math.sqrt(playersOnThisSquare.length))); 
+                    const col = playerIndexOnSquare % itemsPerRow; const row = Math.floor(playerIndexOnSquare/itemsPerRow);
+                    const numRows = Math.ceil(playersOnThisSquare.length/itemsPerRow);
+                    const totalGridWidth = itemsPerRow*tokenWidth+(itemsPerRow-1)*gap; const totalGridHeight = numRows*tokenHeight+(numRows-1)*gap;
+                    const gridBaseX = (squareRect.width-totalGridWidth)/2; const gridBaseY = (squareRect.height-totalGridHeight)/2;
+                    offsetX = gridBaseX + col*(tokenWidth+gap); offsetY = gridBaseY + row*(tokenHeight+gap);
+                } else { offsetX = (squareRect.width-tokenWidth)/2; offsetY = (squareRect.height-tokenHeight)/2; }
+                playerToken.style.left = `${squareElement.offsetLeft+offsetX}px`; playerToken.style.top = `${squareElement.offsetTop+offsetY}px`;
+            });
+        };
+
+        function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
+
+        const updatePlayerMoneyDisplay = (playerId) => {
+            const moneyElement = el(`player${playerId}-money`);
+            if (moneyElement && gameState.players[playerId]) moneyElement.textContent = gameState.players[playerId].money;
+        };
+        const updateAllMoneyDisplays = () => Object.keys(gameState.players).forEach(pId => updatePlayerMoneyDisplay(parseInt(pId)));
+
+        const highlightCurrentPlayerInfoBox = () => {
+            Object.values(gameState.players).forEach(player => {
+                if (player.infoBoxElement) player.infoBoxElement.classList.remove('active');
+            });
+            if (gameState.players[gameState.currentPlayer] && gameState.players[gameState.currentPlayer].infoBoxElement) {
+                 gameState.players[gameState.currentPlayer].infoBoxElement.classList.add('active');
+            }
+        };
+
+        const rollDice = async () => {
+            if (gameState.diceRolling || !gameState.gameStarted) {
+                console.log("Dice roll prevented. Rolling:", gameState.diceRolling, "Game Started:", gameState.gameStarted);
+                return;
+            }
+            gameState.diceRolling = true;
+            diceElement.classList.add('rolling'); diceElement.innerHTML = `<i class="fas fa-dice fa-spin"></i>`;
+            audioManager.play('diceRoll');
+            const player = gameState.players[gameState.currentPlayer];
+            updateGameMessage(`${player.name} 正在擲骰子...`);
+            gameState.boardPath.forEach(pos => pos.element?.classList.remove('highlight'));
+            await new Promise(resolve => setTimeout(resolve, 1200)); 
+            const roll = Math.floor(Math.random() * 6) + 1;
+            diceElement.classList.remove('rolling'); diceElement.innerHTML = `<i class="fas ${DICE_ICONS[roll]}"></i>`;
+            updateGameMessage(`${player.name} 擲出 ${roll}點...`);
+            const startPosition = player.position; let hasWon = false;
+            for (let i = 1; i <= roll; i++) {
+                let currentStepPos = startPosition + i;
+                if (currentStepPos >= gameState.endSquareIndex) { player.position = gameState.endSquareIndex; hasWon = true; } 
+                else { player.position = currentStepPos % gameState.boardPath.length; }
+                positionPlayers(); audioManager.play('playerStep');
+                if (hasWon) { await new Promise(resolve => setTimeout(resolve, 300)); break; }
+                await new Promise(resolve => setTimeout(resolve, 250)); 
+            }
+            const landedSquareData = gameState.boardPath[player.position];
+            landedSquareData.element?.classList.add('highlight');
+            if (hasWon) handleWin();
+            else { updateGameMessage(`${player.name} 抵達 ${landedSquareData.name}`); setTimeout(() => handleSquareAction(landedSquareData), 800); }
+        };
+        
+        function handleWin() {
+            const player = gameState.players[gameState.currentPlayer];
+            const endSquareData = gameState.boardPath[gameState.endSquareIndex];
+            const winAmount = 300;
+            player.money += winAmount;
+            showScoreAnimation(winAmount, player.id);
+            updatePlayerMoneyDisplay(gameState.currentPlayer);
+            updateGameMessage(`🎉 ${player.name} 抵達終點 ${endSquareData.name} 並獲勝！🎉`);
+            audioManager.play('winGame');
+            diceElement.style.pointerEvents = 'none'; diceElement.innerHTML = `<i class="fas fa-trophy"></i>`;
+            gameState.gameStarted = false; 
+            showEventCardWithCustomMessage(
+                `🎉 恭喜 ${player.name}！ 🎉`,
+                `你已成功抵達 ${endSquareData.name}，成為勞動權益步佈為贏神！獲得 ${winAmount} 金幣獎勵！遊戲結束。點擊確定以準備重新開始。`
+            );
+        }
+        
+        function handleSquareAction(squareData) {
+            if (!gameState.gameStarted && squareData.type !== 'end') return;
+            switch(squareData.type) {
+                case 'chance': showChanceTask(squareData.name); break; 
+                case 'fate': showFateWheel(); break; 
+                case 'rest': case 'start': showRestEvent(squareData.name, squareData.type); break;
+                case 'attraction': showQuiz(squareData.name); break;
+                case 'end': handleWin(); break;
+                default: setTimeout(nextPlayerTurn, 700); 
+            }
+        }
+        
+        function showEventCardWithCustomMessage(title, description) { 
+            eventTitleElement.textContent = title;
+            eventDescriptionElement.textContent = description;
+            showPopup(eventCardElement);
+        }
+
+        const nextPlayerTurn = () => {
+            const previousPlayer = gameState.players[gameState.currentPlayer];
+            if (previousPlayer && gameState.boardPath[previousPlayer.position] && gameState.boardPath[previousPlayer.position].element) {
+                 gameState.boardPath[previousPlayer.position].element.classList.remove('highlight');
+            }
+
+            if (!gameState.gameStarted) { 
+                resetGameState(); 
+                updateGameMessage('遊戲結束！選擇人數並點擊「開始遊戲」重新開始。');
+                return;
+            }
+            
+            let playerSkippedThisCycle = false;
+            for (let i = 0; i < gameState.playerCount; i++) {
+                gameState.currentPlayer = (gameState.currentPlayer % gameState.playerCount) + 1;
+                const player = gameState.players[gameState.currentPlayer];
+                if (player.skipNextTurn) {
+                    player.skipNextTurn = false; 
+                    updateGameMessage(`${player.name} 本回合暫停。`);
+                    playerSkippedThisCycle = true; 
+                } else { playerSkippedThisCycle = false; break; }
+            }
+            const currentPlayerData = gameState.players[gameState.currentPlayer];
+            currentPlayerIndicator.textContent = currentPlayerData.id;
+            currentPlayerNameDisplay.textContent = currentPlayerData.name;
+            if (!playerSkippedThisCycle) updateGameMessage(`輪到 ${currentPlayerData.name} 的回合`);
+            gameState.diceRolling = false; 
+            diceElement.innerHTML = `<i class="fas fa-dice-d6"></i>`;
+            diceElement.style.pointerEvents = 'auto'; 
+            highlightCurrentPlayerInfoBox();
+            const currentPlayerSquare = gameState.boardPath[currentPlayerData.position];
+            if (currentPlayerSquare && currentPlayerSquare.element) currentPlayerSquare.element.classList.add('highlight');
+        };
+        
+        const showPopup = (element) => {
+            audioManager.play('popupOpen');
+            element.style.display = 'flex'; 
+            setTimeout(() => element.classList.add('visible'), 10);
+        };
+        const hidePopup = (element, callback) => {
+            element.classList.remove('visible');
+            setTimeout(() => { element.style.display = 'none'; if (callback) callback(); }, 400); 
+        };
+
+        const showRestEvent = (locationName, type) => {
+            if (type === 'start' && gameState.players[gameState.currentPlayer].position === 0 && 
+                Object.values(gameState.players).some(p => p.position > 0 || Object.keys(gameState.players).length === 0)) {
+                updateGameMessage(`${gameState.players[gameState.currentPlayer].name} 回到起點，休息一下。`);
+                showEventCardWithCustomMessage("回到起點", `${locationName} - 稍作停留，養精蓄銳，重整職場腳步。`); 
+                return;
+            }
+            let eventData = { title: `${locationName} 休息一下`, description: `在 ${locationName} 稍作停留，養精蓄銳。`, money: 0 };
+            let baseMoney = 0; let isMoneyRest = false;
+            if (locationName === '特休充電') { baseMoney = 100; eventData.title = '特休充電放鬆'; eventData.description = '依法排定特休假充分放鬆，工資照給身心舒暢，獲 # 金幣。'; isMoneyRest = true;}
+            else if (locationName === '員工福利') { baseMoney = 120; eventData.title = '職工福利下午茶'; eventData.description = '享有職工福利委員會提供之下午茶津貼，獲 # 金幣。'; isMoneyRest = true;}
+            else if (locationName === '年終獎金') { baseMoney = 150; eventData.title = '年終分紅獎勵'; eventData.description = '公司營運績效亮眼獲發年終考核獎金，獲 # 金幣。'; isMoneyRest = true;}
+            let actualMoney = baseMoney; let titleSuffix = "";
+            if (isMoneyRest && Math.random() < CHANCE_OF_DOUBLING_MONEY_EVENT) { actualMoney *= 2; titleSuffix = " (雙倍獎勵!)"; }
+            eventData.money = actualMoney; eventData.description = eventData.description.replace('#', actualMoney);
+            eventTitleElement.textContent = eventData.title + titleSuffix; 
+            eventDescriptionElement.textContent = eventData.description;
+            const player = gameState.players[gameState.currentPlayer];
+            if (eventData.money > 0) { 
+                player.money += eventData.money; 
+                showScoreAnimation(eventData.money, player.id);
+                updatePlayerMoneyDisplay(gameState.currentPlayer); audioManager.play('moneyGain');
+                updateGameMessage(`${player.name} 在 ${locationName} 休息，獲得 ${eventData.money} 金幣。`);
+            } else updateGameMessage(`${player.name} 在 ${locationName} 休息。`);
+            showPopup(eventCardElement); 
+        };
+
+        const showQuiz = (locationName) => { 
+            const quizzesForLocation = gameState.quizData[locationName];
+            if (!quizzesForLocation || quizzesForLocation.length === 0) { updateGameMessage(`抱歉，${locationName} 目前沒有問答題目。`); setTimeout(nextPlayerTurn, 1500); return; }
+            const randomIndex = Math.floor(Math.random() * quizzesForLocation.length); const quiz = quizzesForLocation[randomIndex];
+            gameState.currentQuiz = { ...quiz, location: locationName }; 
+            quizTitleElement.textContent = `${locationName} 問答`; quizQuestionElement.textContent = quiz.q;
+            quizOptionsElement.innerHTML = '';
+            quiz.o.forEach((optionText, index) => {
+                const button = document.createElement('button'); button.textContent = `${String.fromCharCode(65 + index)}. ${optionText}`;
+                button.dataset.index = index; button.addEventListener('click', (e) => { audioManager.play('buttonClick'); handleQuizAnswer(e);});
+                quizOptionsElement.appendChild(button);
+            });
+            quizFeedbackElement.textContent = ''; quizFeedbackElement.style.color = ''; showPopup(quizCardElement);
+        };
+        function handleQuizAnswer(event) { 
+            const selectedIndex = parseInt(event.target.dataset.index); const quiz = gameState.currentQuiz;
+            const player = gameState.players[gameState.currentPlayer]; let feedback = ""; let moneyChange = 0;
+            if (selectedIndex === quiz.a) {
+                audioManager.play('correctAnswer'); feedback = "答對了！真厲害！獲得 50 金幣！"; moneyChange = 50;
+                quizFeedbackElement.style.color = 'var(--accent-color-1)';
+            } else {
+                audioManager.play('incorrectAnswer'); feedback = `答錯了，正確答案是 ${String.fromCharCode(65 + quiz.a)}. ${quiz.o[quiz.a]}。損失 20 金幣。`; moneyChange = -20;
+                quizFeedbackElement.style.color = 'red';
+            }
+            player.money += moneyChange; 
+            if (moneyChange !== 0) showScoreAnimation(moneyChange, player.id);
+            updatePlayerMoneyDisplay(gameState.currentPlayer);
+            if(moneyChange !== 0) audioManager.play(moneyChange > 0 ? 'moneyGain' : 'moneyLoss');
+            quizFeedbackElement.textContent = feedback; quizOptionsElement.querySelectorAll('button').forEach(btn => btn.disabled = true);
+            setTimeout(() => { hidePopup(quizCardElement, nextPlayerTurn); }, 2800); 
+        }
+
+        function showChanceTask(locationName) { 
+            const task = chanceTasks[Math.floor(Math.random() * chanceTasks.length)];
+            gameState.currentChanceTask = task;
+            chanceTaskTitleElement.textContent = `機會任務 @ ${locationName}`; // Use locationName for context
+            chanceTaskTextElement.textContent = task.text;
+            chanceTaskOptionsElement.innerHTML = '';
+            chanceTaskFeedbackElement.textContent = '';
+            chanceTaskCloseButton.style.display = 'none';
+
+            if (task.type === "question") {
+                task.options.forEach((optionText, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = `${String.fromCharCode(65 + index)}. ${optionText}`;
+                    button.dataset.index = index;
+                    button.addEventListener('click', handleChanceTaskAnswer);
+                    chanceTaskOptionsElement.appendChild(button);
+                });
+            } else if (task.type === "action_confirm") {
+                const confirmButton = document.createElement('button');
+                confirmButton.textContent = task.confirmText || "確定";
+                confirmButton.dataset.action = "confirm";
+                confirmButton.addEventListener('click', handleChanceTaskAnswer);
+                chanceTaskOptionsElement.appendChild(confirmButton);
+            } else if (task.type === "auto_event") {
+                const player = gameState.players[gameState.currentPlayer];
+                let moneyChange = task.reward - (task.penalty || 0);
+                player.money += moneyChange;
+                 if (moneyChange !== 0) showScoreAnimation(moneyChange, player.id, true); 
+                updatePlayerMoneyDisplay(gameState.currentPlayer);
+                if (moneyChange !== 0) audioManager.play(moneyChange > 0 ? 'moneyGain' : 'moneyLoss');
+                chanceTaskFeedbackElement.textContent = task.successMessage || (moneyChange > 0 ? `獲得 ${moneyChange} 金幣` : (moneyChange < 0 ? `損失 ${Math.abs(moneyChange)} 金幣` : "事件發生了！"));
+                chanceTaskFeedbackElement.style.color = moneyChange >= 0 ? 'var(--accent-color-1)' : 'red';
+                chanceTaskCloseButton.style.display = 'block';
+            }
+            showPopup(chanceTaskCardElement);
+        }
+        function handleChanceTaskAnswer(event) {
+            audioManager.play('buttonClick');
+            const task = gameState.currentChanceTask;
+            const player = gameState.players[gameState.currentPlayer];
+            let feedback = ""; let moneyChange = 0;
+            chanceTaskOptionsElement.querySelectorAll('button').forEach(btn => btn.disabled = true);
+            if (task.type === "question") {
+                const selectedIndex = parseInt(event.target.dataset.index);
+                if (selectedIndex === task.answer) {
+                    moneyChange = task.reward;
+                    feedback = `答對了！${task.successMessage || `獲得 ${task.reward} 金幣！`}`;
+                    chanceTaskFeedbackElement.style.color = 'var(--accent-color-1)'; audioManager.play('correctAnswer');
+                } else {
+                    moneyChange = task.penalty || 0; 
+                    feedback = `答錯了。${task.failureMessage || (task.penalty ? `損失 ${Math.abs(task.penalty)} 金幣。` : "再接再厲！")}`;
+                    chanceTaskFeedbackElement.style.color = 'red'; audioManager.play('incorrectAnswer');
+                }
+            } else if (task.type === "action_confirm") {
+                if (event.target.dataset.action === "confirm") {
+                    moneyChange = (task.reward || 0) - (task.cost || 0);
+                    feedback = task.successMessage || `任務完成！`;
+                    chanceTaskFeedbackElement.style.color = moneyChange >= 0 ? 'var(--accent-color-1)' : 'red';
+                } else { feedback = "你選擇不執行任務。"; chanceTaskFeedbackElement.style.color = 'var(--text-general)';}
+            }
+            player.money += moneyChange;
+            if (moneyChange !== 0) showScoreAnimation(moneyChange, player.id, true);
+            updatePlayerMoneyDisplay(gameState.currentPlayer);
+            if (moneyChange !== 0) audioManager.play(moneyChange > 0 ? 'moneyGain' : 'moneyLoss');
+            chanceTaskFeedbackElement.textContent = feedback;
+            chanceTaskCloseButton.style.display = 'block'; 
+        }
+        chanceTaskCloseButton.addEventListener('click', () => {
+            audioManager.play('buttonClick');
+            hidePopup(chanceTaskCardElement, nextPlayerTurn);
+        });
+
+        function setDarkTheme(isDark) { 
+            if (isDark) { document.body.classList.add('dark-mode'); themeToggleButton.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'dark'); } 
+            else { document.body.classList.remove('dark-mode'); themeToggleButton.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'light'); }
+            drawFateWheel(fateWheelOutcomes); 
+            updateVolumeSliderFill(); 
+        }
+        themeToggleButton.addEventListener('click', () => {
+            audioManager.play('buttonClick').then(() => { setDarkTheme(!document.body.classList.contains('dark-mode')); });
+        });
+        if (infoLinkButton) {
+            infoLinkButton.addEventListener('click', () => {
+                audioManager.play('buttonClick');
+            });
+        }
+
+        function drawFateWheel(segments) { 
+            if (!wheelCtx) wheelCtx = fateWheelCanvas.getContext('2d');
+            const numSegments = segments.length; const anglePerSegmentRad = (2 * Math.PI) / numSegments;
+            const centerX = fateWheelCanvas.width/2; const centerY = fateWheelCanvas.height/2; const radius = Math.min(centerX,centerY)-5; 
+            wheelCtx.clearRect(0,0,fateWheelCanvas.width,fateWheelCanvas.height);
+            wheelCtx.font = 'bold clamp(10px, 2.2vw, 13px) Noto Sans TC'; wheelCtx.textBaseline = 'middle'; 
+            segments.forEach((segment, i) => {
+                wheelCtx.beginPath(); wheelCtx.moveTo(centerX,centerY);
+                wheelCtx.arc(centerX,centerY,radius, i*anglePerSegmentRad, (i+1)*anglePerSegmentRad);
+                wheelCtx.closePath(); wheelCtx.fillStyle=segment.color; wheelCtx.fill();
+                wheelCtx.strokeStyle = document.body.classList.contains('dark-mode')?'#555':'#ccc'; wheelCtx.lineWidth=1; wheelCtx.stroke();
+                wheelCtx.save(); wheelCtx.translate(centerX,centerY); wheelCtx.rotate((i+0.5)*anglePerSegmentRad); 
+                wheelCtx.textAlign='center'; wheelCtx.fillStyle=segment.textColor||(document.body.classList.contains('dark-mode')?'#f0f0f0':'#333333');
+                const lines = segment.text.split(' '); const lineHeight = 13; 
+                lines.forEach((line,lineIndex)=>wheelCtx.fillText(line,radius*0.6,(lineIndex-(lines.length-1)/2)*lineHeight));
+                wheelCtx.restore();
+            });
+        }
+        function showFateWheel() { 
+            drawFateWheel(fateWheelOutcomes);
+            fateWheelResultElement.textContent = "點擊旋轉決定你的命運！"; spinWheelButton.disabled = false;
+            fateWheelCanvas.style.transform = `rotate(${currentWheelAngle}deg)`; showPopup(fateWheelCardElement);
+        }
+        spinWheelButton.addEventListener('click', () => { 
+            audioManager.play('buttonClick'); if (spinWheelButton.disabled) return;
+            spinWheelButton.disabled = true; fateWheelResultElement.textContent = "旋轉中...";
+            audioManager.play('wheelSpinStart');
+            if(wheelTickInterval) clearInterval(wheelTickInterval);
+            let tickCount=0; const totalTicks=20;
+            wheelTickInterval = setInterval(()=>{audioManager.play('wheelTick');tickCount++;if(tickCount>totalTicks*0.8){clearInterval(wheelTickInterval);wheelTickInterval=setInterval(()=>audioManager.play('wheelTick'),250);}},120);
+            
+            const spinDuration = 3500; const randomExtraRotations = Math.floor(Math.random()*3)+3; 
+            const randomStopSegment = Math.floor(Math.random()*fateWheelOutcomes.length);
+            const anglePerSegmentDeg = 360 / fateWheelOutcomes.length;
+            
+            const targetSegmentMiddleAngle = (randomStopSegment * anglePerSegmentDeg) + (anglePerSegmentDeg / 2);
+            const desiredAngle = 270 - targetSegmentMiddleAngle; 
+
+            const currentNormalizedAngle = currentWheelAngle % 360;
+            let rotationDelta = desiredAngle - currentNormalizedAngle;
+            if (rotationDelta < -180) rotationDelta += 360; 
+            if (rotationDelta > 180) rotationDelta -= 360;
+
+            const finalRotation = currentWheelAngle + (randomExtraRotations * 360) + rotationDelta;
+
+            fateWheelCanvas.style.transform = `rotate(${finalRotation}deg)`;
+            currentWheelAngle = finalRotation; 
+            setTimeout(() => {
+                if(wheelTickInterval) clearInterval(wheelTickInterval); wheelTickInterval = null;
+                audioManager.play('wheelSpinStop');
+                const selectedOutcome = fateWheelOutcomes[randomStopSegment];
+                applyFateOutcome(selectedOutcome); 
+            }, spinDuration);
+        });
+        async function applyFateOutcome(outcome) { 
+            const player = gameState.players[gameState.currentPlayer];
+            let message = `${player.name} 的命運是：${outcome.text}!`;
+            gameState.currentPlayerGetsExtraRoll = false; 
+            switch (outcome.type) {
+                case 'money':
+                    player.money += outcome.value;
+                    showScoreAnimation(outcome.value, player.id);
+                    updatePlayerMoneyDisplay(gameState.currentPlayer);
+                    audioManager.play(outcome.value > 0 ? 'moneyGain' : 'moneyLoss');
+                    message += (outcome.value > 0 ? ` 獲得 ${outcome.value}` : ` 損失 ${Math.abs(outcome.value)}`) + " 金幣。";
+                    break;
+                case 'move': 
+                    const oldPos = player.position; let newPos = player.position + outcome.value;
+                    if (newPos >= gameState.endSquareIndex && outcome.value > 0) newPos = gameState.endSquareIndex;
+                    else if (newPos < 0) newPos = 0; 
+                    if (newPos < gameState.endSquareIndex && newPos >= 0) newPos %= gameState.boardPath.length; 
+                    const stepsToMove = newPos - player.position; const stepDir = Math.sign(stepsToMove);
+                    if (stepsToMove !== 0) {
+                        for (let i = 0; i < Math.abs(stepsToMove); i++) {
+                            player.position += stepDir;
+                            if (player.position >= gameState.endSquareIndex && stepDir > 0) { player.position = gameState.endSquareIndex; positionPlayers(); audioManager.play('playerStep'); break; } 
+                            else if (player.position < 0 && stepDir < 0) { player.position = 0; positionPlayers(); audioManager.play('playerStep'); break; }
+                            player.position = (player.position + gameState.boardPath.length) % gameState.boardPath.length;
+                            positionPlayers(); audioManager.play('playerStep'); await new Promise(resolve => setTimeout(resolve, 200));
+                        }
+                    } else positionPlayers(); 
+                    message += ` 移動 ${outcome.value} 格。`;
+                    if (player.position === gameState.endSquareIndex) {
+                        fateWheelResultElement.textContent = outcome.text; updateGameMessage(message);
+                        hidePopup(fateWheelCardElement, () => setTimeout(handleWin, 300)); return; 
+                    }
+                    break;
+                case 'skip': player.skipNextTurn = true; message += " 下一回合暫停一次。"; break;
+                case 'extra_roll': gameState.currentPlayerGetsExtraRoll = true; message += " 獲得再擲一次機會！"; break;
+                case 'others_move_back':
+                    Object.values(gameState.players).forEach(p => { if (p.id !== player.id) { p.position -= outcome.value; if (p.position < 0) p.position = 0; } });
+                    positionPlayers(); audioManager.play('playerStep'); message += ` 其他所有玩家後退 ${outcome.value} 格。`;
+                    break;
+            }
+            fateWheelResultElement.textContent = outcome.text; updateGameMessage(message); 
+            setTimeout(() => {
+                hidePopup(fateWheelCardElement, () => {
+                    if (gameState.currentPlayerGetsExtraRoll) {
+                        updateGameMessage(`${player.name} 請再擲一次骰子！`); gameState.diceRolling = false; 
+                        diceElement.innerHTML = `<i class="fas fa-dice-d6"></i>`;
+                    } else if (player.position !== gameState.endSquareIndex) nextPlayerTurn();
+                });
+            }, 2800); 
+        }
+        
+        function showScoreAnimation(amount, playerId, isCentered = false) {
+            const player = gameState.players[playerId];
+            const animationElement = document.createElement('div');
+            animationElement.className = 'score-animation';
+            animationElement.textContent = (amount > 0 ? '+' : '') + amount;
+            animationElement.style.color = amount > 0 ? 'var(--accent-color-1)' : '#F44336';
+            const gameWrapper = document.querySelector('.game-wrapper');
+            let targetRect;
+            if (isCentered || !player || !player.infoBoxElement) { 
+                targetRect = gameMessageElement.getBoundingClientRect();
+                 const gameWrapperRect = gameWrapper.getBoundingClientRect();
+                animationElement.style.left = `${targetRect.left - gameWrapperRect.left + targetRect.width / 2}px`;
+                animationElement.style.top = `${targetRect.top - gameWrapperRect.top + targetRect.height / 2}px`;
+            } else {
+                targetRect = player.infoBoxElement.getBoundingClientRect();
+                const gameWrapperRect = gameWrapper.getBoundingClientRect();
+                animationElement.style.left = `${targetRect.left - gameWrapperRect.left + targetRect.width / 2}px`;
+                animationElement.style.top = `${targetRect.top - gameWrapperRect.top - 15}px`; 
+            }
+            animationElement.style.transform = 'translate(-50%, -50%) scale(0.3)';
+            animationElement.style.opacity = '0';
+            gameWrapper.appendChild(animationElement);
+            requestAnimationFrame(() => { 
+                requestAnimationFrame(() => { 
+                    animationElement.style.transform = 'translate(-50%, -150%) scale(1.3)'; 
+                    animationElement.style.opacity = '1';
+                });
+            });
+            setTimeout(() => {
+                animationElement.style.opacity = '0';
+                animationElement.style.transform = 'translate(-50%, -200%) scale(0.7)';
+                setTimeout(() => { animationElement.remove(); }, 800); 
+            }, 1000); 
+        }
+
+        if (toggleMusicButton) {
+            const musicIcon = toggleMusicButton.querySelector('i');
+
+            toggleMusicButton.addEventListener('click', () => {
+                audioManager.play('buttonClick');
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(e => console.error("Error playing music:", e));
+                } else {
+                    bgMusic.pause();
+                }
+            });
+
+            bgMusic.addEventListener('play', () => {
+                if (musicIcon) {
+                    musicIcon.classList.remove('fa-play');
+                    musicIcon.classList.add('fa-pause');
+                }
+                toggleMusicButton.title = "暫停音樂";
+            });
+
+            bgMusic.addEventListener('pause', () => {
+                if (musicIcon) {
+                    musicIcon.classList.remove('fa-pause');
+                    musicIcon.classList.add('fa-play');
+                }
+                toggleMusicButton.title = "播放音樂";
+            });
+            
+            if (bgMusic.paused) {
+                if (musicIcon) {
+                    musicIcon.classList.remove('fa-pause');
+                    musicIcon.classList.add('fa-play');
+                }
+                toggleMusicButton.title = "播放音樂";
+            } else {
+                 if (musicIcon) {
+                    musicIcon.classList.remove('fa-play');
+                    musicIcon.classList.add('fa-pause');
+                }
+                toggleMusicButton.title = "暫停音樂";
+            }
+        }
+
+
+        function updateVolumeSliderFill() {
+            const value = parseFloat(volumeSlider.value);
+            const min = parseFloat(volumeSlider.min);
+            const max = parseFloat(volumeSlider.max);
+            const percent = ((value - min) / (max - min)) * 100;
+            volumeSlider.style.setProperty('--volume-percent', `${percent}%`);
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            bgMusic.volume = parseFloat(e.target.value);
+            localStorage.setItem('musicVolume', e.target.value);
+            updateVolumeSliderFill();
+        });
+
+        // NEW: Mascot particle effect function
+        function createParticles(x, y) {
+            const particleCount = 25;
+            const colors = ['#FFC107', '#F44336', '#4CAF50', '#2196F3', '#9C27B0', '#00BCD4', '#FFEB3B'];
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                document.body.appendChild(particle);
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = Math.random() * 8 + 4; // size from 4px to 12px
+                
+                particle.style.backgroundColor = color;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 80 + 50; // travel distance from 50 to 130px
+                const endX = Math.cos(angle) * distance;
+                const endY = Math.sin(angle) * distance;
+                
+                particle.style.left = `${x - size / 2}px`;
+                particle.style.top = `${y - size / 2}px`;
+
+                const animation = particle.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${endX}px, ${endY}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 600 + 400, // 400ms to 1000ms
+                    easing: 'cubic-bezier(0.1, 0.9, 0.2, 1)', // ease-out like
+                    fill: 'forwards'
+                });
+
+                animation.onfinish = () => particle.remove();
+            }
+        }
+
+        // NEW: Mascot click listener
+        if (mascotElement) {
+            mascotElement.addEventListener('click', (e) => {
+                audioManager.play('sparkle');
+                const rect = mascotElement.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                createParticles(centerX, centerY);
+            });
+        }
+
+
+        const preferredTheme = localStorage.getItem('theme');
+        if (preferredTheme === 'dark') setDarkTheme(true); else if (preferredTheme === 'light') setDarkTheme(false);
+        else setDarkTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+        playerCountSelect.addEventListener('change', () => {
+             audioManager.play('buttonClick');
+             if (!gameState.gameStarted) setupNameInputsUI(parseInt(playerCountSelect.value));
+        });
+
+        startGameButton.addEventListener('click', () => {
+            audioManager.play('buttonClick').then(() => { 
+                const count = parseInt(playerCountSelect.value);
+                if (count < 1 || count > 12) { updateGameMessage("請選擇 1 至 12 位玩家！"); return; }
+                
+                // 優先讀取玩家在輸入框輸入的自訂名稱
+                const customNames = [];
+                for (let i = 1; i <= count; i++) {
+                    const input = el(`player-name-input-${i}`);
+                    const name = input && input.value.trim() ? input.value.trim() : `玩家 ${i}`;
+                    customNames.push(name);
+                }
+
+                // 重設棋盤與遊戲狀態
+                gameState.players = {};
+                gameState.currentPlayer = 1;
+                gameState.diceRolling = false; 
+                gameState.currentPlayerGetsExtraRoll = false;
+                gameState.currentQuiz = null;
+                gameState.currentChanceTask = null;
+                currentWheelAngle = 0; 
+                fateWheelCanvas.style.transition = 'none'; 
+                fateWheelCanvas.style.transform = `rotate(0deg)`;
+                requestAnimationFrame(() => { 
+                     fateWheelCanvas.style.transition = 'transform 3.5s cubic-bezier(0.23, 1, 0.32, 1)';
+                });
+
+                document.querySelectorAll('.player').forEach(p => p.remove());
+                playerControlsContainer.innerHTML = '';
+                boardPathContainer.querySelectorAll('.board-square.highlight').forEach(sq => sq.classList.remove('highlight'));
+                diceElement.innerHTML = `<i class="fas fa-dice-d6"></i>`;
+                diceElement.style.pointerEvents = 'auto'; 
+                
+                gameState.playerCount = count;
+                initPlayers(count, customNames); 
+                gameState.gameStarted = true; 
+                
+                const firstPlayer = gameState.players[1];
+                currentPlayerIndicator.textContent = firstPlayer.id; 
+                currentPlayerNameDisplay.textContent = firstPlayer.name;
+                updateGameMessage(`遊戲開始！輪到 ${firstPlayer.name}`);
+                highlightCurrentPlayerInfoBox();
+                if(gameState.boardPath[0] && gameState.boardPath[0].element) gameState.boardPath[0].element.classList.add('highlight'); 
+                playerCountSelect.disabled = true; 
+                startGameButton.disabled = true; 
+                playerNameSetupDiv.style.display = 'none'; 
+                bgMusic.play().catch(e => console.warn("Music autoplay prevented:", e)); 
+            });
+        });
+
+        diceElement.addEventListener('click', () => { audioManager.play('buttonClick'); rollDice(); });
+        eventCloseButton.addEventListener('click', () => { 
+            audioManager.play('buttonClick'); 
+            hidePopup(eventCardElement, nextPlayerTurn); 
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initBoardPath(); 
+            playerCountSelect.value = "2"; setupNameInputsUI(2); 
+            currentPlayerIndicator.textContent = "-"; currentPlayerNameDisplay.textContent = "等待開始";
+            updateGameMessage('選擇人數，輸入名稱(選填)，並點擊「開始遊戲」！');
+            diceElement.style.pointerEvents = 'auto'; 
+            drawFateWheel(fateWheelOutcomes); 
+
+            const savedVolume = localStorage.getItem('musicVolume');
+            if (savedVolume !== null) {
+                bgMusic.volume = parseFloat(savedVolume);
+                volumeSlider.value = savedVolume;
+            } else {
+                bgMusic.volume = 0.5; 
+                volumeSlider.value = 0.5;
+            }
+            updateVolumeSliderFill(); 
+
+            if (toggleMusicButton) {
+                const musicIcon = toggleMusicButton.querySelector('i');
+                if (bgMusic.paused) {
+                    if (musicIcon) {
+                        musicIcon.classList.remove('fa-pause');
+                        musicIcon.classList.add('fa-play');
+                    }
+                    toggleMusicButton.title = "播放音樂";
+                } else {
+                    if (musicIcon) {
+                        musicIcon.classList.remove('fa-play');
+                        musicIcon.classList.add('fa-pause');
+                    }
+                    toggleMusicButton.title = "暫停音樂";
+                }
+            }
+        });
+        window.addEventListener('resize', () => { 
+            if (gameState.gameStarted || Object.keys(gameState.players).length > 0) positionPlayers(); 
+            drawFateWheel(fateWheelOutcomes); 
+        });
+
+        /* ========================================================
+           管理員模式與題庫管理邏輯 (密碼採 SHA-256 雜湊比對防洩漏)
+           ======================================================== */
+        const ADMIN_HASH = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+        let isAdminLoggedIn = false;
+
+        // 備份初始系統題庫供還原使用
+        const DEFAULT_QUIZ_DATA = JSON.parse(JSON.stringify(gameState.quizData));
+        const QUIZ_STORAGE_KEY = 'labor_monopoly_custom_quiz_v1';
+
+        // 載入自訂題庫 (若有)
+        function loadCustomQuizzes() {
+            try {
+                const stored = localStorage.getItem(QUIZ_STORAGE_KEY);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (parsed && typeof parsed === 'object') {
+                        gameState.quizData = parsed;
+                    }
+                }
+            } catch (e) {
+                console.error("載入題庫失敗:", e);
+            }
+        }
+        loadCustomQuizzes();
+
+        // 管理員 DOM 元素
+        const adminModeButton = el('admin-mode-button');
+        const adminLoginModal = el('admin-login-modal');
+        const adminLoginClose = el('admin-login-close');
+        const adminLoginCancel = el('admin-login-cancel');
+        const adminLoginSubmit = el('admin-login-submit');
+        const adminPasswordInput = el('admin-password-input');
+        const adminLoginError = el('admin-login-error');
+
+        const adminPanelModal = el('admin-panel-modal');
+        const adminPanelClose = el('admin-panel-close');
+        const adminLogoutBtn = el('admin-logout-btn');
+        const adminResetDefaultBtn = el('admin-reset-default-btn');
+        const adminCategoryFilter = el('admin-category-filter');
+        const adminAddQuizBtn = el('admin-add-quiz-btn');
+        const adminQuizSummary = el('admin-quiz-summary');
+        const adminQuizList = el('admin-quiz-list');
+
+        const adminEditFormContainer = el('admin-edit-form-container');
+        const adminQuizForm = el('admin-quiz-form');
+        const adminFormTitle = el('admin-form-title');
+        const adminFormCancel = el('admin-form-cancel');
+        const editQuizCategory = el('edit-quiz-category');
+        const editQuizQ = el('edit-quiz-q');
+        const editOriginalCat = el('edit-original-cat');
+        const editOriginalIndex = el('edit-original-index');
+
+        async function verifyPassword(pwd) {
+            if (!pwd) return false;
+            try {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(pwd);
+                const hashBuf = await crypto.subtle.digest('SHA-256', data);
+                const hashArr = Array.from(new Uint8Array(hashBuf));
+                const hashHex = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+                return hashHex === ADMIN_HASH;
+            } catch (e) {
+                let h = 0;
+                for (let i = 0; i < pwd.length; i++) {
+                    h = ((h << 5) - h) + pwd.charCodeAt(i);
+                    h |= 0;
+                }
+                return h === 92668751;
+            }
+        }
+
+        function openAdminLogin() {
+            adminPasswordInput.value = '';
+            adminLoginError.classList.add('hidden');
+            adminLoginModal.classList.add('active');
+            setTimeout(() => adminPasswordInput.focus(), 100);
+        }
+
+        function closeAdminLogin() {
+            adminLoginModal.classList.remove('active');
+            adminPasswordInput.value = '';
+        }
+
+        function openAdminPanel() {
+            initAdminCategoryOptions();
+            renderAdminQuizList();
+            adminPanelModal.classList.add('active');
+        }
+
+        function closeAdminPanel() {
+            adminPanelModal.classList.remove('active');
+            adminEditFormContainer.classList.add('hidden');
+        }
+
+        async function handleAdminLogin() {
+            const pwd = adminPasswordInput.value;
+            const isValid = await verifyPassword(pwd);
+            if (isValid) {
+                isAdminLoggedIn = true;
+                closeAdminLogin();
+                openAdminPanel();
+            } else {
+                adminLoginError.classList.remove('hidden');
+                adminPasswordInput.focus();
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function initAdminCategoryOptions() {
+            const categories = Object.keys(gameState.quizData);
+            const currentFilter = adminCategoryFilter.value;
+            adminCategoryFilter.innerHTML = `<option value="all">全部主題 (${categories.length} 個主題)</option>`;
+            categories.forEach(cat => {
+                const count = (gameState.quizData[cat] || []).length;
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = `${cat} (${count} 題)`;
+                adminCategoryFilter.appendChild(opt);
+            });
+            if (categories.includes(currentFilter)) {
+                adminCategoryFilter.value = currentFilter;
+            } else {
+                adminCategoryFilter.value = 'all';
+            }
+
+            editQuizCategory.innerHTML = '';
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                editQuizCategory.appendChild(opt);
+            });
+        }
+
+        function renderAdminQuizList() {
+            const filterCat = adminCategoryFilter.value;
+            const categories = Object.keys(gameState.quizData);
+            let totalQuestions = 0;
+            let displayList = [];
+
+            categories.forEach(cat => {
+                const qList = gameState.quizData[cat] || [];
+                totalQuestions += qList.length;
+                if (filterCat === 'all' || filterCat === cat) {
+                    qList.forEach((qItem, index) => {
+                        displayList.push({ category: cat, index, ...qItem });
+                    });
+                }
+            });
+
+            adminQuizSummary.textContent = `共 ${categories.length} 個主題，總計 ${totalQuestions} 道題目（目前顯示 ${displayList.length} 題）`;
+            adminQuizList.innerHTML = '';
+
+            if (displayList.length === 0) {
+                adminQuizList.innerHTML = `
+                    <div class="text-center py-10 text-gray-400">
+                        <i class="fas fa-folder-open text-3xl mb-2"></i>
+                        <p class="text-sm">此主題目前沒有題目，請點選上方按鈕新增！</p>
+                    </div>`;
+                return;
+            }
+
+            displayList.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'p-3.5 border rounded-xl bg-white dark:bg-slate-900 border-gray-200 dark:border-gray-700 shadow-sm transition hover:shadow-md';
+                
+                let optionsHtml = '';
+                item.o.forEach((optText, oIdx) => {
+                    const isCorrect = (oIdx === item.a);
+                    optionsHtml += `
+                        <div class="text-xs p-1.5 px-2.5 rounded-lg flex items-center justify-between ${isCorrect ? 'bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-300 font-semibold border border-green-200 dark:border-green-800' : 'bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-gray-300'}">
+                            <span><b class="mr-1">${String.fromCharCode(65 + oIdx)}.</b> ${escapeHtml(optText)}</span>
+                            ${isCorrect ? '<span class="text-[11px] px-1.5 py-0.5 rounded bg-green-200 dark:bg-green-900 text-green-800 dark:text-green-200"><i class="fas fa-check mr-1"></i>正確解答</span>' : ''}
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
+                                ${escapeHtml(item.category)}
+                            </span>
+                            <span class="text-xs text-gray-400">#${item.index + 1}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button class="edit-quiz-btn px-2.5 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 rounded transition" data-cat="${escapeHtml(item.category)}" data-index="${item.index}">
+                                <i class="fas fa-pen-to-square mr-1"></i>編輯
+                            </button>
+                            <button class="delete-quiz-btn px-2.5 py-1 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-slate-800 rounded transition" data-cat="${escapeHtml(item.category)}" data-index="${item.index}">
+                                <i class="fas fa-trash-can mr-1"></i>刪除
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-xs md:text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2.5 leading-relaxed">${escapeHtml(item.q)}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+                        ${optionsHtml}
+                    </div>
+                `;
+                adminQuizList.appendChild(card);
+            });
+
+            adminQuizList.querySelectorAll('.edit-quiz-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    audioManager.play('buttonClick');
+                    const cat = e.currentTarget.dataset.cat;
+                    const idx = parseInt(e.currentTarget.dataset.index);
+                    openEditQuiz(cat, idx);
+                });
+            });
+            adminQuizList.querySelectorAll('.delete-quiz-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    audioManager.play('buttonClick');
+                    const cat = e.currentTarget.dataset.cat;
+                    const idx = parseInt(e.currentTarget.dataset.index);
+                    deleteQuiz(cat, idx);
+                });
+            });
+        }
+
+        function openEditQuiz(cat, index) {
+            const qItem = (gameState.quizData[cat] || [])[index];
+            if (!qItem) return;
+
+            adminFormTitle.innerHTML = `<i class="fas fa-pen-to-square"></i> 編輯題目 [${cat} - #${index + 1}]`;
+            editOriginalCat.value = cat;
+            editOriginalIndex.value = index;
+            editQuizCategory.value = cat;
+            editQuizQ.value = qItem.q;
+
+            for (let i = 0; i < 4; i++) {
+                el(`edit-opt-${i}`).value = qItem.o[i] || '';
+            }
+            const radio = adminQuizForm.querySelector(`input[name="correct_answer"][value="${qItem.a}"]`);
+            if (radio) radio.checked = true;
+
+            adminEditFormContainer.classList.remove('hidden');
+            adminEditFormContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function openAddQuiz() {
+            adminFormTitle.innerHTML = `<i class="fas fa-plus"></i> 新增題目`;
+            editOriginalCat.value = '';
+            editOriginalIndex.value = '';
+            
+            const currentFilter = adminCategoryFilter.value;
+            if (currentFilter !== 'all' && gameState.quizData[currentFilter]) {
+                editQuizCategory.value = currentFilter;
+            } else {
+                editQuizCategory.value = Object.keys(gameState.quizData)[0] || '';
+            }
+
+            editQuizQ.value = '';
+            for (let i = 0; i < 4; i++) {
+                el(`edit-opt-${i}`).value = '';
+            }
+            const firstRadio = adminQuizForm.querySelector(`input[name="correct_answer"][value="0"]`);
+            if (firstRadio) firstRadio.checked = true;
+
+            adminEditFormContainer.classList.remove('hidden');
+            adminEditFormContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function saveCustomQuizzesToStorage() {
+            try {
+                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(gameState.quizData));
+            } catch (e) {
+                console.error("儲存題庫失敗:", e);
+            }
+        }
+
+        adminQuizForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            audioManager.play('buttonClick');
+            const targetCat = editQuizCategory.value;
+            const qText = editQuizQ.value.trim();
+            const options = [
+                el('edit-opt-0').value.trim(),
+                el('edit-opt-1').value.trim(),
+                el('edit-opt-2').value.trim(),
+                el('edit-opt-3').value.trim()
+            ];
+            const answerRadio = adminQuizForm.querySelector('input[name="correct_answer"]:checked');
+            const answerIdx = answerRadio ? parseInt(answerRadio.value) : 0;
+
+            if (!qText || options.some(opt => !opt)) {
+                alert("請完整填寫題目敘述與 4 個選項！");
+                return;
+            }
+
+            if (!gameState.quizData[targetCat]) {
+                gameState.quizData[targetCat] = [];
+            }
+
+            const origCat = editOriginalCat.value;
+            const origIndexStr = editOriginalIndex.value;
+            const newQuizObj = { q: qText, o: options, a: answerIdx };
+
+            if (origCat && origIndexStr !== '') {
+                const origIdx = parseInt(origIndexStr);
+                if (origCat === targetCat) {
+                    gameState.quizData[targetCat][origIdx] = newQuizObj;
+                } else {
+                    gameState.quizData[origCat].splice(origIdx, 1);
+                    gameState.quizData[targetCat].push(newQuizObj);
+                }
+            } else {
+                gameState.quizData[targetCat].push(newQuizObj);
+            }
+
+            saveCustomQuizzesToStorage();
+            adminEditFormContainer.classList.add('hidden');
+            initAdminCategoryOptions();
+            renderAdminQuizList();
+            alert("題目已儲存成功！");
+        });
+
+        function deleteQuiz(cat, index) {
+            const qList = gameState.quizData[cat];
+            if (!qList || !qList[index]) return;
+
+            if (qList.length <= 1) {
+                if (!confirm(`警告：主題「${cat}」目前僅剩 1 題。確認要刪除嗎？`)) return;
+            } else {
+                if (!confirm(`確認要刪除這道題目嗎？\n\n題目：${qList[index].q}`)) return;
+            }
+
+            qList.splice(index, 1);
+            saveCustomQuizzesToStorage();
+            initAdminCategoryOptions();
+            renderAdminQuizList();
+        }
+
+        function resetToDefaultQuizzes() {
+            if (confirm("確認要將所有題庫還原為「系統預設題庫」嗎？\n這將清除所有自訂與修改後的題目！")) {
+                gameState.quizData = JSON.parse(JSON.stringify(DEFAULT_QUIZ_DATA));
+                localStorage.removeItem(QUIZ_STORAGE_KEY);
+                adminEditFormContainer.classList.add('hidden');
+                initAdminCategoryOptions();
+                renderAdminQuizList();
+                alert("已成功還原為預設題庫！");
+            }
+        }
+
+        // 管理員按鈕與模態框事件綁定
+        adminModeButton.addEventListener('click', () => {
+            audioManager.play('buttonClick');
+            if (isAdminLoggedIn) {
+                openAdminPanel();
+            } else {
+                openAdminLogin();
+            }
+        });
+
+        adminLoginClose.addEventListener('click', () => { audioManager.play('buttonClick'); closeAdminLogin(); });
+        adminLoginCancel.addEventListener('click', () => { audioManager.play('buttonClick'); closeAdminLogin(); });
+        adminLoginSubmit.addEventListener('click', () => { audioManager.play('buttonClick'); handleAdminLogin(); });
+        adminPasswordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleAdminLogin();
+        });
+
+        adminPanelClose.addEventListener('click', () => { audioManager.play('buttonClick'); closeAdminPanel(); });
+        adminLogoutBtn.addEventListener('click', () => {
+            audioManager.play('buttonClick');
+            isAdminLoggedIn = false;
+            closeAdminPanel();
+            alert("管理員已登出。");
+        });
+        adminResetDefaultBtn.addEventListener('click', () => {
+            audioManager.play('buttonClick');
+            resetToDefaultQuizzes();
+        });
+        adminCategoryFilter.addEventListener('change', () => {
+            renderAdminQuizList();
+        });
+        adminAddQuizBtn.addEventListener('click', () => {
+            audioManager.play('buttonClick');
+            openAddQuiz();
+        });
+        adminFormCancel.addEventListener('click', () => {
+            audioManager.play('buttonClick');
+            adminEditFormContainer.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
