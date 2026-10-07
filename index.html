@@ -602,7 +602,7 @@
         }
 
         /* 右上角浮動功能按鈕 (色彩與尺寸 100% 絕對一致) */
-        .floating-action-btn, #theme-toggle, #info-link-button, #admin-mode-button {
+        .floating-action-btn, #theme-toggle, #info-link-button, #admin-mode-button, #lecture-mode-button {
             position: fixed;
             right: 10px;
             width: 40px;
@@ -619,18 +619,20 @@
             color: #ffffff !important;
             z-index: 1000;
         }
-        .floating-action-btn:hover, #theme-toggle:hover, #info-link-button:hover, #admin-mode-button:hover {
+        .floating-action-btn:hover, #theme-toggle:hover, #info-link-button:hover, #admin-mode-button:hover, #lecture-mode-button:hover {
             transform: scale(1.1);
             filter: brightness(110%);
         }
         #theme-toggle { top: 10px; font-size: 1.15rem; }
         #info-link-button { top: 60px; font-size: 1.15rem; }
         #admin-mode-button { top: 110px; font-size: 1.1rem; }
+        #lecture-mode-button { top: 160px; font-size: 1.1rem; }
 
-        /* 深色模式下三個按鈕的背景與圖示顏色完全相同 (#0f172a 均勻深色對比) */
+        /* 深色模式下按鈕的背景與圖示顏色完全相同 (#0f172a 均勻深色對比) */
         body.dark-mode #theme-toggle,
         body.dark-mode #info-link-button,
-        body.dark-mode #admin-mode-button {
+        body.dark-mode #admin-mode-button,
+        body.dark-mode #lecture-mode-button {
             background-color: var(--accent-color-2) !important;
             color: #0f172a !important;
         }
@@ -834,6 +836,13 @@
     <button id="admin-mode-button" title="管理員模式（題庫管理）">
         <i class="fas fa-user-shield"></i>
     </button>
+    <a href="lecture.html" 
+       id="lecture-mode-button" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       title="教學簡報講義（老師單獨講解專用）">
+        <i class="fas fa-chalkboard-user"></i>
+    </a>
 
     <audio id="bg-music" src="music/background.mp3" loop></audio>
 
@@ -1078,6 +1087,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
+                    <a href="lecture.html" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-xs font-medium border border-blue-500 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 rounded-lg transition" title="前往教學簡報講義（老師單獨講解專用）">
+                        <i class="fas fa-chalkboard-user mr-1"></i>簡報講義
+                    </a>
                     <button id="admin-reset-default-btn" class="px-2.5 py-1.5 text-xs font-medium border border-amber-500 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950 rounded-lg transition" title="還原至系統原始預設題庫">
                         <i class="fas fa-rotate-left mr-1"></i>還原預設
                     </button>
